@@ -36,9 +36,9 @@ class MyModel(nn.Module):
             sentence_embedding = word_embeddings_output_list[0, 0, :]  # [CLS]'s output embedding,
             sentence_embeddings_list.append(sentence_embedding)
             # print("after a sentence: ", torch.cuda.memory_allocated(0))
-            if torch.cuda.memory_allocated(0) > 10000000000:
-                gold_labels_list = gold_labels_list[:len(sentence_embeddings_list)]
-                break
+            # if torch.cuda.memory_allocated(0) > 10000000000:
+            #     gold_labels_list = gold_labels_list[:len(sentence_embeddings_list)]
+            #     break
 
         sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # sentence_num * 768
         # sentence_embeddings_list = torch.cat((CLS_SEP[:, 0], sentence_embeddings_list))
