@@ -62,7 +62,6 @@ def train_and_valid():
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
             best_model = model
-            torch.save(best_model, 'LZQ.pt')
             best_macro_Fscore = tmp_macro_Fscore
 
     return best_epoch, best_model, best_macro_Fscore

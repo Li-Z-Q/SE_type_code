@@ -78,7 +78,7 @@ def train_and_valid():
     return best_epoch, best_model, best_macro_Fscore
 
 
-EPOCHs = 10
+EPOCHs = 20
 DROPOUT = 0.5
 BATCH_SIZE = 4
 LEARN_RATE = 1e-5
