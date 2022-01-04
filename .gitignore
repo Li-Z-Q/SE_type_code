@@ -155,3 +155,5 @@ data/
 resource/
 pre_train/
 *.pt
+stanford-corenlp-4.3.1/
+*/__pycache__/
