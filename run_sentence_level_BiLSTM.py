@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.getcwd() + '/data')
 sys.path.append(os.getcwd() + '/model')
 sys.path.append(os.getcwd() + '/tools')
-sys.path.append(os.getcwd() + '/stanford-corenlp-4.3.1')
+sys.path.append(os.getcwd() + '/pre_train')
 print(sys.path)
 # os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 import warnings
