@@ -4,6 +4,9 @@ from torchcrf import CRF
 from torch.autograd import Variable
 
 
+print("paragraph level BiLSTM CRF")
+
+
 class MyModel(nn.Module):
     def __init__(self, dropout):
         super(MyModel, self).__init__()
@@ -26,7 +29,7 @@ class MyModel(nn.Module):
         # self.softmax = nn.Softmax()
         self.crf = CRF(num_tags=7, batch_first=True)
 
-    def forward(self, sentences_list, labels_list):
+    def forward(self, sentences_list, gold_labels_list):
 
         sentence_embeddings_list = []
         for sentence in sentences_list:
@@ -49,21 +52,13 @@ class MyModel(nn.Module):
         sentence_embeddings_output = sentence_embeddings_output.squeeze(0)  # sentence_num * 300
 
         pro_matrix = self.hidden2tag(sentence_embeddings_output)  # sentence_num * 7
-        # output = self.softmax(output)
 
         pro_matrix = pro_matrix.unsqueeze(0)  # 1 * sentence_num * 7
 
-        if labels_list != None:
-            labels_list = labels_list.unsqueeze(0)  # 1 * sentence_num
-            loss = -self.crf(pro_matrix, labels_list)
-        else:
-            loss = 0
-
         output = self.crf.decode(pro_matrix)  # 1 * sentence_num
+        pre_labels_list = output[0]  # is a list, len = sentence_num
 
-        output = output[0]  # is a list, len = sentence_num
+        gold_labels_list = torch.tensor(gold_labels_list).unsqueeze(0).cuda()  # 1 * sentence_num
+        loss = -self.crf(pro_matrix, gold_labels_list)
 
-        # print(output)
-        # print(labels_list)
-
-        return output, loss
+        return pre_labels_list, loss

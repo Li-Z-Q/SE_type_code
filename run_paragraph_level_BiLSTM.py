@@ -32,15 +32,16 @@ def train_and_valid():
             batch_loss = 0
             optimizer.zero_grad()
             for train_data in train_batch:
-                labels_list = train_data[1]
-                sentence_embeddings_list = train_data[2]
+                sentences_embeddings_list = []
+                gold_labels_list = []
+                for sentence_embedding, label in zip(train_data[3], train_data[1]):
+                    if label != 7:  # before using CRF, so must delete label==7
+                        gold_labels_list.append(label)
+                        sentences_embeddings_list.append(sentence_embedding.cuda())
 
-                output = model.forward(sentence_embeddings_list)  # sentence_num * 7
+                _, loss = model.forward(sentences_embeddings_list, gold_labels_list)  # sentence_num * 7
 
-                for i in range(len(labels_list)):
-                    label = labels_list[i]
-                    if label != 7:
-                        batch_loss += -output[i][label]
+                batch_loss += loss
 
             batch_loss.backward()
             optimizer.step()
@@ -51,17 +52,19 @@ def train_and_valid():
         useful_predict_Y_list = []
         with torch.no_grad():
             for valid_data in valid_data_list:
-                labels_list = valid_data[1]
-                sentence_embeddings_list = valid_data[2]
+                sentences_embeddings_list = []
+                gold_labels_list = []
+                for sentence_embedding, label in zip(valid_data[3], valid_data[1]):
+                    if label != 7:  # before using CRF, so must delete label==7
+                        gold_labels_list.append(label)
+                        sentences_embeddings_list.append(sentence_embedding.cuda())
 
-                output = model.forward(sentence_embeddings_list)  # sentence_num * 7
+                pre_labels_list, loss = model.forward(sentences_embeddings_list, gold_labels_list)  # sentence_num * 7
 
-                for i in range(len(labels_list)):
-                    label = labels_list[i]
-                    if label != 7:
-                        useful_target_Y_list.append(label)
-                        useful_predict_Y_list.append(int(torch.argmax(output[i])))
+                useful_target_Y_list += gold_labels_list
+                useful_predict_Y_list += pre_labels_list
 
+        # ################################### print and save model ##############################
         tmp_macro_Fscore = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
@@ -71,17 +74,18 @@ def train_and_valid():
     return best_epoch, best_model, best_macro_Fscore
 
 
-EPOCHs = 50
+EPOCHs = 40
 DROPOUT = 0.5
 BATCH_SIZE = 128
 LEARN_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 
-train_data_list, valid_data_list = get_data(if_do_embedding=True)
+train_data_list, valid_data_list = get_data(if_do_embedding=True, stanford_path='stanford-corenlp-4.3.1')
 
 if __name__ == '__main__':
     model = MyModel(dropout=DROPOUT).cuda()
     optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
     best_epoch, best_model, best_macro_Fscore = train_and_valid()
-    print("best_epoch: ", best_epoch)
+    torch.save(best_model, 'output/model_paragraph_level_BiLSTM.pt')
+    print("best_epoch: ", best_epoch, best_macro_Fscore)

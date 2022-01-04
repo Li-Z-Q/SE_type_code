@@ -10,6 +10,9 @@ model_config.num_labels = 7
 # model_config.output_hidden_states = True
 
 
+print("paragraph level BERT CRF")
+
+
 class MyModel(nn.Module):
     def __init__(self, dropout):
         super(MyModel, self).__init__()
@@ -23,12 +26,12 @@ class MyModel(nn.Module):
 
         self.crf = CRF(num_tags=7, batch_first=True)
 
-    def forward(self, sentences_list, label_list):
+    def forward(self, sentences_list, gold_labels_list):
 
         # print("before bert1: ", torch.cuda.memory_allocated(0))
 
         if len(sentences_list) > 512:
-            label_list = label_list[:512]
+            gold_labels_list = gold_labels_list[:512]
             sentences_list = sentences_list[:512]
 
         sentence_embeddings_list = []
@@ -45,15 +48,15 @@ class MyModel(nn.Module):
         sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 768
 
         # print("before bert2: ", torch.cuda.memory_allocated(0))
-        label_list = torch.tensor(label_list).cuda()
-        label_list = label_list.unsqueeze(0)  # 1 * sentence_num
+        gold_labels_list = torch.tensor(gold_labels_list).cuda()
+        gold_labels_list = gold_labels_list.unsqueeze(0)  # 1 * sentence_num
 
         pro_matrix = self.bert_model_2(inputs_embeds=sentence_embeddings_list).last_hidden_state  # 1 * sentence_num * 768
         pro_matrix = self.dropout(pro_matrix)
 
         pro_matrix = self.hiden2tag(pro_matrix.squeeze(0)).unsqueeze(0)  # 1 * sentence_num * 7
 
-        loss = -self.crf(pro_matrix, label_list)
-        outputs = self.crf.decode(pro_matrix)[0]  # is a list, len == sentence_num
+        loss = -self.crf(pro_matrix, gold_labels_list)
+        pre_labels_list = self.crf.decode(pro_matrix)[0]  # is a list, len == sentence_num
 
-        return outputs, loss
+        return pre_labels_list, loss

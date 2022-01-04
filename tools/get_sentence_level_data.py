@@ -15,6 +15,7 @@ def helper(filename_list, stanford_nlp, if_do_embedding):
         i += 1
         if i % 10 == 0:
             print("already deal {0} file".format(i))
+            # break
         DOMTree = minidom.parse('data/MASC_Wikipedia/annotations_xml/' + filename[:len(filename) - 3] + "xml")
         document = DOMTree.documentElement
         segments = document.getElementsByTagName('segment')
@@ -32,9 +33,9 @@ def helper(filename_list, stanford_nlp, if_do_embedding):
     return data_list
 
 
-def get_data(if_do_embedding):
+def get_data(if_do_embedding, stanford_path):
     print("start to get stanford")
-    stanford_nlp = StanfordCoreNLP('D://stanford-corenlp-4.3.1')  # default english, useless for BERT
+    stanford_nlp = StanfordCoreNLP(stanford_path)  # default english, useless for BERT
     print("already get stanford")
 
     print("if_do_embedding: ", if_do_embedding)

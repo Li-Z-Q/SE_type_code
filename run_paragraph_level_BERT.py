@@ -34,13 +34,13 @@ def train_and_valid():
             optimizer.zero_grad()
             for train_data in train_batch:
                 sentences_list = []
-                labels_list = []
+                gold_labels_list = []
                 for sentence, label in zip(train_data[0], train_data[1]):
                     if label != 7:
-                        labels_list.append(label)
+                        gold_labels_list.append(label)
                         sentences_list.append(sentence)
 
-                _, loss = model.forward(sentences_list, labels_list)  # sentence_num * 7
+                _, loss = model.forward(sentences_list, gold_labels_list)  # sentence_num * 7
 
                 batch_loss += loss
 
@@ -55,17 +55,17 @@ def train_and_valid():
         with torch.no_grad():
             for valid_data in valid_data_list:
                 sentences_list = []
-                labels_list = []
+                gold_labels_list = []
                 for sentence, label in zip(valid_data[0], valid_data[1]):
                     if label != 7:
-                        labels_list.append(label)
+                        gold_labels_list.append(label)
                         sentences_list.append(sentence)
 
-                output, _ = model.forward(sentences_list, labels_list)  # sentence_num * 7
+                pre_labels_list, _ = model.forward(sentences_list, gold_labels_list)  # sentence_num * 7
 
-                for i in range(len(labels_list)):
-                    useful_target_Y_list.append(labels_list[i])
-                    useful_predict_Y_list.append(int(torch.argmax(output[i])))
+                for i in range(len(gold_labels_list)):
+                    useful_target_Y_list.append(gold_labels_list[i])
+                    useful_predict_Y_list.append(pre_labels_list[i])
 
         # ################################### print and save model ##############################
         tmp_macro_Fscore = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
@@ -77,12 +77,12 @@ def train_and_valid():
     return best_epoch, best_model, best_macro_Fscore
 
 
-EPOCHs = 1
+EPOCHs = 10
 DROPOUT = 0.5
 BATCH_SIZE = 4
 LEARN_RATE = 1e-5
 WEIGHT_DECAY = 1e-4
-train_data_list, valid_data_list = get_data(if_do_embedding=False)
+train_data_list, valid_data_list = get_data(if_do_embedding=False, stanford_path='stanford-corenlp-4.3.1')
 
 if __name__ == '__main__':
 
@@ -90,4 +90,5 @@ if __name__ == '__main__':
     optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
     best_epoch, best_model, best_macro_Fscore = train_and_valid()
-    print("best_epoch: ", best_epoch)
+    torch.save(best_model, 'output/model_paragraph_level_BERT.pt')
+    print("best_epoch: ", best_epoch, best_macro_Fscore)

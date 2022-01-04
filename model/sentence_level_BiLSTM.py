@@ -3,6 +3,9 @@ import torch.nn as nn
 from torch.autograd import Variable
 
 
+print("sentence level BiLSTM")
+
+
 class MyModel(nn.Module):
     def __init__(self, dropout):
         super(MyModel, self).__init__()
@@ -17,7 +20,7 @@ class MyModel(nn.Module):
         self.hidden2tag = nn.Linear(300, 7)
         self.softmax = nn.LogSoftmax()
 
-    def forward(self, word_embeddings_list):
+    def forward(self, word_embeddings_list, gold_label):
         word_embeddings_list = word_embeddings_list.unsqueeze(0)  # 1 * sentence_len * 300
 
         init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
@@ -28,5 +31,9 @@ class MyModel(nn.Module):
         output = self.hidden2tag(sentence_embedding)  # 1 * 7
 
         output = self.softmax(output)  # 1 * 7
+        output = output.squeeze(0)
 
-        return output
+        pre_label = int(torch.argmax(output))
+        loss = -output[gold_label]
+
+        return pre_label, loss

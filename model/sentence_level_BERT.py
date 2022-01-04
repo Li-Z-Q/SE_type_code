@@ -9,6 +9,9 @@ model_config.num_labels = 7
 # model_config.output_hidden_states = True
 
 
+print("sentence level BERT")
+
+
 class MyModel(nn.Module):
     def __init__(self, dropout):
         super(MyModel, self).__init__()
@@ -33,20 +36,8 @@ class MyModel(nn.Module):
 
         loss = outputs.loss
         output = outputs.logits
+        output = output.squeeze(0)
 
-        # print(loss)
-        # print(logits)
-        # embedding = self.bert_model(word_ids_list).last_hidden_state  # 1 * len(word_ids_list) * 768
-        # embedding = embedding.squeeze(0)  # len(word_ids_list) * 768
-        # print(embedding.shape)
+        pre_label = int(torch.argmax(output))
 
-
-        # input()
-        #
-        # CLS_embedding = embedding[0]  # 1 * 768
-        #
-        # output = self.hidden2tag(CLS_embedding)  # 1 * 7
-        #
-        # output = self.softmax(output)  # 1 * 7
-
-        return output, loss
+        return pre_label, loss

@@ -3,6 +3,9 @@ import torch.nn as nn
 from torch.autograd import Variable
 
 
+print("paragraph level BiLSTM")
+
+
 class MyModel(nn.Module):
     def __init__(self, dropout):
         super(MyModel, self).__init__()
@@ -24,7 +27,7 @@ class MyModel(nn.Module):
         self.hidden2tag = nn.Linear(300, 7)
         self.softmax = nn.LogSoftmax()
 
-    def forward(self, sentences_list):  # [4*3336, 7*336, 1*336]
+    def forward(self, sentences_list, gold_labels_list):  # [4*3336, 7*336, 1*336]
         sentence_embeddings_list = []
         for sentence in sentences_list:
             word_embeddings_list = sentence.unsqueeze(0).cuda()  # 1 * sentence_len * 336
@@ -45,4 +48,13 @@ class MyModel(nn.Module):
 
         output = self.softmax(output)  # 3 * 7
 
-        return output
+        pre_labels_list = []
+        for i in range(output.shape[0]):
+            pre_labels_list.append(int(torch.argmax(output[i])))
+
+        loss = 0
+        for i in range(len(gold_labels_list)):
+            label = gold_labels_list[i]
+            loss += -output[i][label]
+
+        return pre_labels_list, loss
