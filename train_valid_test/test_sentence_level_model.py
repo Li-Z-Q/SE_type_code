@@ -9,7 +9,7 @@ def test_model(test_data_list, model):
     with torch.no_grad():
         for test_data in test_data_list:
             gold_label = test_data[1]
-            inputs = test_data[3]  # for BiLSTM is words_embeddings_list, for BERT is words_ids_list
+            inputs = test_data[2]  # for BiLSTM is words_embeddings_list, for BERT is words_ids_list
 
             pre_label, loss = model.forward(inputs, gold_label)  # 1 * 7
 

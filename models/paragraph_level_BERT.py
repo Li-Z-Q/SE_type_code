@@ -30,8 +30,7 @@ class MyModel(nn.Module):
             sentences_list = sentences_list[:512]
 
         sentence_embeddings_list = []
-        for sentence in sentences_list:  # sentence is already words_ids_list, but is only a list
-            word_ids_list = torch.tensor(sentence).unsqueeze(0).cuda()  # 1 * sentence_len
+        for word_ids_list in sentences_list:
             word_embeddings_output_list = self.bert_model_1(word_ids_list.cuda()).last_hidden_state  # 1 * sentence_len * 768
             sentence_embedding = word_embeddings_output_list[0, 0, :]  # [CLS]'s output embedding,
             sentence_embeddings_list.append(sentence_embedding)

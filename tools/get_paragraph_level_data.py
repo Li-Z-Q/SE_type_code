@@ -58,7 +58,7 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
                 segment_embeddings_list.append(from_sentence_2_word_embeddings_list(text, stanford_nlp, word2vec_vocab))
             else:  # for BERT
                 segment_embeddings_list.append(tokenizer(text, return_tensors="pt").input_ids.cuda())
-        break
+        # break
     return all_data_list
 
 

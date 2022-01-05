@@ -35,7 +35,7 @@ class MyModel(nn.Module):
         for sentence in sentences_list:
             sentence = self.dropout(sentence)
 
-            word_embeddings_list = sentence.unsqueeze(0)  # 1 * sentence_len * 336
+            word_embeddings_list = sentence.unsqueeze(0).cuda()  # 1 * sentence_len * 336
 
             init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
             word_embeddings_output, _ = self.BiLSTM_1(word_embeddings_list, init_hidden)  # 1 * sentence_len * 300

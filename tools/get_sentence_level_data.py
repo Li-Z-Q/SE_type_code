@@ -19,7 +19,7 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
         i += 1
         if i % 10 == 0:
             print("already deal {0} file".format(i))
-            break
+            # break
         DOMTree = minidom.parse('data/MASC_Wikipedia/annotations_xml/' + filename[:len(filename) - 3] + "xml")
         document = DOMTree.documentElement
         segments = document.getElementsByTagName('segment')
