@@ -33,6 +33,6 @@ if __name__ == '__main__':
 
     best_epoch, best_model, best_macro_Fscore = train_and_valid(model, optimizer, train_batch_list, valid_data_list, EPOCHs)
     torch.save(best_model, 'output/model_paragraph_level_BiLSTM_CRF.pt')
-    print("best_epoch: ", best_epoch, best_model)
+    print("best_epoch: ", best_epoch, best_macro_Fscore)
 
     test_model(test_data_list, best_model)
