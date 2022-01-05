@@ -36,4 +36,3 @@ if __name__ == '__main__':
     print("best_epoch: ", best_epoch, best_macro_Fscore)
 
     test_model(test_data_list, best_model)
-

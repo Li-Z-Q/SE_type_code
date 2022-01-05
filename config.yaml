@@ -2,7 +2,7 @@
 description: SE type
 
 environment:
-  image: 124.16.138.141/lizhuoqun/transformers:v2
+  image: 124.16.138.141/lizhuoqun/transformers:v3
   environment_variables:
     - DET_TASK_OWNER=lizhuoqun
 
@@ -15,9 +15,9 @@ bind_mounts:
   - host_path: /shared_home/lizhuoqun/SE_type_code/pre_train
     container_path: /run/determined/workdir/pre_train
 
-  # Output Folder Bind Mount
-  - host_path: /shared_home/lizhuoqun/SE_type_code/output
-    container_path: /run/determined/workdir/output
+#  # Output Folder Bind Mount
+#  - host_path: /shared_home/lizhuoqun/SE_type_code/output
+#    container_path: /run/determined/workdir/output
 
   # resource Folder Bind Mount
   - host_path: /shared_home/lizhuoqun/SE_type_code/resource

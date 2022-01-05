@@ -26,7 +26,10 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
                         gold_labels_list.append(label)
                         sentences_list.append(sentence)
 
-                _, loss = model.forward(sentences_list, gold_labels_list)  # sentence_num * 7
+                pre_labels_list, loss = model.forward(sentences_list, gold_labels_list)  # sentence_num * 7
+
+                # print("train pre : ", pre_labels_list)
+                # print("train gold: ", gold_labels_list)
 
                 batch_loss += loss
 
@@ -49,6 +52,9 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
                         sentences_list.append(sentence)
 
                 pre_labels_list, _ = model.forward(sentences_list, gold_labels_list)  # sentence_num * 7
+
+                # print("valid pre : ", pre_labels_list)
+                # print("valid gold: ", gold_labels_list)
 
                 for i in range(len(gold_labels_list)):
                     useful_target_Y_list.append(gold_labels_list[i])

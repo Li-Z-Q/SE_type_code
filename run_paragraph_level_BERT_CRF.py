@@ -25,7 +25,6 @@ LEARN_RATE = 1e-5
 WEIGHT_DECAY = 0
 
 
-
 if __name__ == '__main__':
     train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=False, stanford_path='stanford-corenlp-4.3.1')
     train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)

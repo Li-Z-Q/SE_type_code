@@ -34,21 +34,12 @@ class MyModel(nn.Module):
             word_embeddings_output_list = self.bert_model_1(word_ids_list.cuda()).last_hidden_state  # 1 * sentence_len * 768
             sentence_embedding = word_embeddings_output_list[0, 0, :]  # [CLS]'s output embedding,
             sentence_embeddings_list.append(sentence_embedding)
-            # print("after a sentence: ", torch.cuda.memory_allocated(0))
-            # if torch.cuda.memory_allocated(0) > 10000000000:
-            #     gold_labels_list = gold_labels_list[:len(sentence_embeddings_list)]
-            #     break
 
         sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # sentence_num * 768
-        # sentence_embeddings_list = torch.cat((CLS_SEP[:, 0], sentence_embeddings_list))
-        # sentence_embeddings_list = torch.cat((sentence_embeddings_list, CLS_SEP[:, 1]))
         sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 768
 
-        # print("before bert2: ", torch.cuda.memory_allocated(0))
         gold_labels_list = torch.tensor(gold_labels_list).cuda()
         outputs = self.bert_model_2(inputs_embeds=sentence_embeddings_list, labels=gold_labels_list)
-
-        # print("after bert2: ", torch.cuda.memory_allocated(0))
 
         loss = outputs.loss
         logits = outputs.logits.squeeze(0)  # sentence_num * 7
