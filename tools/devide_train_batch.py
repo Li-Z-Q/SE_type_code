@@ -2,8 +2,7 @@ import random
 
 
 def get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len):
-    randnum = random.randint(0, 1)
-    random.seed(randnum)
+    random.seed(1)
     random.shuffle(train_data_list)
 
     train_data_batch_list = [[]]

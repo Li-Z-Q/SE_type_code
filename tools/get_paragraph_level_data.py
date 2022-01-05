@@ -98,6 +98,7 @@ def get_data(if_do_embedding, stanford_path):
     valid_data_list = helper(test_filename_list, stanford_nlp, if_do_embedding, tokenizer)
     print("complete get data, len(valid_data_list): ", len(valid_data_list))
 
+    random.seed(1)
     random.shuffle(valid_data_list)
 
     print("len(valid_data_list[:int(0.5 * len(valid_data_list))]): ", len(valid_data_list[:int(0.5 * len(valid_data_list))]))

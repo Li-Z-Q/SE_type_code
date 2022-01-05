@@ -11,7 +11,7 @@ class MyModel(nn.Module):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
-        self.BiLSTM = nn.LSTM(343,
+        self.BiLSTM = nn.LSTM(300,
                               300 // 2,
                               num_layers=1,
                               batch_first=True,

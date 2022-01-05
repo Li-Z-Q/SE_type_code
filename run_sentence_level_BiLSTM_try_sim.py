@@ -12,8 +12,8 @@ warnings.filterwarnings('ignore')
 import torch
 from torch import optim
 from tools.get_sentence_level_data import get_data
+from models.sentence_level_BiLSTM_try_sim import MyModel
 from tools.devide_train_batch import get_train_batch_list
-from models.sentence_level_BiLSTM_bia_loss import MyModel
 from train_valid_test.test_sentence_level_model import test_model
 from train_valid_test.train_valid_sentence_level_model import train_and_valid
 
@@ -32,7 +32,9 @@ if __name__ == '__main__':
     optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
     best_epoch, best_model, best_macro_Fscore = train_and_valid(model, optimizer, train_batch_list, valid_data_list, EPOCHs)
-    torch.save(best_model, 'output/model_sentence_level_BiLSTM_bia_loss.pt')
+    torch.save(best_model, 'output/model_sentence_level_BiLSTM_try_sim.pt')
     print("best_epoch: ", best_epoch, best_macro_Fscore)
 
     test_model(test_data_list, best_model)
+
+    ################################

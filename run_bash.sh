@@ -6,11 +6,11 @@ export PYTHONUNBUFFERED=1
 
 
 #python test_out.py
-python run_sentence_level_BERT.py
+#python run_sentence_level_BERT.py
 #python run_sentence_level_BiLSTM.py
 
 
-#python run_paragraph_level_BERT.py
+python run_paragraph_level_BERT.py
 #python run_paragraph_level_BiLSTM.py
  
 #python run_paragraph_level_BERT_CRF.py
