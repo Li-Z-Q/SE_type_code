@@ -1,21 +1,25 @@
+import random
+
 import gensim
 import pandas as pd
 from xml.dom import minidom
 from tools.from_sentence_2_word_embeddings_list import from_sentence_2_word_embeddings_list
 from stanfordcorenlp import StanfordCoreNLP
+from transformers import BertTokenizer
 
 word2vec_vocab = gensim.models.KeyedVectors.load_word2vec_format('resource/GoogleNews-vectors-negative300.bin', binary=True)
 seType_dict = {'STATE': 0, 'EVENT': 1, 'REPORT': 2, 'GENERIC_SENTENCE': 3, 'GENERALIZING_SENTENCE': 4, 'QUESTION': 5, 'IMPERATIVE': 6}
 
 
-def helper(filename_list, stanford_nlp, if_do_embedding):
+def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
+    print("len(filename_list): ", len(filename_list))
     data_list = []
     i = 0
     for filename in filename_list[:]:
         i += 1
         if i % 10 == 0:
             print("already deal {0} file".format(i))
-            # break
+            break
         DOMTree = minidom.parse('data/MASC_Wikipedia/annotations_xml/' + filename[:len(filename) - 3] + "xml")
         document = DOMTree.documentElement
         segments = document.getElementsByTagName('segment')
@@ -29,7 +33,7 @@ def helper(filename_list, stanford_nlp, if_do_embedding):
                     if if_do_embedding:  # for BiLSTM
                         data_list.append([text, seType_dict[seType], from_sentence_2_word_embeddings_list(text, stanford_nlp, word2vec_vocab)])
                     else:  # for BERT
-                        data_list.append([text, seType_dict[seType]])
+                        data_list.append([text, seType_dict[seType], tokenizer(text, return_tensors="pt").input_ids.cuda()])
     return data_list
 
 
@@ -37,6 +41,10 @@ def get_data(if_do_embedding, stanford_path):
     print("start to get stanford")
     stanford_nlp = StanfordCoreNLP(stanford_path)  # default english, useless for BERT
     print("already get stanford")
+
+    print('start get bert_tokenizer')
+    tokenizer = BertTokenizer.from_pretrained('pre_train')
+    print('get bert tokenizer')
 
     print("if_do_embedding: ", if_do_embedding)
 
@@ -48,14 +56,18 @@ def get_data(if_do_embedding, stanford_path):
     for i in range(len(train_test_split_csv)):
         if train_test_split_csv.iloc[i]['fold'] == "train":
             train_filename_list.append(train_test_split_csv.iloc[i]['category_filename'])
-        if train_test_split_csv.iloc[i]['fold'] == "model_test":
+        if train_test_split_csv.iloc[i]['fold'] == "test":
             test_filename_list.append(train_test_split_csv.iloc[i]['category_filename'])
 
     print("start get train data")
-    train_data_list = helper(train_filename_list, stanford_nlp, if_do_embedding)
-    print("start get valid data, len(train_data_list): ", len(train_data_list))
-    valid_data_list = helper(test_filename_list, stanford_nlp, if_do_embedding)
-    print("complete get data, len(valid_data_list): ", len(valid_data_list))
+    train_data_list = helper(train_filename_list, stanford_nlp, if_do_embedding, tokenizer)
+    print("len(train_data_list): ", len(train_data_list))
+    valid_data_list = helper(test_filename_list, stanford_nlp, if_do_embedding, tokenizer)
+    print("len(valid_data_list): ", len(valid_data_list))
+
+    random.shuffle(valid_data_list)
+
+    print("len(valid_data_list[:int(0.5 * len(valid_data_list))]): ", len(valid_data_list[:int(0.5 * len(valid_data_list))]))
 
     stanford_nlp.close()
     return train_data_list, valid_data_list[:int(0.5 * len(valid_data_list))], valid_data_list[int(0.5 * len(valid_data_list)):]

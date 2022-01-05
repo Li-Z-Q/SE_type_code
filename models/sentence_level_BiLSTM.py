@@ -21,7 +21,7 @@ class MyModel(nn.Module):
         self.softmax = nn.LogSoftmax()
 
     def forward(self, word_embeddings_list, gold_label):
-        word_embeddings_list = word_embeddings_list.unsqueeze(0)  # 1 * sentence_len * 300
+        word_embeddings_list = word_embeddings_list.unsqueeze(0).cuda()  # 1 * sentence_len * 300
 
         init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
         BiLSTM_output, _ = self.BiLSTM(word_embeddings_list, init_hidden)  # 1 * sentence_len * 300
