@@ -37,20 +37,20 @@ class MyModel(nn.Module):
         loss = -output[gold_label]
 
         if gold_label == 0:
-            loss += output[1]
-            loss += output[3]
+            loss += output[1] / 49
+            loss += output[3] / 49
         if gold_label == 1:
-            loss += output[0]
+            loss += output[0] / 49
         if gold_label == 2:
-            loss += output[1]
+            loss += output[1] / 49
         if gold_label == 3:
-            loss += output[0]
-            loss += output[1]
+            loss += output[0] / 49
+            loss += output[1] / 49
         if gold_label == 4:
-            loss += output[0]
-            loss += output[1]
-            loss += output[3]
+            loss += output[0] / 49
+            loss += output[1] / 49
+            loss += output[3] / 49
         if gold_label == 5:
-            loss += output[0]
+            loss += output[0] / 49
 
         return pre_label, loss

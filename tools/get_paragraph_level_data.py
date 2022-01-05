@@ -19,7 +19,14 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
     segment_list = []  # [sentence0, sentence1, ]
     segment_embeddings_list = []
     label_list_len = 0  #
+
+    i = 0
     for filename in filename_list[:]:
+        i += 1
+        if i % 10 == 0:
+            print("already deal {0} file".format(i))
+            # break
+
         raw_text = open('data/MASC_Wikipedia/raw_text/' + filename, 'r', encoding='utf-8').read()
         DOMTree = minidom.parse('data/MASC_Wikipedia/annotations_xml/' + filename[:len(filename) - 3] + "xml")
         document = DOMTree.documentElement
@@ -58,13 +65,14 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
                 segment_embeddings_list.append(from_sentence_2_word_embeddings_list(text, stanford_nlp, word2vec_vocab))
             else:  # for BERT
                 segment_embeddings_list.append(tokenizer(text, return_tensors="pt").input_ids.cuda())
-        # break
     return all_data_list
 
 
 def get_data(if_do_embedding, stanford_path):
     print("start to get stanford")
     stanford_nlp = StanfordCoreNLP(stanford_path)  # default english, useless for BERT
+    if if_do_embedding == False:  # BERT
+        stanford_nlp.close()
     print("already get stanford")
 
     print('start get bert_tokenizer')

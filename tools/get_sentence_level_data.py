@@ -40,6 +40,8 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
 def get_data(if_do_embedding, stanford_path):
     print("start to get stanford")
     stanford_nlp = StanfordCoreNLP(stanford_path)  # default english, useless for BERT
+    if if_do_embedding == False:  # BERT
+        stanford_nlp.close()
     print("already get stanford")
 
     print('start get bert_tokenizer')
