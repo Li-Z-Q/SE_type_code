@@ -48,11 +48,11 @@ class MyModel(nn.Module):
 
         if self.reset_num > 1:
             if pre_label != gold_label:
-                sim_loss = torch.cosine_similarity(hidden_output, self.last_epoch_correct_representation_list[gold_label, :])
+                sim_loss = torch.cosine_similarity(hidden_output, self.last_epoch_correct_representation_list[gold_label, :], dim=0)
                 loss += sim_loss
 
         if pre_label == gold_label:
-            self.correct_representation_list[gold_label] += hidden_output
+            self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + hidden_output
             self.correct_num_list[gold_label] += 1
 
         return pre_label, loss
@@ -63,12 +63,15 @@ class MyModel(nn.Module):
         print("self.reset_num: ", self.reset_num)
 
         for i in range(7):
-            self.correct_representation_list[i, :] /= self.correct_num_list[i]
+            self.correct_representation_list[i, :] = self.correct_representation_list[i, :] / self.correct_num_list[i]
 
-        self.last_epoch_correct_representation_list = copy.deepcopy(self.correct_representation_list)
+        self.last_epoch_correct_representation_list = self.correct_representation_list
 
         self.correct_num_list = [1] * 7
         self.correct_representation_list = torch.tensor([[0.0 for _ in range(7)] for _ in range(7)]).cuda()  # each class a gold representation
+
+        self.correct_representation_list = self.correct_representation_list.detach()
+        self.last_epoch_correct_representation_list = self.last_epoch_correct_representation_list.detach()
 
 
 
