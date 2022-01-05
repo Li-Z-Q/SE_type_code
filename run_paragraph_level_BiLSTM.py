@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append(os.getcwd() + '/data')
-sys.path.append(os.getcwd() + '/model')
+sys.path.append(os.getcwd() + '/models')
 sys.path.append(os.getcwd() + '/tools')
 sys.path.append(os.getcwd() + '/pre_train')
 print(sys.path)
@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 import copy
 import torch
 from torch import optim
-from model.paragraph_level_BiLSTM import MyModel
+from models.paragraph_level_BiLSTM import MyModel
 from tools.get_paragraph_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list
 from tools.print_evaluation_result import print_evaluation_result
@@ -65,7 +65,7 @@ def train_and_valid():
                 useful_target_Y_list += gold_labels_list
                 useful_predict_Y_list += pre_labels_list
 
-        # ################################### print and save model ##############################
+        # ################################### print and save models ##############################
         tmp_macro_Fscore = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
@@ -80,12 +80,13 @@ DROPOUT = 0.5
 BATCH_SIZE = 128
 LEARN_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
+train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=True, stanford_path='stanford-corenlp-4.3.1')
 
-train_data_list, valid_data_list = get_data(if_do_embedding=True, stanford_path='stanford-corenlp-4.3.1')
+model = MyModel(dropout=DROPOUT).cuda()
+optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
+
 
 if __name__ == '__main__':
-    model = MyModel(dropout=DROPOUT).cuda()
-    optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
     best_epoch, best_model, best_macro_Fscore = train_and_valid()
     torch.save(best_model, 'output/model_paragraph_level_BiLSTM.pt')

@@ -75,7 +75,7 @@ def get_data(if_do_embedding, stanford_path):
     for i in range(len(train_test_split_csv)):
         if train_test_split_csv.iloc[i]['fold'] == "train":
             train_filename_list.append(train_test_split_csv.iloc[i]['category_filename'])
-        if train_test_split_csv.iloc[i]['fold'] == "test":
+        if train_test_split_csv.iloc[i]['fold'] == "model_test":
             test_filename_list.append(train_test_split_csv.iloc[i]['category_filename'])
 
     print("start get train data")
@@ -85,4 +85,4 @@ def get_data(if_do_embedding, stanford_path):
     print("complete get data, len(valid_data_list): ", len(valid_data_list))
 
     stanford_nlp.close()
-    return train_data_list, valid_data_list
+    return train_data_list, valid_data_list[:int(0.5 * len(valid_data_list))], valid_data_list[int(0.5 * len(valid_data_list)):]

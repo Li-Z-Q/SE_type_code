@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append(os.getcwd() + '/data')
-sys.path.append(os.getcwd() + '/model')
+sys.path.append(os.getcwd() + '/models')
 sys.path.append(os.getcwd() + '/tools')
 sys.path.append(os.getcwd() + '/pre_train')
 print(sys.path)
@@ -9,14 +9,13 @@ print(sys.path)
 import warnings
 warnings.filterwarnings('ignore')
 
-
-import copy
 import torch
 from torch import optim
 from transformers import BertTokenizer
-from model.sentence_level_BERT import MyModel
+from models.sentence_level_BERT import MyModel
 from tools.get_sentence_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list
+from model_test.test_sentence_level_model import test_model
 from tools.print_evaluation_result import print_evaluation_result
 
 
@@ -61,11 +60,11 @@ def train_and_valid():
                 useful_target_Y_list.append(gold_label)
                 useful_predict_Y_list.append(pre_label)
 
-        # ################################### print and save model ##############################
+        # ################################### print and save models ##############################
         tmp_macro_Fscore = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
-            best_model = copy.deepcopy(model)
+            best_model = model
             best_macro_Fscore = tmp_macro_Fscore
 
     return best_epoch, best_model, best_macro_Fscore
@@ -77,13 +76,16 @@ BATCH_SIZE = 4
 LEARN_RATE = 1e-5
 WEIGHT_DECAY = 1e-4
 tokenizer = BertTokenizer.from_pretrained('pre_train')
-train_data_list, valid_data_list = get_data(if_do_embedding=False, stanford_path='stanford-corenlp-4.3.1')
+train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=False, stanford_path='stanford-corenlp-4.3.1')
+
+model = MyModel(dropout=DROPOUT).cuda()
+optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
+
 
 if __name__ == '__main__':
-
-    model = MyModel(dropout=DROPOUT).cuda()
-    optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
     best_epoch, best_model, best_macro_Fscore = train_and_valid()
     torch.save(best_model, 'output/model_sentence_level_BERT.pt')
     print("best_epoch: ", best_epoch, best_macro_Fscore)
+
+
