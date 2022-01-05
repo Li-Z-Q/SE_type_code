@@ -23,9 +23,9 @@ class MyModel(nn.Module):
 
         self.reset_num = 0
 
-        self.correct_representation_list = torch.tensor([[0.0 for _ in range(7)] for _ in range(7)]).cuda()  # each class a correct representation
+        self.correct_representation_list = torch.tensor([[0.0 for _ in range(300)] for _ in range(7)]).cuda()  # each class a correct representation
         self.correct_num_list = [1] * 7
-        self.last_epoch_correct_representation_list = torch.tensor([[0.0 for _ in range(7)] for _ in range(7)]).cuda()  # each class a correct representation
+        self.last_epoch_correct_representation_list = torch.tensor([[0.0 for _ in range(300)] for _ in range(7)]).cuda()  # each class a correct representation
 
     def forward(self, word_embeddings_list, gold_label):
 
@@ -45,14 +45,15 @@ class MyModel(nn.Module):
         loss = -output[gold_label]
 
         hidden_output = hidden_output.squeeze(0)  # size is 7
+        sentence_embedding = sentence_embedding.squeeze(0)  # size is 300
 
         if self.reset_num > 1:
             if pre_label != gold_label:
-                sim_loss = torch.cosine_similarity(hidden_output, self.last_epoch_correct_representation_list[gold_label, :], dim=0)
+                sim_loss = torch.cosine_similarity(sentence_embedding, self.last_epoch_correct_representation_list[gold_label, :], dim=0)
                 loss += sim_loss
 
         if pre_label == gold_label:
-            self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + hidden_output
+            self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + sentence_embedding
             self.correct_num_list[gold_label] += 1
 
         return pre_label, loss
@@ -68,7 +69,7 @@ class MyModel(nn.Module):
         self.last_epoch_correct_representation_list = self.correct_representation_list
 
         self.correct_num_list = [1] * 7
-        self.correct_representation_list = torch.tensor([[0.0 for _ in range(7)] for _ in range(7)]).cuda()  # each class a gold representation
+        self.correct_representation_list = torch.tensor([[0.0 for _ in range(300)] for _ in range(7)]).cuda()  # each class a gold representation
 
         self.correct_representation_list = self.correct_representation_list.detach()
         self.last_epoch_correct_representation_list = self.last_epoch_correct_representation_list.detach()
