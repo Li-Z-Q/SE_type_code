@@ -63,15 +63,17 @@ def get_data(if_do_embedding, stanford_path):
 
     print("start get train data")
     train_data_list = helper(train_filename_list, stanford_nlp, if_do_embedding, tokenizer)
-    print("len(train_data_list): ", len(train_data_list))
-    valid_data_list = helper(test_filename_list, stanford_nlp, if_do_embedding, tokenizer)
-    print("len(valid_data_list): ", len(valid_data_list))
+    print("len(train_valid_data_list): ", len(train_data_list))
+    test_data_list = helper(test_filename_list, stanford_nlp, if_do_embedding, tokenizer)
+    print("len(test_data_list): ", len(test_data_list))
 
     # random.seed(1)
-    random.shuffle(valid_data_list)
-
-    print("len(valid_data_list[:int(0.5 * len(valid_data_list))]): ", len(valid_data_list[:int(0.5 * len(valid_data_list))]))
+    random.shuffle(train_data_list)
 
     stanford_nlp.close()
-    return train_data_list, valid_data_list[:int(0.5 * len(valid_data_list))], valid_data_list[int(0.5 * len(valid_data_list)):]
+
+    valid_list_len = len(test_data_list)  # choose the same len as test
+    train_list_len = len(train_data_list) - valid_list_len  # from train get valid
+
+    return train_data_list[:train_list_len], train_data_list[train_list_len:], test_data_list
 

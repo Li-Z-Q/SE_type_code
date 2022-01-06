@@ -19,7 +19,7 @@ def test_model(test_data_list, model):
 
             pre_labels_list, _ = model.forward(sentences_list, gold_labels_list)  # sentence_num * 7
 
-            for i in range(len(gold_labels_list)):
+            for i in range(len(pre_labels_list)):
                 useful_target_Y_list.append(gold_labels_list[i])
                 useful_predict_Y_list.append(pre_labels_list[i])
 

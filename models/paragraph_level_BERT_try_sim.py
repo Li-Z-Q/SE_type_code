@@ -1,12 +1,14 @@
 import torch
 import torch.nn as nn
-from transformers import BertTokenizer, BertConfig, BertModel, BertForTokenClassification
+from transformers import BertConfig, BertModel, BertForTokenClassification
 
-tokenizer = BertTokenizer.from_pretrained('pre_train')
-model_config = BertConfig.from_pretrained('pre_train')
-model_config.num_labels = 7
-# model_config.output_attentions = True
-model_config.output_hidden_states = True
+
+def do_config():
+    model_config = BertConfig.from_pretrained('pre_train')
+    model_config.num_labels = 7
+    # model_config.output_attentions = True
+    model_config.output_hidden_states = True
+    return model_config
 
 
 print("paragraph level BERT try sim")
@@ -17,9 +19,10 @@ class MyModel(nn.Module):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
+        self.model_config = do_config()
 
-        self.bert_model_1 = BertModel.from_pretrained('pre_train/', config=model_config)
-        self.bert_model_2 = BertForTokenClassification.from_pretrained('pre_train/', config=model_config)
+        self.bert_model_1 = BertModel.from_pretrained('pre_train/', config=self.model_config)
+        self.bert_model_2 = BertForTokenClassification.from_pretrained('pre_train/', config=self.model_config)
 
         self.sim_softmax = nn.Softmax(dim=0)
         self.reset_num = 0

@@ -59,9 +59,13 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
                 # print("valid pre : ", pre_labels_list)
                 # print("valid gold: ", gold_labels_list)
 
-                for i in range(len(gold_labels_list)):
-                    useful_target_Y_list.append(gold_labels_list[i])
-                    useful_predict_Y_list.append(pre_labels_list[i])
+                try:
+                    for i in range(len(pre_labels_list)):
+                        useful_target_Y_list.append(gold_labels_list[i])
+                        useful_predict_Y_list.append(pre_labels_list[i])
+                except:
+                    print("gold_labels_list: ", gold_labels_list)
+                    print("pre_labels_list:  ", pre_labels_list)
 
         # ################################### print and save models ##############################
         tmp_macro_Fscore, tmp_acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
