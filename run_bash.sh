@@ -10,8 +10,10 @@ export PYTHONUNBUFFERED=1
 #python run_sentence_level_BiLSTM.py
 
 
-python run_paragraph_level_BERT.py
+#python run_paragraph_level_BERT.py
 #python run_paragraph_level_BiLSTM.py
  
 #python run_paragraph_level_BERT_CRF.py
 #python run_paragraph_level_BiLSTM_CRF.py
+
+python run_paragraph_level_BERT_try_sim.py

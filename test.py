@@ -24,3 +24,7 @@ print(torch.tensor(sim_matrix).int())
 sim_list = torch.tensor([1.2, 1.3])
 s = torch.nn.Softmax(dim=0)
 print(s(sim_list))
+
+import numpy as np
+l = [1, 2, 3]
+print(np.mean(np.array(l)))

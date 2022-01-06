@@ -4,6 +4,7 @@ from tools.print_evaluation_result import print_evaluation_result
 
 def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_epoch):
 
+    best_acc = -1
     best_model = None
     best_epoch = None
     best_macro_Fscore = -1
@@ -44,10 +45,11 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
                 useful_predict_Y_list.append(pre_label)
 
         # ################################### print and save models ##############################
-        tmp_macro_Fscore = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
+        tmp_macro_Fscore, tmp_acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
             best_model = model
+            best_acc = tmp_acc
             best_macro_Fscore = tmp_macro_Fscore
 
-    return best_epoch, best_model, best_macro_Fscore
+    return best_epoch, best_model, best_macro_Fscore, best_acc

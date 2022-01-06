@@ -1,10 +1,18 @@
-import copy
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
+from transformers import BertConfig, BertForSequenceClassification
 
 
-print("sentence level BiLSTM try sim")
+def do_config():
+    model_config = BertConfig.from_pretrained('pre_train')
+    model_config.num_labels = 7
+    # model_config.output_attentions = True
+    model_config.output_hidden_states = True
+
+    return model_config
+
+
+print("sentence level BERT try sim")
 
 
 class MyModel(nn.Module):
@@ -12,47 +20,45 @@ class MyModel(nn.Module):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
-        self.BiLSTM = nn.LSTM(300,
-                              300 // 2,
-                              num_layers=1,
-                              batch_first=True,
-                              bidirectional=True,
-                              dropout=dropout)
-        self.hidden2tag = nn.Linear(300, 7)
-        self.softmax = nn.LogSoftmax()
 
-        self.sim_softmax = nn.Softmax(dim=0)
+        self.model_config = do_config()
+
+        self.bert_model = BertForSequenceClassification.from_pretrained('pre_train/', config=self.model_config)
+
+        # self.hidden2tag = nn.Linear(768, 7)
+        # self.softmax = nn.LogSoftmax()
         self.reset_num = 0
-        self.correct_representation_list = torch.tensor([[0.0 for _ in range(300)] for __ in range(7)]).cuda()  # each class a correct representation
+        self.sim_softmax = nn.Softmax(dim=0)
+        self.correct_representation_list = torch.tensor([[0.0 for _ in range(768)] for __ in range(7)]).cuda()  # each class a correct representation
         self.correct_num_list = [1] * 7
-        self.last_epoch_correct_representation_list = torch.tensor([[0.0 for __ in range(300)] for _ in range(7)]).cuda()  # each class a correct representation
+        self.last_epoch_correct_representation_list = torch.tensor([[0.0 for __ in range(768)] for _ in range(7)]).cuda()  # each class a correct representation
         self.sim_matrix = [[0 for _ in range(7)] for __ in range(7)]
 
-    def forward(self, word_embeddings_list, gold_label):
+    def forward(self, inputs, gold_label):
+        # word_ids_list = word_ids_list.unsqueeze(0)  # 1 * len(word_ids_list)
+        #
+        # print(word_ids_list.shape)
 
-        word_embeddings_list = word_embeddings_list.unsqueeze(0).cuda()  # 1 * sentence_len * 300
+        labels = torch.tensor(gold_label).unsqueeze(0)  # Batch size 1
 
-        init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
-        BiLSTM_output, _ = self.BiLSTM(word_embeddings_list, init_hidden)  # 1 * sentence_len * 300
+        # print(labels)
 
-        sentence_embedding = torch.max(BiLSTM_output, 1)[0]  # 1 * 300
+        outputs = self.bert_model(inputs, labels=labels.cuda())
 
-        hidden_output = self.hidden2tag(sentence_embedding)  # 1 * 7
-
-        output = self.softmax(hidden_output)  # 1 * 7
+        output = outputs.logits
         output = output.squeeze(0)
-
         pre_label = int(torch.argmax(output))
-        loss = -output[gold_label]
 
-        hidden_output = hidden_output.squeeze(0)  # size is 7
-        sentence_embedding = sentence_embedding.squeeze(0)  # size is 300
-
+        loss = outputs.loss
+        
+        last_hidden_states = outputs.hidden_states[-1]  # 1 * s.len * 768
+        last_hidden_states_CLS = last_hidden_states.squeeze(0)[0, :]  # size = 768
+        
         if self.reset_num > 1:
             # ###################################################### check if label is related with sim
             sim_list = []
             for i in range(7):
-                sim_list.append(torch.cosine_similarity(sentence_embedding,
+                sim_list.append(torch.cosine_similarity(last_hidden_states_CLS,
                                                         self.last_epoch_correct_representation_list[i, :],
                                                         dim=0))
             # sim_list = self.sim_softmax(torch.tensor(sim_list))
@@ -61,17 +67,19 @@ class MyModel(nn.Module):
             # ###########################################################################################################
 
             if pre_label != gold_label:
-                sim_loss = torch.cosine_similarity(sentence_embedding, self.last_epoch_correct_representation_list[pre_label, :], dim=0)
+                sim_loss = torch.cosine_similarity(last_hidden_states_CLS, 
+                                                   self.last_epoch_correct_representation_list[pre_label, :], 
+                                                   dim=0)
                 loss += sim_loss
 
         if pre_label == gold_label:
-            self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + sentence_embedding
+            self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + \
+                                                           last_hidden_states_CLS
             self.correct_num_list[gold_label] += 1
 
         return pre_label, loss
-
+    
     def reset(self):
-
         if self.reset_num > 1:
             print(torch.tensor(self.sim_matrix).int())
 
@@ -85,7 +93,7 @@ class MyModel(nn.Module):
         self.last_epoch_correct_representation_list = self.correct_representation_list
 
         self.correct_num_list = [1] * 7
-        self.correct_representation_list = torch.tensor([[0.0 for _ in range(300)] for _ in range(7)]).cuda()  # each class a gold representation
+        self.correct_representation_list = torch.tensor([[0.0 for _ in range(768)] for _ in range(7)]).cuda()  # each class a gold representation
 
         self.correct_representation_list = self.correct_representation_list.detach()
         self.last_epoch_correct_representation_list = self.last_epoch_correct_representation_list.detach()
@@ -96,5 +104,3 @@ class MyModel(nn.Module):
         #     print("retain_grad")
         #     self.correct_representation_list = self.correct_representation_list.retain_grad()
         #     self.last_epoch_correct_representation_list = self.last_epoch_correct_representation_list.retain_grad()
-#
-

@@ -23,5 +23,8 @@ def test_model(test_data_list, model):
                 useful_target_Y_list.append(gold_labels_list[i])
                 useful_predict_Y_list.append(pre_labels_list[i])
 
-    print('\n\n\n test print \n\n')
-    print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
+    print('\n\ntest print ')
+
+    f1_score, acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
+
+    return f1_score, acc
