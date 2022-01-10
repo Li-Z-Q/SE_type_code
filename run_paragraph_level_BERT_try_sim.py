@@ -19,13 +19,23 @@ from tools.devide_train_batch import get_train_batch_list
 from train_valid_test.test_paragraph_level_model import test_model
 from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 
+import argparse
+parser = argparse.ArgumentParser(description='para transfer')
+parser.add_argument('--EPOCHs', type=int, default=20)
+parser.add_argument('--DROPOUT', type=float, default=0.5)
+parser.add_argument('--BATCH_SIZE', type=int, default=4)
+parser.add_argument('--LEARN_RATE', type=float, default=1e-5)
+parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
+parser.add_argument('--fold_num', type=int)
+args = parser.parse_args()
+print(args)
 
-EPOCHs = 20
-DROPOUT = 0.5
-BATCH_SIZE = 4
-LEARN_RATE = 1e-5
-WEIGHT_DECAY = 1e-4
-
+EPOCHs = args.EPOCHs
+DROPOUT = args.DROPOUT
+BATCH_SIZE = args.BATCH_SIZE
+LEARN_RATE = args.LEARN_RATE
+WEIGHT_DECAY = args.WEIGHT_DECAY
+fold_num = args.fold_num
 
 if __name__ == '__main__':
 
@@ -34,10 +44,10 @@ if __name__ == '__main__':
     valid_best_f1_list = []
     valid_best_acc_list = []
 
-    for t in range(5):
+    for t in range(1):
         print("\n\n\n\ntime=", t)
 
-        train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=False, stanford_path='stanford-corenlp-4.3.1')
+        train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=False, stanford_path='stanford-corenlp-4.3.1', random_seed=fold_num)
         train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)
 
         model = MyModel(dropout=DROPOUT).cuda()
@@ -59,3 +69,8 @@ if __name__ == '__main__':
     print("test ass: ", np.mean(np.array(test_acc_list)), test_acc_list)
     print("valid f1: ", np.mean(np.array(valid_best_f1_list)), valid_best_f1_list)
     print("valid acc:", np.mean(np.array(valid_best_acc_list)), valid_best_acc_list)
+    
+    open('output/paragraph_level_BERT/sim/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
+    open('output/paragraph_level_BERT/sim/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
+    open('output/paragraph_level_BERT/sim/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
+    open('output/paragraph_level_BERT/sim/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')

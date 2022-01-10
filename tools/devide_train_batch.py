@@ -3,7 +3,8 @@ import random
 
 def get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len):
     # random.seed(1)
-    random.shuffle(train_data_list)
+    # random.shuffle(train_data_list)
+    # do shuffle in last .py
 
     train_data_batch_list = [[]]
     total_segment_num_in_this_batch = 0

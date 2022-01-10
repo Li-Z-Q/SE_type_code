@@ -1,5 +1,4 @@
-#description: this is a train_valid_test ner demo
-description: SE type paragraph_level_BERT_CRF
+description: run_sentence_level_BERT
 
 environment:
   image: 124.16.138.141/lizhuoqun/transformers:v3

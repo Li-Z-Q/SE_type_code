@@ -25,7 +25,9 @@ class MyModel(nn.Module):
                                 dropout=dropout)
 
         self.hidden2tag = nn.Linear(300, 7)
-        self.softmax = nn.LogSoftmax()
+        self.log_softmax = nn.LogSoftmax()
+
+        self.softmax = nn.Softmax()  # used as weight average
 
         self.sim_softmax = nn.Softmax(dim=0)
         self.reset_num = 0
@@ -53,17 +55,19 @@ class MyModel(nn.Module):
 
         output = self.hidden2tag(sentence_embeddings_output)  # 3 * 7
 
-        output = self.softmax(output)  # 3 * 7
+        log_softmax_output = self.log_softmax(output)  # 3 * 7
+
+        softmax_output = self.softmax(output)  # size is 3 * 7
 
         pre_labels_list = []
-        for i in range(output.shape[0]):
-            pre_labels_list.append(int(torch.argmax(output[i])))
+        for i in range(log_softmax_output.shape[0]):
+            pre_labels_list.append(int(torch.argmax(log_softmax_output[i])))
 
         loss = 0
         for j in range(len(gold_labels_list)):
             gold_label = gold_labels_list[j]
             pre_label = pre_labels_list[j]
-            loss += -output[j][gold_label]
+            loss += -log_softmax_output[j][gold_label]
 
             sentence_embedding_new = sentence_embeddings_output[j, :]  # size is 300
             if self.reset_num > 1:
@@ -86,8 +90,8 @@ class MyModel(nn.Module):
 
             if pre_label == gold_label:
                 self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + \
-                                                               sentence_embedding_new
-                self.correct_num_list[gold_label] += 1
+                                                               sentence_embedding_new * softmax_output[j][gold_label]
+                self.correct_num_list[gold_label] += softmax_output[j][gold_label]
 
         return pre_labels_list, loss
 

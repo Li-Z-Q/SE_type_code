@@ -67,11 +67,12 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
     return all_data_list
 
 
-def get_data(if_do_embedding, stanford_path):
+def get_data(if_do_embedding, stanford_path, random_seed):
     print("start to get stanford")
-    stanford_nlp = StanfordCoreNLP(stanford_path)  # default english, useless for BERT
-    if if_do_embedding == False:  # BERT
-        stanford_nlp.close()
+    if if_do_embedding:
+        stanford_nlp = StanfordCoreNLP(stanford_path)  # default english, useless for BERT
+    else:  # BERT
+        stanford_nlp = None
     print("already get stanford")
 
     print('start get bert_tokenizer')
@@ -97,10 +98,11 @@ def get_data(if_do_embedding, stanford_path):
     test_data_list = helper(test_filename_list, stanford_nlp, if_do_embedding, tokenizer)
     print("complete get data, len(test_data_list): ", len(test_data_list))
 
-    # random.seed(1)
+    random.seed(random_seed)
     random.shuffle(train_data_list)
 
-    stanford_nlp.close()
+    # if stanford_nlp:  # open a stanford_nlp just now
+    #     stanford_nlp.close()
 
     valid_list_len = len(test_data_list)  # choose the same len as test
     train_list_len = len(train_data_list) - valid_list_len  # from train get valid

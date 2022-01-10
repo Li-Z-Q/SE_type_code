@@ -24,6 +24,8 @@ class MyModel(nn.Module):
         self.bert_model_1 = BertModel.from_pretrained('pre_train/', config=self.model_config)
         self.bert_model_2 = BertForTokenClassification.from_pretrained('pre_train/', config=self.model_config)
 
+        self.softmax = nn.Softmax()  # used as weight average
+
         self.sim_softmax = nn.Softmax(dim=0)
         self.reset_num = 0
         self.correct_representation_list = torch.tensor([[0.0 for _ in range(768)] for __ in range(7)]).cuda()  # each class a correct representation
@@ -53,6 +55,9 @@ class MyModel(nn.Module):
         outputs = self.bert_model_2(inputs_embeds=sentence_embeddings_list, labels=gold_labels_list)
 
         logits = outputs.logits.squeeze(0)  # sentence_num * 7
+
+        softmax_output = self.softmax(logits)  # s.num * 7
+
         pre_labels_list = []
         for i in range(logits.shape[0]):
             pre_labels_list.append(int(torch.argmax(logits[i])))
@@ -85,8 +90,8 @@ class MyModel(nn.Module):
 
             if pre_label == gold_label:
                 self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + \
-                                                               sentence_embedding_new
-                self.correct_num_list[gold_label] += 1
+                                                               sentence_embedding_new * softmax_output[j][gold_label]
+                self.correct_num_list[gold_label] += softmax_output[j][gold_label]
 
         return pre_labels_list, loss
 

@@ -25,6 +25,8 @@ class MyModel(nn.Module):
 
         self.bert_model = BertForSequenceClassification.from_pretrained('pre_train/', config=self.model_config)
 
+        self.softmax = nn.Softmax(dim=0)
+
         # self.hidden2tag = nn.Linear(768, 7)
         # self.softmax = nn.LogSoftmax()
         self.reset_num = 0
@@ -46,14 +48,15 @@ class MyModel(nn.Module):
         outputs = self.bert_model(inputs, labels=labels.cuda())
 
         output = outputs.logits
-        output = output.squeeze(0)
+        output = output.squeeze(0)  # size is 7
         pre_label = int(torch.argmax(output))
+        softmax_output = self.softmax(output)
 
         loss = outputs.loss
-        
+
         last_hidden_states = outputs.hidden_states[-1]  # 1 * s.len * 768
         last_hidden_states_CLS = last_hidden_states.squeeze(0)[0, :]  # size = 768
-        
+
         if self.reset_num > 1:
             # ###################################################### check if label is related with sim
             sim_list = []
@@ -67,18 +70,18 @@ class MyModel(nn.Module):
             # ###########################################################################################################
 
             if pre_label != gold_label:
-                sim_loss = torch.cosine_similarity(last_hidden_states_CLS, 
-                                                   self.last_epoch_correct_representation_list[pre_label, :], 
+                sim_loss = torch.cosine_similarity(last_hidden_states_CLS,
+                                                   self.last_epoch_correct_representation_list[pre_label, :],
                                                    dim=0)
                 loss += sim_loss
 
         if pre_label == gold_label:
             self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + \
-                                                           last_hidden_states_CLS
-            self.correct_num_list[gold_label] += 1
+                                                           last_hidden_states_CLS * softmax_output[gold_label]
+            self.correct_num_list[gold_label] += softmax_output[gold_label]
 
         return pre_label, loss
-    
+
     def reset(self):
         if self.reset_num > 1:
             print(torch.tensor(self.sim_matrix).int())
@@ -93,7 +96,8 @@ class MyModel(nn.Module):
         self.last_epoch_correct_representation_list = self.correct_representation_list
 
         self.correct_num_list = [1] * 7
-        self.correct_representation_list = torch.tensor([[0.0 for _ in range(768)] for _ in range(7)]).cuda()  # each class a gold representation
+        self.correct_representation_list = torch.tensor(
+            [[0.0 for _ in range(768)] for _ in range(7)]).cuda()  # each class a gold representation
 
         self.correct_representation_list = self.correct_representation_list.detach()
         self.last_epoch_correct_representation_list = self.last_epoch_correct_representation_list.detach()
