@@ -6,7 +6,7 @@ from stanfordcorenlp import StanfordCoreNLP
 from tools.from_sentence_2_word_embeddings_list import from_sentence_2_word_embeddings_list
 
 
-print("paragraph level BiLSTM label embedding")
+print("paragraph level BiLSTM label embedding sim")
 
 
 def do_label_embedding(stanford_path):
@@ -44,53 +44,30 @@ class MyModel(nn.Module):
                                 batch_first=True,
                                 bidirectional=True,
                                 dropout=dropout)
-        self.BiLSTM_2 = nn.LSTM(600,
+        self.BiLSTM_2 = nn.LSTM(300,
                                 300 // 2,
                                 num_layers=1,
                                 batch_first=True,
                                 bidirectional=True,
                                 dropout=dropout)
 
-        self.label_embedding_list = do_label_embedding(stanford_path)
-        self.ex_hidden_2_tag = nn.Linear(300, 7)
-        self.ex_softmax = nn.Softmax(dim=0)
-
         self.hidden2tag = nn.Linear(300, 7)
-        self.softmax = nn.LogSoftmax()
+        self.log_softmax = nn.LogSoftmax()
 
-        self.gold_prob = 0
-        self.gold_num = 1
+        self.label_embedding_list = do_label_embedding(stanford_path)
 
     def forward(self, sentences_list, gold_labels_list):  # [4*3336, 7*336, 1*336]
         sentence_embeddings_list = []
-        for i in range(len(sentences_list)):
-
-            sentence = sentences_list[i]
+        for sentence in sentences_list:
             word_embeddings_list = sentence.unsqueeze(0).cuda()  # 1 * sentence_len * 336
 
             init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
             word_embeddings_output, _ = self.BiLSTM_1(word_embeddings_list, init_hidden)  # 1 * sentence_len * 300
 
             sentence_embedding = torch.max(word_embeddings_output[0, :, :], 0)[0]  # size = 300
-
-            gold_label = gold_labels_list[i]
-            # one_hot_vector = [0 for _ in range(7)]
-            # one_hot_vector[gold_label] = 1
-            ex_output = self.ex_hidden_2_tag(sentence_embedding)  # size is 7
-            ex_output = self.ex_softmax(ex_output)  # size is 7
-            temp_pre_label = torch.argmax(ex_output, dim=0)
-            if temp_pre_label == gold_label:
-                # print(ex_output, temp_pre_label)
-                self.gold_prob += ex_output[temp_pre_label]
-                self.gold_num += 1
-            if ex_output[temp_pre_label] > 0.165:
-                sentence_embedding = torch.cat((sentence_embedding, self.label_embedding_list[temp_pre_label]), dim=0).cuda()  # size is 300 + 300
-            else:
-                sentence_embedding = torch.cat((sentence_embedding, self.label_embedding_list[7]), dim=0).cuda()
-
             sentence_embeddings_list.append(sentence_embedding)
-        sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # sentence_num * 307
-        sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 307
+        sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # sentence_num * 300
+        sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 300
 
         init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
         sentence_embeddings_output, _ = self.BiLSTM_2(sentence_embeddings_list, init_hidden)  # 1 * sentence_num * 300
@@ -98,22 +75,27 @@ class MyModel(nn.Module):
 
         output = self.hidden2tag(sentence_embeddings_output)  # 3 * 7
 
-        output = self.softmax(output)  # 3 * 7
+        log_softmax_output = self.log_softmax(output)  # 3 * 7
+
+        # softmax_output = self.softmax(output)  # size is 3 * 7
 
         pre_labels_list = []
-        for i in range(output.shape[0]):
-            pre_labels_list.append(int(torch.argmax(output[i])))
+        for i in range(log_softmax_output.shape[0]):
+            pre_labels_list.append(int(torch.argmax(log_softmax_output[i])))
 
         loss = 0
-        for i in range(len(gold_labels_list)):
-            label = gold_labels_list[i]
-            loss += -output[i][label]
+        for j in range(len(gold_labels_list)):
+            gold_label = gold_labels_list[j]
+            pre_label = pre_labels_list[j]
+            loss += -log_softmax_output[j][gold_label]
+
+            sentence_embedding_new = sentence_embeddings_output[j, :]  # size is 300
+            loss += -torch.cosine_similarity(sentence_embedding_new,
+                                             self.label_embedding_list[gold_label],
+                                             dim=0)
+            if pre_label != gold_label:
+                loss += torch.cosine_similarity(sentence_embedding_new,
+                                                   self.label_embedding_list[pre_label],
+                                                   dim=0)
 
         return pre_labels_list, loss
-
-    def reset(self):
-        print(self.gold_prob / self.gold_num)
-        self.gold_prob = 0
-        self.gold_num = 1
-
-

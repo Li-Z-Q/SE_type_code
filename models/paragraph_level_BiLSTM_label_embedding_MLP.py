@@ -6,7 +6,7 @@ from stanfordcorenlp import StanfordCoreNLP
 from tools.from_sentence_2_word_embeddings_list import from_sentence_2_word_embeddings_list
 
 
-print("paragraph level BiLSTM label embedding")
+print("paragraph level BiLSTM label embedding MLP")
 
 
 def do_label_embedding(stanford_path):
@@ -26,10 +26,13 @@ def do_label_embedding(stanford_path):
         label_embedding_list.append(label_embedding)
         # input()
 
-    average_labels_embedding = torch.mean(torch.stack(label_embedding_list), dim=0)  # will get size is 300
-    label_embedding_list.append(average_labels_embedding)
+    # average_labels_embedding = torch.mean(torch.stack(label_embedding_list), dim=0)  # will get size is 300
+    # label_embedding_list.append(average_labels_embedding)
 
     stanford_nlp.close()
+
+    label_embedding_list = torch.stack(label_embedding_list)  # 8 * 300
+
     return label_embedding_list
 
 
@@ -51,15 +54,16 @@ class MyModel(nn.Module):
                                 bidirectional=True,
                                 dropout=dropout)
 
-        self.label_embedding_list = do_label_embedding(stanford_path)
+        self.label_embedding_list = nn.Parameter(do_label_embedding(stanford_path), requires_grad=True)
+
+        self.mlp = nn.Linear(in_features=600, out_features=600)
+        self.relu = nn.ReLU()
+
         self.ex_hidden_2_tag = nn.Linear(300, 7)
         self.ex_softmax = nn.Softmax(dim=0)
 
         self.hidden2tag = nn.Linear(300, 7)
-        self.softmax = nn.LogSoftmax()
-
-        self.gold_prob = 0
-        self.gold_num = 1
+        self.log_softmax = nn.LogSoftmax()
 
     def forward(self, sentences_list, gold_labels_list):  # [4*3336, 7*336, 1*336]
         sentence_embeddings_list = []
@@ -73,23 +77,21 @@ class MyModel(nn.Module):
 
             sentence_embedding = torch.max(word_embeddings_output[0, :, :], 0)[0]  # size = 300
 
-            gold_label = gold_labels_list[i]
-            # one_hot_vector = [0 for _ in range(7)]
-            # one_hot_vector[gold_label] = 1
+            # gold_label = gold_labels_list[i]
             ex_output = self.ex_hidden_2_tag(sentence_embedding)  # size is 7
             ex_output = self.ex_softmax(ex_output)  # size is 7
-            temp_pre_label = torch.argmax(ex_output, dim=0)
-            if temp_pre_label == gold_label:
-                # print(ex_output, temp_pre_label)
-                self.gold_prob += ex_output[temp_pre_label]
-                self.gold_num += 1
-            if ex_output[temp_pre_label] > 0.165:
-                sentence_embedding = torch.cat((sentence_embedding, self.label_embedding_list[temp_pre_label]), dim=0).cuda()  # size is 300 + 300
-            else:
-                sentence_embedding = torch.cat((sentence_embedding, self.label_embedding_list[7]), dim=0).cuda()
 
-            sentence_embeddings_list.append(sentence_embedding)
-        sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # sentence_num * 307
+            average_label_embedding = torch.tensor([0.0 for _ in range(300)]).cuda()
+            for j in range(7):
+                average_label_embedding = average_label_embedding + self.label_embedding_list[j, :] * ex_output[j]
+            
+            joint_sentence_embedding = torch.cat((sentence_embedding, average_label_embedding), dim=0).unsqueeze(0)  # size is 1 * 600
+            joint_sentence_embedding = self.mlp(joint_sentence_embedding).squeeze(0)  # size is 300
+            joint_sentence_embedding = self.relu(joint_sentence_embedding)
+
+            sentence_embeddings_list.append(joint_sentence_embedding)
+            
+        sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # sentence_num * 300
         sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 307
 
         init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
@@ -98,7 +100,7 @@ class MyModel(nn.Module):
 
         output = self.hidden2tag(sentence_embeddings_output)  # 3 * 7
 
-        output = self.softmax(output)  # 3 * 7
+        output = self.log_softmax(output)  # 3 * 7
 
         pre_labels_list = []
         for i in range(output.shape[0]):
@@ -111,9 +113,9 @@ class MyModel(nn.Module):
 
         return pre_labels_list, loss
 
-    def reset(self):
-        print(self.gold_prob / self.gold_num)
-        self.gold_prob = 0
-        self.gold_num = 1
-
+    # def reset(self):
+    #     print(self.gold_prob / self.gold_num)
+    #     self.gold_prob = 0
+    #     self.gold_num = 1
+    # 
 

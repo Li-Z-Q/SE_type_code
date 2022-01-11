@@ -86,7 +86,7 @@ class MyModel(nn.Module):
                     sim_loss = torch.cosine_similarity(sentence_embedding_new,
                                                        self.last_epoch_correct_representation_list[pre_label, :],
                                                        dim=0)
-                    loss += sim_loss
+                    loss += sim_loss * 1.5
 
             if pre_label == gold_label:
                 self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + \

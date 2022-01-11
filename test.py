@@ -43,6 +43,10 @@ pre = torch.nn.Linear(300, 7)
 a_p = pre(a)
 print(a_p)
 
+a = torch.tensor([[3, 4, 1]])
+print(a.shape)
+print(torch.max(a, dim=0)[0])
+
 a = [torch.tensor([1.1, 2.1]), torch.tensor([0.1, 3.1])]
 print(a)
 print(torch.mean(torch.stack(a), dim=0))
