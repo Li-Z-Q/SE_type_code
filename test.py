@@ -33,20 +33,37 @@
 # print(len(ss))
 # pp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # print(len(pp))
+import random
+
 import torch
 
-t1 = 1.2
-# open('output/sentence_level_bilstm/' + str(t1) + '.txt', 'w')
+# t1 = 1.2
+# # open('output/sentence_level_bilstm/' + str(t1) + '.txt', 'w')
+#
+# a = torch.tensor([1.1 for _ in range(300)])
+# pre = torch.nn.Linear(300, 7)
+# a_p = pre(a)
+# print(a_p)
+#
+# a = torch.tensor([[3, 4, 1]])
+# print(a.shape)
+# print(torch.max(a, dim=0)[0])
+#
+# a = [torch.tensor([1.1, 2.1]), torch.tensor([0.1, 3.1])]
+# print(a)
+# print(torch.mean(torch.stack(a), dim=0))
 
-a = torch.tensor([1.1 for _ in range(300)])
-pre = torch.nn.Linear(300, 7)
-a_p = pre(a)
-print(a_p)
+# a = torch.tensor([[1.1 + i] for i in range(7)])
+# print(a)
+# print(torch.sort(a, descending=True, dim=0))
 
-a = torch.tensor([[3, 4, 1]])
-print(a.shape)
-print(torch.max(a, dim=0)[0])
+print(random.randint(10, 100))
 
-a = [torch.tensor([1.1, 2.1]), torch.tensor([0.1, 3.1])]
+a = torch.tensor(1)
 print(a)
-print(torch.mean(torch.stack(a), dim=0))
+print(int(a))
+
+model = torch.load('./models/model_sentence_level_BiLSTM_extra.pt')
+for name, parameters in model.named_parameters():
+    print(name, ':')
+# print(model.parameters())
