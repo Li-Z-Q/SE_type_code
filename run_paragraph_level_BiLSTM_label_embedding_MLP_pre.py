@@ -24,12 +24,12 @@ from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 import argparse
 
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=40)
+parser.add_argument('--EPOCHs', type=int, default=10)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
 parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
-parser.add_argument('--fold_num', type=int)
+parser.add_argument('--fold_num', type=int, default=0)
 args = parser.parse_args()
 print(args)
 
@@ -50,13 +50,15 @@ if __name__ == '__main__':
     for t in range(1):
         print("\n\n\n\ntime=", t)
 
+        model = MyModel(dropout=DROPOUT, stanford_path='stanford-corenlp-4.3.1', pre_model_path='models/model_sentence_level_BiLSTM_extra.pt').cuda()
+        optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
+
         train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=True,
                                                                     stanford_path='stanford-corenlp-4.3.1',
                                                                     random_seed=fold_num)
         train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)
 
-        model = MyModel(dropout=DROPOUT, stanford_path='stanford-corenlp-4.3.1').cuda()
-        optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
+
 
         best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list,
                                                                               valid_data_list, EPOCHs)

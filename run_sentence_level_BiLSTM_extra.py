@@ -24,12 +24,12 @@ from train_valid_test.train_valid_sentence_level_model import train_and_valid_ex
 import argparse
 
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=20)
+parser.add_argument('--EPOCHs', type=int, default=8)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
 parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
-parser.add_argument('--fold_num', type=int)
+parser.add_argument('--fold_num', type=int, default=0)
 args = parser.parse_args()
 print(args)
 

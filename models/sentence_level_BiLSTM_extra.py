@@ -7,7 +7,7 @@ print("sentence level BiLSTM extra")
 
 
 class MyModel(nn.Module):
-    def __init__(self, dropout):
+    def __init__(self, dropout=0):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
@@ -37,3 +37,6 @@ class MyModel(nn.Module):
         loss = -output[gold_label]
 
         return pre_label, loss, sentence_embedding
+
+    def load_model(self, path):
+        return torch.load(path)
