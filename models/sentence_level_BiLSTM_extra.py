@@ -18,7 +18,8 @@ class MyModel(nn.Module):
                               bidirectional=True,
                               dropout=dropout)
         self.hidden2tag = nn.Linear(300, 7)
-        self.softmax = nn.LogSoftmax()
+        self.log_softmax = nn.LogSoftmax()
+        self.softmax = nn.Softmax()
 
     def forward(self, word_embeddings_list, gold_label):
         word_embeddings_list = word_embeddings_list.unsqueeze(0).cuda()  # 1 * sentence_len * 300
@@ -28,15 +29,18 @@ class MyModel(nn.Module):
 
         sentence_embedding = torch.max(BiLSTM_output, 1)[0]  # 1 * 300
 
-        output = self.hidden2tag(sentence_embedding)  # 1 * 7
+        hidden_output = self.hidden2tag(sentence_embedding)  # 1 * 7
 
-        output = self.softmax(output)  # 1 * 7
+        output = self.log_softmax(hidden_output)  # 1 * 7
         output = output.squeeze(0)
+
+        softmax_output = self.softmax(hidden_output)
+        softmax_output = softmax_output.squeeze(0)  # size is 7, uesed to representantion believeable
 
         pre_label = int(torch.argmax(output))
         loss = -output[gold_label]
 
-        return pre_label, loss, sentence_embedding
+        return pre_label, loss, sentence_embedding, softmax_output
 
     def load_model(self, path):
         return torch.load(path)

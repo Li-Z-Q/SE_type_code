@@ -41,6 +41,8 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
             optimizer.step()
 
         # ################################### valid ##############################
+        if hasattr(model, 'valid_flag'):
+            model.valid_flag = True
         model.eval()
         useful_target_Y_list = []
         useful_predict_Y_list = []

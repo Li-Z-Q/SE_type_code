@@ -1,82 +1,49 @@
-import os
-import sys
-
-import numpy as np
-
-sys.path.append(os.getcwd() + '/data')
-sys.path.append(os.getcwd() + '/models')
-sys.path.append(os.getcwd() + '/tools')
-sys.path.append(os.getcwd() + '/pre_train')
-print(sys.path)
-# os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
-import warnings
-
-warnings.filterwarnings('ignore')
+import random
 
 import torch
 from torch import optim
 from models.sentence_level_BiLSTM_extra import MyModel
-from tools.get_sentence_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list
-from train_valid_test.test_sentence_level_model import test_model
 from train_valid_test.train_valid_sentence_level_model import train_and_valid_extra
 
-import argparse
 
-parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=8)
-parser.add_argument('--DROPOUT', type=float, default=0.5)
-parser.add_argument('--BATCH_SIZE', type=int, default=128)
-parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
-parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
-parser.add_argument('--fold_num', type=int, default=0)
-args = parser.parse_args()
-print(args)
+def from_paragraph_to_sentence(paragraph_data_list):
+    sentence_data_list = []
 
-EPOCHs = args.EPOCHs
-DROPOUT = args.DROPOUT
-BATCH_SIZE = args.BATCH_SIZE
-LEARN_RATE = args.LEARN_RATE
-WEIGHT_DECAY = args.WEIGHT_DECAY
-fold_num = args.fold_num
+    for paragraph_data in paragraph_data_list:
+        for sentence, label in zip(paragraph_data[3], paragraph_data[1]):
+            # for BiLSTM, sentence is words_embeddings_list
+            if label != 7:
+                sentence_data_list.append(["LZQ", label, sentence])
 
-if __name__ == '__main__':
+    random.shuffle(sentence_data_list)
 
-    test_f1_list = []
-    test_acc_list = []
-    valid_best_f1_list = []
-    valid_best_acc_list = []
+    return sentence_data_list
 
-    for t in range(1):
-        print("\n\n\n\ntime=", t)
 
-        train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=True,
-                                                                    stanford_path='stanford-corenlp-4.3.1',
-                                                                    random_seed=fold_num)
-        train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=1)
+def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_data_list):
+    print("\n\nstart sentence level BiLSTM  extra")
 
-        model = MyModel(dropout=DROPOUT).cuda()
-        optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
+    EPOCHs = 4
+    DROPOUT = 0.5
+    BATCH_SIZE = 128
+    LEARN_RATE = 1e-3
+    WEIGHT_DECAY = 1e-4
 
-        best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid_extra(model, optimizer, train_batch_list,
-                                                                              valid_data_list, EPOCHs)
-        torch.save(best_model, 'output/model_sentence_level_BiLSTM_extra.pt')
-        print("time={}, best_epoch: ".format(t), best_epoch, best_macro_Fscore, best_acc)
+    test_data_list = from_paragraph_to_sentence(paragraph_test_data_list)
+    valid_data_list = from_paragraph_to_sentence(paragraph_valid_data_list)
+    train_data_list = from_paragraph_to_sentence(paragraph_train_data_list)
 
-        f1_score, acc = test_model(test_data_list, best_model)
+    train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=1)
 
-        test_f1_list.append(f1_score)
-        test_acc_list.append(acc)
-        valid_best_f1_list.append(best_macro_Fscore)
-        valid_best_acc_list.append(best_acc)
+    model = MyModel(dropout=DROPOUT).cuda()
+    optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
-    ################################
-    print("test f1:  ", np.mean(np.array(test_f1_list)), test_f1_list)
-    print("test ass: ", np.mean(np.array(test_acc_list)), test_acc_list)
-    print("valid f1: ", np.mean(np.array(valid_best_f1_list)), valid_best_f1_list)
-    print("valid acc:", np.mean(np.array(valid_best_acc_list)), valid_best_acc_list)
+    best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid_extra(model, optimizer, train_batch_list,
+                                                                          valid_data_list, EPOCHs)
+    torch.save(best_model, 'models/model_sentence_level_BiLSTM_extra.pt')
+    print("sentence level BiLSTM  extra best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
-    # open('output/sentence_level_BiLSTM_extra/base/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
-    # open('output/sentence_level_BiLSTM_extra/base/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
-    # open('output/sentence_level_BiLSTM_extra/base/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
-    # open('output/sentence_level_BiLSTM_extra/base/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')
+    # test_model(test_data_list, best_model)
+
+    print("sentence level BiLSTM  extra end\n\n********************************************")

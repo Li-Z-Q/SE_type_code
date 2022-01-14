@@ -14,6 +14,7 @@ warnings.filterwarnings('ignore')
 
 import torch
 import numpy as np
+import run_sentence_level_BiLSTM_extra
 from torch import optim
 from tools.get_paragraph_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list
@@ -24,7 +25,7 @@ from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 import argparse
 
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=10)
+parser.add_argument('--EPOCHs', type=int, default=20)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
@@ -58,7 +59,7 @@ if __name__ == '__main__':
                                                                     random_seed=fold_num)
         train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)
 
-
+        run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list)
 
         best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list,
                                                                               valid_data_list, EPOCHs)

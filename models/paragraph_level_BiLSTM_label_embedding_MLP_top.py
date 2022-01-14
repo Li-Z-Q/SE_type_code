@@ -120,7 +120,7 @@ class MyModel(nn.Module):
         score_list = score_list.squeeze(0)
         score_list = self.score_softmax(score_list)  # size is s.num
         score_index_list = torch.sort(score_list, dim=0, descending=True)[1]
-        score_index_list = score_index_list[:int(0.2*len(score_index_list))]  # use top 20%
+        score_index_list = score_index_list[:int(0.8*len(score_index_list))]  # use top 20%
 
         # get sentences_embedding list from old or joint
         sentence_embeddings_list = []

@@ -75,7 +75,7 @@ def train_and_valid_extra(model, optimizer, train_batch_list, valid_data_list, t
                 gold_label = train_data[1]
                 inputs = train_data[2]  # for BiLSTM is words_embeddings_list, for BERT is words_ids_list
 
-                pre_label, loss, _ = model.forward(inputs, gold_label)  # 1 * 7
+                pre_label, loss, _, _ = model.forward(inputs, gold_label)  # 1 * 7
 
                 batch_loss += loss
 
@@ -83,6 +83,8 @@ def train_and_valid_extra(model, optimizer, train_batch_list, valid_data_list, t
             optimizer.step()
 
         # ################################### valid ##############################
+        if hasattr(model, 'valid_flag'):
+            model.valid_flag = True
         model.eval()
         useful_target_Y_list = []
         useful_predict_Y_list = []
@@ -91,7 +93,7 @@ def train_and_valid_extra(model, optimizer, train_batch_list, valid_data_list, t
                 gold_label = valid_data[1]
                 inputs = valid_data[2]  # for BiLSTM is words_embeddings_list, for BERT is words_ids_list
 
-                pre_label, loss, _ = model.forward(inputs, gold_label)  # 1 * 7
+                pre_label, loss, _, _ = model.forward(inputs, gold_label)  # 1 * 7
 
                 useful_target_Y_list.append(gold_label)
                 useful_predict_Y_list.append(pre_label)

@@ -21,7 +21,7 @@ from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 
 import argparse
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=20)
+parser.add_argument('--EPOCHs', type=int, default=40)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=4)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-5)
