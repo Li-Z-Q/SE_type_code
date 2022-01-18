@@ -1,4 +1,4 @@
-description: run_sentence_level_BERT
+description: run_paragraph_level_BERT
 
 environment:
   image: 124.16.138.141/lizhuoqun/transformers:v3
@@ -28,4 +28,4 @@ bind_mounts:
 
 resources:
   slots: 1
-  resource_pool: A100-80G
+  resource_pool: A100-40G

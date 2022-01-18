@@ -57,13 +57,15 @@ import torch
 # print(a)
 # print(torch.sort(a, descending=True, dim=0))
 
-print(random.randint(10, 100))
+print(random.randint(0, 1))
 
-a = torch.tensor(1)
-print(a)
-print(int(a))
+print(torch.randn(10))
 
-model = torch.load('./models/model_sentence_level_BiLSTM_extra.pt')
-for name, parameters in model.named_parameters():
-    print(name, ':')
-# print(model.parameters())
+# a = torch.tensor(1)
+# print(a)
+# print(int(a))
+#
+# model = torch.load('./models/model_sentence_level_BiLSTM_extra.pt')
+# for name, parameters in model.named_parameters():
+#     print(name, ':')
+# # print(model.parameters())

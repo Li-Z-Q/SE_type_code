@@ -1,16 +1,20 @@
 import random
 
 import torch
-import gensim
 import numpy as np
 import torch.nn as nn
 from sklearn import metrics
-from torch.autograd import Variable
-from stanfordcorenlp import StanfordCoreNLP
-from models.sentence_level_BiLSTM_extra import MyModel as MyModel_ex
-from tools.from_sentence_2_word_embeddings_list import from_sentence_2_word_embeddings_list
+from models.sentence_level_BERT_extra import MyModel as MyModel_ex
+from transformers import BertTokenizer, BertConfig, BertModel, BertForTokenClassification
 
-print("paragraph level BiLSTM label embedding MLP pre")
+
+print("paragraph level BERT label embedding MLP pre")
+
+tokenizer = BertTokenizer.from_pretrained('pre_train')
+model_config = BertConfig.from_pretrained('pre_train')
+model_config.num_labels = 7
+# model_config.output_attentions = True
+# model_config.output_hidden_states = True
 
 
 def do_label_embedding(stanford_path):
@@ -31,35 +35,22 @@ def do_label_embedding(stanford_path):
     return label_embedding_list
 
 
-def do_label_embedding_random():
-    label_embedding_list = []
-    for i in range(7):
-        label_embedding = torch.randn(300)
-        label_embedding_list.append(label_embedding)
-    label_embedding_list = torch.stack(label_embedding_list)  # 8 * 300
-    return label_embedding_list
-
-
 class MyModel(nn.Module):
     def __init__(self, dropout, stanford_path, pre_model_path, cheat, mask_p):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
+
         tmp = MyModel_ex()
-        self.BiLSTM_1 = tmp.load_model(path=pre_model_path)
-        self.BiLSTM_1_r = True
-        print("self.BiLSTM_1_require_grad: ", self.BiLSTM_1_r)
-        for p in self.BiLSTM_1.parameters():
-            p.requires_grad = self.BiLSTM_1_r
+        self.bert_model_1 = tmp.load_model(path=pre_model_path)
+        self.BERT_1_r = True
+        print("self.BERT_1_require_grad: ", self.BERT_1_r)
+        for p in self.bert_model_1.parameters():
+            p.requires_grad = self.BERT_1_r
 
-        self.BiLSTM_2 = nn.LSTM(300,
-                                300 // 2,
-                                num_layers=1,
-                                batch_first=True,
-                                bidirectional=True,
-                                dropout=dropout)
+        self.bert_model_2 = BertForTokenClassification.from_pretrained('pre_train/', config=model_config)
 
-        self.label_embedding_list = nn.Parameter(do_label_embedding(stanford_path), requires_grad=True)
+        self.label_embedding_list = nn.Parameter(do_label_embedding(), requires_grad=True)
 
         self.mlp = nn.Linear(in_features=600, out_features=300)
         self.relu = nn.ReLU()
@@ -76,22 +67,16 @@ class MyModel(nn.Module):
         self.ex_pre_label_list = []
         self.gold_labels_list = []
 
-        self.used_ex_pre_label_list = []
-        self.used_gold_labels_list = []
-
         self.reliability_list = []
         self.c_reliability_list = []
         self.w_reliability_list = []
 
         self.valid_flag = False
-        self.threshold = 0.8
-        print("self.threshold: ", self.threshold)
 
     def forward(self, sentences_list, gold_labels_list):  # [4*3336, 7*336, 1*336]
         old_sentence_embeddings_list = []
         joint_sentence_embeddings_list = []
         ex_pre_label_list = []
-        reliability_list = []
         for i in range(len(sentences_list)):
 
             # get sentence embedding
@@ -103,7 +88,6 @@ class MyModel(nn.Module):
 
             ex_pre_label_list.append(ex_pre_label)
             reliability = softmax_output[ex_pre_label]
-            reliability_list.append(float(reliability))
             self.reliability_list.append(float(reliability))
 
             if self.valid_flag:
@@ -117,22 +101,8 @@ class MyModel(nn.Module):
             # get joint sentence embedding
             average_label_embedding = None
             if self.cheat == "False":
-                if self.mask_p == 3.0:  # only cat up_threshold__pre, others cat random
-                    if float(reliability) > self.threshold:
-                        average_label_embedding = self.label_embedding_list[ex_pre_label, :]
-                    else:
-                        random_gold = random.randint(0, 6)
-                        average_label_embedding = self.label_embedding_list[random_gold, :]
-                elif self.mask_p == 4.0:  # cat all pre_label's random_reverse
-                    while True:
-                        random_pre = random.randint(0, 6)
-                        if random_pre != ex_pre_label:
-                            break
-                    average_label_embedding = self.label_embedding_list[random_pre, :]
-                else:
-                    average_label_embedding = self.label_embedding_list[ex_pre_label, :]
-
-            else:  # cheat == True
+                average_label_embedding = self.label_embedding_list[ex_pre_label, :]
+            else:
                 if self.mask_p >= 0:  # use masked gold label
                     save_p = 1 - self.mask_p
                     r = random.randint(1, 100000)
@@ -153,8 +123,6 @@ class MyModel(nn.Module):
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                # if self.mask_p == -3:  # if golden label is 0, cat it, else use un-cat
-                #     average_label_embedding = self.label_embedding_list[gold_labels_list[i], :]
 
             joint_sentence_embedding = torch.cat((sentence_embedding, average_label_embedding), dim=0).unsqueeze(0)  # size is 1 * 600
             joint_sentence_embedding = self.mlp(joint_sentence_embedding).squeeze(0)  # size is 300
@@ -164,55 +132,11 @@ class MyModel(nn.Module):
         # get sentences_embedding list from old or joint
         sentence_embeddings_list = []
         for i in range(len(old_sentence_embeddings_list)):
-            if self.cheat == "False":
-                if self.mask_p == 0.0:  # cat all the pre_label
-                    sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                    if self.valid_flag:
-                        self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                        self.used_gold_labels_list.append(gold_labels_list[i])
-
-                if self.mask_p == 1.0:  # only cat correct_pre, others use un-cat
-                    if ex_pre_label_list[i] == gold_labels_list[i]:
-                        sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                        if self.valid_flag:
-                            self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                            self.used_gold_labels_list.append(gold_labels_list[i])
-                    else:
-                        sentence_embeddings_list.append(old_sentence_embeddings_list[i])
-
-                if self.mask_p == 2.0:  # only cat up_threshold__pre, others use un-cat
-                    if reliability_list[i] > self.threshold:
-                        sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                        if self.valid_flag:
-                            self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                            self.used_gold_labels_list.append(gold_labels_list[i])
-                    else:
-                        sentence_embeddings_list.append(old_sentence_embeddings_list[i])
-
-                if self.mask_p == 3.0:  # only cat up_threshold__pre, others cat random
-                    sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                    if self.valid_flag:
-                        self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                        self.used_gold_labels_list.append(gold_labels_list[i])
-
-                if self.mask_p == 4.0:  # cat all pre_label's random_reverse
-                    sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                    if self.valid_flag:
-                        self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                        self.used_gold_labels_list.append(gold_labels_list[i])
-
-            # cheat is True
-            else:
-                sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                if self.valid_flag:
-                    self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                    self.used_gold_labels_list.append(gold_labels_list[i])
-
+            sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
+            # sentence_embeddings_list.append(old_sentence_embeddings_list[i])
             if self.valid_flag:
                 self.ex_pre_label_list.append(ex_pre_label_list[i])
                 self.gold_labels_list.append(gold_labels_list[i])
-
-
 
         sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # s.num * 300
         sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 307
@@ -246,11 +170,6 @@ class MyModel(nn.Module):
         if self.valid_flag:
             ex_acc = metrics.accuracy_score(self.gold_labels_list, self.ex_pre_label_list)
             print("ex_acc: ", ex_acc)
-            print('ex_Confusion Metric: \n', metrics.confusion_matrix(self.gold_labels_list, self.ex_pre_label_list))
-
-            used_ex_acc = metrics.accuracy_score(self.used_gold_labels_list, self.used_ex_pre_label_list)
-            print("used_ex_acc: ", used_ex_acc)
-            print('used_ex_Confusion Metric: \n', metrics.confusion_matrix(self.used_gold_labels_list, self.used_ex_pre_label_list))
 
             reliability_np = np.array(self.reliability_list)
             print("np.mean(reliability_np): ", np.mean(reliability_np))
@@ -264,16 +183,10 @@ class MyModel(nn.Module):
             print("np.mean(w_reliability_np): ", np.mean(w_reliability_np))
             print("np.median(w_reliability_np): ", np.median(w_reliability_np))
 
-            self.threshold = np.median(c_reliability_np)
-            print("self.threshold: ", self.threshold)
-
         self.valid_flag = False
 
         self.ex_pre_label_list = []
         self.gold_labels_list = []
-
-        self.used_ex_pre_label_list = []
-        self.used_gold_labels_list = []
 
         self.reliability_list = []
         self.c_reliability_list = []

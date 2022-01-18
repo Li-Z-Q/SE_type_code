@@ -7,7 +7,7 @@ print("paragraph level BiLSTM try sim")
 
 
 class MyModel(nn.Module):
-    def __init__(self, dropout):
+    def __init__(self, dropout, p):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
@@ -32,9 +32,11 @@ class MyModel(nn.Module):
         self.sim_softmax = nn.Softmax(dim=0)
         self.reset_num = 0
         self.correct_representation_list = torch.tensor([[0.0 for _ in range(300)] for __ in range(7)]).cuda()  # each class a correct representation
-        self.correct_num_list = [1] * 7
+        self.correct_num_list = [1 for _ in range(7)]
         self.last_epoch_correct_representation_list = torch.tensor([[0.0 for __ in range(300)] for _ in range(7)]).cuda()  # each class a correct representation
-        self.sim_matrix = [[0 for _ in range(7)] for __ in range(7)]
+
+        self.p = p
+        print("self.p: ", self.p)
 
     def forward(self, sentences_list, gold_labels_list):  # [4*3336, 7*336, 1*336]
         sentence_embeddings_list = []
@@ -67,45 +69,39 @@ class MyModel(nn.Module):
         for j in range(len(gold_labels_list)):
             gold_label = gold_labels_list[j]
             pre_label = pre_labels_list[j]
+
+            # normal loss
             loss += -log_softmax_output[j][gold_label]
 
             sentence_embedding_new = sentence_embeddings_output[j, :]  # size is 300
             if self.reset_num > 1:
-                # ###################################################### check if label is related with sim
-                sim_list = []
+                p_distance = 0
+                n_distance = 0
                 for i in range(7):
-                    sim_list.append(torch.cosine_similarity(sentence_embedding_new,
-                                                            self.last_epoch_correct_representation_list[i, :],
-                                                            dim=0))
-                # sim_list = self.sim_softmax(torch.tensor(sim_list))
-                for i in range(7):
-                    self.sim_matrix[gold_label][i] += sim_list[i]
-                # ###########################################################################################################
-
-                if pre_label != gold_label:
-                    sim_loss = torch.cosine_similarity(sentence_embedding_new,
-                                                       self.last_epoch_correct_representation_list[pre_label, :],
-                                                       dim=0)
-                    loss += sim_loss * 1.5
+                    if gold_label == i:
+                        p_distance += torch.cosine_similarity(sentence_embedding_new,
+                                                              self.last_epoch_correct_representation_list[i, :],
+                                                              dim=0)
+                    else:
+                        n_distance += torch.cosine_similarity(sentence_embedding_new,
+                                                              self.last_epoch_correct_representation_list[i, :],
+                                                              dim=0)
+                # contrastive loss
+                loss += (p_distance / n_distance) * self.p
 
             if pre_label == gold_label:
-                self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + \
-                                                               sentence_embedding_new * softmax_output[j][gold_label]
+                self.correct_representation_list[gold_label] = self.correct_representation_list[gold_label] + sentence_embedding_new * softmax_output[j][gold_label]
                 self.correct_num_list[gold_label] += softmax_output[j][gold_label]
 
         return pre_labels_list, loss
 
     def reset(self):
-        if self.reset_num > 1:
-            print(torch.tensor(self.sim_matrix).int())
-
         self.reset_num += 1
         print("self.reset_num: ", self.reset_num)
+        print("self.p: ", self.p)
 
         for i in range(7):
             self.correct_representation_list[i, :] = self.correct_representation_list[i, :] / self.correct_num_list[i]
-            # print(self.correct_representation_list[i, :])
-
         self.last_epoch_correct_representation_list = self.correct_representation_list
 
         self.correct_num_list = [1] * 7
@@ -113,10 +109,3 @@ class MyModel(nn.Module):
 
         self.correct_representation_list = self.correct_representation_list.detach()
         self.last_epoch_correct_representation_list = self.last_epoch_correct_representation_list.detach()
-
-        self.sim_matrix = [[0 for _ in range(7)] for __ in range(7)]
-
-        # if self.correct_representation_list.requires_grad:
-        #     print("retain_grad")
-        #     self.correct_representation_list = self.correct_representation_list.retain_grad()
-        #     self.last_epoch_correct_representation_list = self.last_epoch_correct_representation_list.retain_grad()

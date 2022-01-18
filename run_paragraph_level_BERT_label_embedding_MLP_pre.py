@@ -14,25 +14,25 @@ warnings.filterwarnings('ignore')
 
 import torch
 import numpy as np
-import run_sentence_level_BiLSTM_extra
+import run_sentence_level_BERT_extra
 from torch import optim
 from tools.get_paragraph_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list
 from train_valid_test.test_paragraph_level_model import test_model
-from models.paragraph_level_BiLSTM_label_embedding_MLP_pre import MyModel
+from models.paragraph_level_BERT_label_embedding_MLP_pre import MyModel
 from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 
 import argparse
 
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=40)
+parser.add_argument('--EPOCHs', type=int, default=20)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
-parser.add_argument('--BATCH_SIZE', type=int, default=128)
-parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
+parser.add_argument('--BATCH_SIZE', type=int, default=4)
+parser.add_argument('--LEARN_RATE', type=float, default=1e-5)
 parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
 parser.add_argument('--fold_num', type=int, default=0)
-parser.add_argument('--cheat', type=str, default='False')
-parser.add_argument('--mask_p', type=float, default=0.0)
+parser.add_argument('--cheat', type=str)
+parser.add_argument('--mask_p', type=float)
 args = parser.parse_args()
 print(args)
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
         model = MyModel(dropout=DROPOUT,
                         stanford_path='stanford-corenlp-4.3.1',
-                        pre_model_path='models/model_sentence_level_BiLSTM_extra.pt',
+                        pre_model_path='models/model_sentence_level_BERT_extra.pt',
                         cheat=cheat,
                         mask_p=mask_p).cuda()
         optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
@@ -67,11 +67,11 @@ if __name__ == '__main__':
                                                                     random_seed=fold_num)
         train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)
 
-        run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list)
+        run_sentence_level_BERT_extra.main(train_data_list, valid_data_list, test_data_list)
 
         best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list,
                                                                               valid_data_list, EPOCHs)
-        torch.save(best_model, 'output/model_paragraph_level_BiLSTM_label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '.pt')
+        torch.save(best_model, 'output/model_paragraph_level_BERT_label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '.pt')
         print("best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
         f1_score, acc = test_model(test_data_list, best_model)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     print("valid f1: ", np.mean(np.array(valid_best_f1_list)), valid_best_f1_list)
     print("valid acc:", np.mean(np.array(valid_best_acc_list)), valid_best_acc_list)
 
-    open('output/paragraph_level_BiLSTM/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')
+    open('output/paragraph_level_BERT/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
+    open('output/paragraph_level_BERT/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
+    open('output/paragraph_level_BERT/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
+    open('output/paragraph_level_BERT/label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')

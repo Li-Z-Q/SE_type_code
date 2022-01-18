@@ -27,6 +27,7 @@ parser.add_argument('--BATCH_SIZE', type=int, default=128)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
 parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
 parser.add_argument('--fold_num', type=int)
+parser.add_argument('--p', type=float)
 args = parser.parse_args()
 print(args)
 
@@ -36,6 +37,7 @@ BATCH_SIZE = args.BATCH_SIZE
 LEARN_RATE = args.LEARN_RATE
 WEIGHT_DECAY = args.WEIGHT_DECAY
 fold_num = args.fold_num
+p = args.p
 
 if __name__ == '__main__':
 
@@ -50,11 +52,11 @@ if __name__ == '__main__':
         train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=True, stanford_path='stanford-corenlp-4.3.1', random_seed=fold_num)
         train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)
 
-        model = MyModel(dropout=DROPOUT).cuda()
+        model = MyModel(dropout=DROPOUT, p=p).cuda()
         optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
         best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list, valid_data_list, EPOCHs)
-        torch.save(best_model, 'output/model_paragraph_level_BiLSTM_try_sim.pt')
+        torch.save(best_model, 'output/model_paragraph_level_BiLSTM_try_sim_' + str(p) + '.pt')
         print("best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
         f1_score, acc = test_model(test_data_list, best_model)
@@ -70,7 +72,7 @@ if __name__ == '__main__':
     print("valid f1: ", np.mean(np.array(valid_best_f1_list)), valid_best_f1_list)
     print("valid acc:", np.mean(np.array(valid_best_acc_list)), valid_best_acc_list)
     
-    open('output/paragraph_level_BiLSTM/sim/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/sim/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/sim/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/sim/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')
+    open('output/paragraph_level_BiLSTM/sim_' + str(p) + '/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
+    open('output/paragraph_level_BiLSTM/sim_' + str(p) + '/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
+    open('output/paragraph_level_BiLSTM/sim_' + str(p) + '/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
+    open('output/paragraph_level_BiLSTM/sim_' + str(p) + '/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')

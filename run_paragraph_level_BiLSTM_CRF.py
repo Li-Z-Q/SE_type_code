@@ -3,6 +3,7 @@ import sys
 sys.path.append(os.getcwd() + '/data')
 sys.path.append(os.getcwd() + '/models')
 sys.path.append(os.getcwd() + '/tools')
+sys.path.append(os.getcwd() + '/resource')
 sys.path.append(os.getcwd() + '/pre_train')
 print(sys.path)
 
