@@ -1,0 +1,1213 @@
+['/home/lizhuoqun/SE_type_code', '/home/lizhuoqun/anconda/envs/py38/lib/python38.zip', '/home/lizhuoqun/anconda/envs/py38/lib/python3.8', '/home/lizhuoqun/anconda/envs/py38/lib/python3.8/lib-dynload', '/home/lizhuoqun/anconda/envs/py38/lib/python3.8/site-packages', '/home/lizhuoqun/SE_type_code/data', '/home/lizhuoqun/SE_type_code/models', '/home/lizhuoqun/SE_type_code/tools', '/home/lizhuoqun/SE_type_code/resource', '/home/lizhuoqun/SE_type_code/pre_train']
+sentence level BiLSTM extra
+___________****************************************** 300 ********************************************************************************
+paragraph level BiLSTM label embedding MLP pre
+Namespace(BATCH_SIZE=128, DROPOUT=0.5, EPOCHs=40, LEARN_RATE=0.001, WEIGHT_DECAY=0.0001, cheat='False', fold_num=1, mask_p=0.0)
+
+
+
+
+time= 0
+self.BiLSTM_1_require_grad:  True
+self.cheat:  False
+self.mask_p:  0.0
+start to get stanford
+already get stanford
+start get bert_tokenizer
+get bert tokenizer
+if_do_embedding:  True
+start read data catalogue
+start get train data
+already deal 10 file
+already deal 20 file
+already deal 30 file
+already deal 40 file
+already deal 50 file
+already deal 60 file
+already deal 70 file
+already deal 80 file
+already deal 90 file
+already deal 100 file
+already deal 110 file
+already deal 120 file
+already deal 130 file
+already deal 140 file
+already deal 150 file
+already deal 160 file
+already deal 170 file
+already deal 180 file
+already deal 190 file
+already deal 200 file
+already deal 210 file
+already deal 220 file
+already deal 230 file
+already deal 240 file
+already deal 250 file
+already deal 260 file
+already deal 270 file
+already deal 280 file
+len(train_valid_data_list):  3368
+already deal 10 file
+already deal 20 file
+already deal 30 file
+already deal 40 file
+already deal 50 file
+already deal 60 file
+already deal 70 file
+already deal 80 file
+complete get data, len(test_data_list):  919
+
+
+start sentence level BiLSTM  extra
+
+
+epoch 0/4
+Accuracy:  0.6801186315009004
+Confusion Metric: 
+ [[3490  339   19  405    0   13    3]
+ [ 561 1481   39  155    0    1    1]
+ [  41   80  245    0    0    0    0]
+ [ 536   88    4 1003    0    5    1]
+ [ 189   62    1  107    0    2    0]
+ [ 110   13    4    5    0  109    1]
+ [ 116   22    2   25    0   70   93]]
+Micro Precision/Recall/F-score:  (0.6801186315009004, 0.6801186315009004, 0.6801186315009004, None)
+Macro Precision/Recall/F-score:  (0.6081441215659995, 0.49933258816675125, 0.5264685175447859, None)
+
+
+epoch 1/4
+Accuracy:  0.7214278148501219
+Confusion Metric: 
+ [[3495  306   27  406    0   23   12]
+ [ 404 1631   43  146    0    3   11]
+ [  27   57  282    0    0    0    0]
+ [ 470  100    4 1051    0   10    2]
+ [ 170   68    2  114    0    3    4]
+ [  66    5    2    5    0  153   11]
+ [  79   20    1   19    0   10  199]]
+Micro Precision/Recall/F-score:  (0.7214278148501219, 0.7214278148501219, 0.7214278148501219, None)
+Macro Precision/Recall/F-score:  (0.6375074822203547, 0.5998467457707866, 0.6149647738766223, None)
+
+
+epoch 2/4
+Accuracy:  0.732761360025421
+Confusion Metric: 
+ [[3460  309   24  419    3   30   24]
+ [ 348 1683   45  136    3    4   19]
+ [  23   48  294    1    0    0    0]
+ [ 439  108    6 1068    3    9    4]
+ [ 128   73    3  121   25    5    6]
+ [  55    6    3    6    0  158   14]
+ [  56   16    1   16    2    7  230]]
+Micro Precision/Recall/F-score:  (0.732761360025421, 0.732761360025421, 0.732761360025421, None)
+Macro Precision/Recall/F-score:  (0.7306652808036624, 0.6345086822280549, 0.6451294367686927, None)
+
+
+epoch 3/4
+Accuracy:  0.7357271475479292
+Confusion Metric: 
+ [[3466  259   22  435   24   40   23]
+ [ 343 1649   47  148   23    6   22]
+ [  19   48  297    1    0    1    0]
+ [ 413  105    6 1084   14   10    5]
+ [ 108   69    3  119   50    5    7]
+ [  50    5    3    8    2  161   13]
+ [  48   15    1   17    2    6  239]]
+Micro Precision/Recall/F-score:  (0.7357271475479292, 0.7357271475479292, 0.7357271475479293, None)
+Macro Precision/Recall/F-score:  (0.691365129298109, 0.650690373629131, 0.6595637070246848, None)
+sentence level BiLSTM  extra best_epoch:  3 0.6595637070246848 0.7357271475479292
+sentence level BiLSTM  extra end
+
+********************************************
+
+
+epoch 0/40
+model.reset
+self.reset_num:  0
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  False
+self.BiLSTM_1_require_grad:  True
+Accuracy:  0.7397521448999047
+Confusion Metric: 
+ [[3435  314   70  308   17   51   74]
+ [ 382 1624  105   80   10    8   29]
+ [   9   32  324    0    0    0    1]
+ [ 406   49    8 1141   14    6   13]
+ [ 194   63   10   40   43    3    8]
+ [  41    7    4    5    1  158   26]
+ [  45    9    5    2    1    7  259]]
+Micro Precision/Recall/F-score:  (0.7397521448999047, 0.7397521448999047, 0.7397521448999047, None)
+Macro Precision/Recall/F-score:  (0.6693067133203802, 0.6677398416337833, 0.6468142117905245, None)
+
+
+epoch 1/40
+model.reset
+self.reset_num:  1
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6894396780002119
+np.mean(reliability_np):  0.7280356693692196
+np.median(reliability_np):  0.7619338929653168
+np.mean(c_reliability_np):  0.771377530368467
+np.median(c_reliability_np):  0.8306177258491516
+np.mean(w_reliability_np):  0.571769939051969
+np.median(w_reliability_np):  0.5483752191066742
+Accuracy:  0.7409172757123186
+Confusion Metric: 
+ [[3516  336   59  228   21   56   53]
+ [ 337 1650  112   87   16    6   30]
+ [  13   32  318    0    0    1    2]
+ [ 479   59    7 1056   13    6   17]
+ [ 185   71    8   40   44    2   11]
+ [  44    7    4    6    2  159   20]
+ [  41   13    5    7    1    9  252]]
+Micro Precision/Recall/F-score:  (0.7409172757123186, 0.7409172757123186, 0.7409172757123186, None)
+Macro Precision/Recall/F-score:  (0.6654021917805755, 0.66028765177999, 0.6448812664534991, None)
+
+
+epoch 2/40
+model.reset
+self.reset_num:  2
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7063870352716873
+np.mean(reliability_np):  0.7355384786204946
+np.median(reliability_np):  0.7739028036594391
+np.mean(c_reliability_np):  0.793304452556133
+np.median(c_reliability_np):  0.8555383086204529
+np.mean(w_reliability_np):  0.5926223377472738
+np.median(w_reliability_np):  0.5637984871864319
+Accuracy:  0.749179112382163
+Confusion Metric: 
+ [[3656  193   23  296   49   16   36]
+ [ 502 1543   68   70   29    1   25]
+ [  23   35  306    0    0    0    2]
+ [ 465   30    6 1089   38    0    9]
+ [ 147   56    2   69   80    1    6]
+ [  56    5    3    9    2  150   17]
+ [  54    2    2   11    4    6  249]]
+Micro Precision/Recall/F-score:  (0.749179112382163, 0.749179112382163, 0.7491791123821631, None)
+Macro Precision/Recall/F-score:  (0.7152933916313767, 0.6639651560372785, 0.6813274410079514, None)
+
+
+epoch 3/40
+model.reset
+self.reset_num:  3
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7241817604067365
+np.mean(reliability_np):  0.7434457645086013
+np.median(reliability_np):  0.7879915833473206
+np.mean(c_reliability_np):  0.798304855418132
+np.median(c_reliability_np):  0.8664601445198059
+np.mean(w_reliability_np):  0.5850181305944095
+np.median(w_reliability_np):  0.5558609068393707
+Accuracy:  0.7623133142675564
+Confusion Metric: 
+ [[3559  237   27  358   30   17   41]
+ [ 399 1636   60   92   32    2   17]
+ [  19   37  308    0    0    0    2]
+ [ 343   35    5 1228   19    1    6]
+ [ 162   53    2   76   59    2    7]
+ [  52    5    2    8    1  158   16]
+ [  49    8    1   10    5    6  249]]
+Micro Precision/Recall/F-score:  (0.7623133142675564, 0.7623133142675564, 0.7623133142675563, None)
+Macro Precision/Recall/F-score:  (0.7191208010309325, 0.6759787304870424, 0.6874844280879003, None)
+
+
+epoch 4/40
+model.reset
+self.reset_num:  4
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7062811142887406
+np.mean(reliability_np):  0.7357133702994931
+np.median(reliability_np):  0.7740972638130188
+np.mean(c_reliability_np):  0.7812367445232272
+np.median(c_reliability_np):  0.8399623036384583
+np.mean(w_reliability_np):  0.579674482125261
+np.median(w_reliability_np):  0.5536695122718811
+Accuracy:  0.7629488401652368
+Confusion Metric: 
+ [[3582  228    8  363   38   11   39]
+ [ 445 1636   24   81   30    1   21]
+ [  22   58  283    0    0    0    3]
+ [ 335   41    0 1229   24    1    7]
+ [ 150   56    0   72   71    1   11]
+ [  60    4    2    7    1  153   15]
+ [  54    5    0    9    5    6  249]]
+Micro Precision/Recall/F-score:  (0.7629488401652368, 0.7629488401652368, 0.7629488401652367, None)
+Macro Precision/Recall/F-score:  (0.7420362995607943, 0.6688747849782704, 0.6953874115881279, None)
+
+
+epoch 5/40
+model.reset
+self.reset_num:  5
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7070225611693677
+np.mean(reliability_np):  0.7260236473009943
+np.median(reliability_np):  0.7590034902095795
+np.mean(c_reliability_np):  0.7715650903799114
+np.median(c_reliability_np):  0.8245608806610107
+np.mean(w_reliability_np):  0.5683116875023232
+np.median(w_reliability_np):  0.5422480404376984
+Accuracy:  0.6715390318822159
+Confusion Metric: 
+ [[3887  300   15    0    0   44   23]
+ [ 423 1766   30    0    0    8   11]
+ [  16   61  287    0    0    0    2]
+ [1406  186    3    0    2   31    9]
+ [ 234  110    1    0    5    5    6]
+ [  53    7    2    0    0  164   16]
+ [  65   15    0    0    0   17  231]]
+Micro Precision/Recall/F-score:  (0.6715390318822159, 0.6715390318822159, 0.6715390318822159, None)
+Macro Precision/Recall/F-score:  (0.6156300900717652, 0.5542246797305884, 0.5325033576560102, None)
+
+
+epoch 6/40
+model.reset
+self.reset_num:  6
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6614765385022773
+np.mean(reliability_np):  0.7673042577545208
+np.median(reliability_np):  0.8271783888339996
+np.mean(c_reliability_np):  0.8580573929606484
+np.median(c_reliability_np):  0.9323399066925049
+np.mean(w_reliability_np):  0.7069195153632286
+np.median(w_reliability_np):  0.719477504491806
+Accuracy:  0.7413409596441055
+Confusion Metric: 
+ [[3795  107    4  292   46   10   15]
+ [ 728 1370   27   68   40    2    3]
+ [  38   45  281    0    0    0    2]
+ [ 500   20    0 1082   33    2    0]
+ [ 188   37    0   36   96    1    3]
+ [  60    3    2   10    2  150   15]
+ [  80    3    0   12    4    4  225]]
+Micro Precision/Recall/F-score:  (0.7413409596441055, 0.7413409596441055, 0.7413409596441055, None)
+Macro Precision/Recall/F-score:  (0.766039971610146, 0.643083388749221, 0.6914483552159432, None)
+
+
+epoch 7/40
+model.reset
+self.reset_num:  7
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7029975638173922
+np.mean(reliability_np):  0.7572513222667182
+np.median(reliability_np):  0.8206061720848083
+np.mean(c_reliability_np):  0.7854771311471346
+np.median(c_reliability_np):  0.8505268692970276
+np.mean(w_reliability_np):  0.5783385646113656
+np.median(w_reliability_np):  0.5513131618499756
+Accuracy:  0.7554284503760195
+Confusion Metric: 
+ [[3483  414    8  229   75   37   23]
+ [ 278 1814   24   62   46    6    8]
+ [  14   74  276    0    0    0    2]
+ [ 441   93    1 1047   43   10    2]
+ [  93   93    0   57  110    4    4]
+ [  46    9    2    5    2  167   11]
+ [  50   19    0    8    4   12  235]]
+Micro Precision/Recall/F-score:  (0.7554284503760195, 0.7554284503760195, 0.7554284503760194, None)
+Macro Precision/Recall/F-score:  (0.7239702161727134, 0.6759093194747235, 0.6968518113273384, None)
+
+
+epoch 8/40
+model.reset
+self.reset_num:  8
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7034212477491791
+np.mean(reliability_np):  0.7118943982909466
+np.median(reliability_np):  0.7400867938995361
+np.mean(c_reliability_np):  0.7519555832293715
+np.median(c_reliability_np):  0.8039640188217163
+np.mean(w_reliability_np):  0.5474493162600057
+np.median(w_reliability_np):  0.5164758861064911
+Accuracy:  0.766656074568372
+Confusion Metric: 
+ [[3628  323    6  216   44   27   25]
+ [ 353 1749   19   55   48    6    8]
+ [  23   68  274    0    0    0    1]
+ [ 416   78    1 1091   34   12    5]
+ [ 140   79    0   43   91    4    4]
+ [  53    4    2    5    2  163   13]
+ [  58   12    1    7    2    6  242]]
+Micro Precision/Recall/F-score:  (0.766656074568372, 0.766656074568372, 0.766656074568372, None)
+Macro Precision/Recall/F-score:  (0.7398066789516137, 0.6728403087593765, 0.7012049450639903, None)
+
+
+epoch 9/40
+model.reset
+self.reset_num:  9
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7067047982205275
+np.mean(reliability_np):  0.7081777708332554
+np.median(reliability_np):  0.7357601821422577
+np.mean(c_reliability_np):  0.759866593063896
+np.median(c_reliability_np):  0.8131907284259796
+np.mean(w_reliability_np):  0.5439057544966216
+np.median(w_reliability_np):  0.5094707608222961
+Accuracy:  0.7680330473466794
+Confusion Metric: 
+ [[3655  256    8  230   79   15   26]
+ [ 397 1640   44   61   89    2    5]
+ [  26   45  291    0    1    1    2]
+ [ 394   46    1 1142   51    1    2]
+ [ 135   64    0   28  130    2    2]
+ [  65    3    2    8    4  150   10]
+ [  53    9    0   10    9    4  243]]
+Micro Precision/Recall/F-score:  (0.7680330473466794, 0.7680330473466794, 0.7680330473466793, None)
+Macro Precision/Recall/F-score:  (0.7478411696176089, 0.6860668969993265, 0.7129617720921239, None)
+
+
+epoch 10/40
+model.reset
+self.reset_num:  10
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.7075521660841012
+np.mean(reliability_np):  0.7050109544652585
+np.median(reliability_np):  0.7288641035556793
+np.mean(c_reliability_np):  0.7567331785726511
+np.median(c_reliability_np):  0.8041630685329437
+np.mean(w_reliability_np):  0.5480722831410371
+np.median(w_reliability_np):  0.5090992450714111
+Accuracy:  0.7615718673869294
+Confusion Metric: 
+ [[3644  249    5  207  114   27   23]
+ [ 407 1607   27   61  122    8    6]
+ [  24   60  278    0    2    0    2]
+ [ 397   54    1 1111   67    3    4]
+ [ 122   59    0   31  143    3    3]
+ [  53    5    2    7    3  164    8]
+ [  51    8    1    8    9    8  243]]
+Micro Precision/Recall/F-score:  (0.7615718673869294, 0.7615718673869294, 0.7615718673869295, None)
+Macro Precision/Recall/F-score:  (0.7356107536763792, 0.6892217670171591, 0.7091323062774422, None)
+
+
+epoch 11/40
+model.reset
+self.reset_num:  11
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6938883592839742
+np.mean(reliability_np):  0.7005420582677181
+np.median(reliability_np):  0.7213161587715149
+np.mean(c_reliability_np):  0.7514193253223449
+np.median(c_reliability_np):  0.7983897924423218
+np.mean(w_reliability_np):  0.5462372228967277
+np.median(w_reliability_np):  0.5171613395214081
+Accuracy:  0.7587120008473679
+Confusion Metric: 
+ [[3353  382    8  273  109   93   51]
+ [ 253 1772   39   54   83   18   19]
+ [  13   52  295    0    3    0    3]
+ [ 305   83    1 1163   58   16   11]
+ [  94   74    1   39  138    5   10]
+ [  32    6    3    7    1  180   13]
+ [  33    9    1    8    2   13  262]]
+Micro Precision/Recall/F-score:  (0.7587120008473679, 0.7587120008473679, 0.7587120008473679, None)
+Macro Precision/Recall/F-score:  (0.6830629215239152, 0.7169312417280744, 0.6972156905591353, None)
+
+
+epoch 12/40
+model.reset
+self.reset_num:  12
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6748225823535643
+np.mean(reliability_np):  0.6867297858133156
+np.median(reliability_np):  0.6985992193222046
+np.mean(c_reliability_np):  0.7315864034185341
+np.median(c_reliability_np):  0.7687842845916748
+np.mean(w_reliability_np):  0.5403644501920244
+np.median(w_reliability_np):  0.5112639367580414
+Accuracy:  0.7548988454612858
+Confusion Metric: 
+ [[3423  465    5  139  103  112   22]
+ [ 217 1895   13   30   51   24    8]
+ [  15   80  264    0    1    3    3]
+ [ 435  123    0  996   54   23    6]
+ [ 101  104    0   21  125    7    3]
+ [  31   10    1    4    3  184    9]
+ [  33   22    1    8    9   15  240]]
+Micro Precision/Recall/F-score:  (0.7548988454612858, 0.7548988454612858, 0.7548988454612858, None)
+Macro Precision/Recall/F-score:  (0.7076506114374821, 0.6880864426638341, 0.6882999538864849, None)
+
+
+epoch 13/40
+model.reset
+self.reset_num:  13
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6808600783815274
+np.mean(reliability_np):  0.6830720068095598
+np.median(reliability_np):  0.6935351490974426
+np.mean(c_reliability_np):  0.7303392157403668
+np.median(c_reliability_np):  0.7622873187065125
+np.mean(w_reliability_np):  0.5326785297833762
+np.median(w_reliability_np):  0.5049198269844055
+Accuracy:  0.7484376655015359
+Confusion Metric: 
+ [[3470  415    7  118   68  136   55]
+ [ 249 1839   37   21   56   15   21]
+ [  12   60  288    0    2    1    3]
+ [ 514  118    1  902   63   26   13]
+ [ 114   85    2   23  118    7   12]
+ [  31    6    2    3    2  187   11]
+ [  27   13    3    6    4   13  262]]
+Micro Precision/Recall/F-score:  (0.7484376655015359, 0.7484376655015359, 0.7484376655015359, None)
+Macro Precision/Recall/F-score:  (0.6794460970228047, 0.6958319002131158, 0.6772655267933195, None)
+
+
+epoch 14/40
+model.reset
+self.reset_num:  14
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6614765385022773
+np.mean(reliability_np):  0.6811080611870283
+np.median(reliability_np):  0.689191609621048
+np.mean(c_reliability_np):  0.7249368164017259
+np.median(c_reliability_np):  0.754489541053772
+np.mean(w_reliability_np):  0.5368094958309014
+np.median(w_reliability_np):  0.5060119926929474
+Accuracy:  0.7589238428132613
+Confusion Metric: 
+ [[3772  125    5  243   81   20   23]
+ [ 572 1444   18   73  118    6    7]
+ [  32   62  262    1    3    2    4]
+ [ 402   34    0 1154   42    1    4]
+ [ 143   35    1   49  127    4    2]
+ [  60    2    3    4    3  162    8]
+ [  58    3    1   10    8    4  244]]
+Micro Precision/Recall/F-score:  (0.7589238428132613, 0.7589238428132613, 0.7589238428132613, None)
+Macro Precision/Recall/F-score:  (0.7476227798898373, 0.6735311127127959, 0.704742487760525, None)
+
+
+epoch 15/40
+model.reset
+self.reset_num:  15
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.687850863256011
+np.mean(reliability_np):  0.6768111397643684
+np.median(reliability_np):  0.6828896999359131
+np.mean(c_reliability_np):  0.7180066638527777
+np.median(c_reliability_np):  0.7447008490562439
+np.mean(w_reliability_np):  0.5257851435525724
+np.median(w_reliability_np):  0.4955637753009796
+Accuracy:  0.7394343819510645
+Confusion Metric: 
+ [[3634   99    4  342  103   49   38]
+ [ 642 1323   19  105  116   16   17]
+ [  29   66  255    1    9    3    3]
+ [ 323   27    0 1223   52    4    8]
+ [ 122   36    1   69  122    6    5]
+ [  44    1    2   12    2  174    7]
+ [  55    0    2    9    3    9  250]]
+Micro Precision/Recall/F-score:  (0.7394343819510645, 0.7394343819510645, 0.7394343819510645, None)
+Macro Precision/Recall/F-score:  (0.7037213216358718, 0.6721970318490342, 0.6818099380964442, None)
+
+
+epoch 16/40
+model.reset
+self.reset_num:  16
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6603114076898634
+np.mean(reliability_np):  0.6733543002318229
+np.median(reliability_np):  0.6784552931785583
+np.mean(c_reliability_np):  0.7078818935718069
+np.median(c_reliability_np):  0.7275586128234863
+np.mean(w_reliability_np):  0.533806032919051
+np.median(w_reliability_np):  0.49943438172340393
+Accuracy:  0.750662006143417
+Confusion Metric: 
+ [[3677  174    3  229   68   88   30]
+ [ 469 1525   14  102   99   20    9]
+ [  28   81  244    0    8    1    4]
+ [ 420   43    0 1114   41   14    5]
+ [ 144   53    0   47  107    7    3]
+ [  39    4    1    7    1  181    9]
+ [  50    6    0   12    9   12  239]]
+Micro Precision/Recall/F-score:  (0.750662006143417, 0.750662006143417, 0.750662006143417, None)
+Macro Precision/Recall/F-score:  (0.7028468767133275, 0.6661298465297046, 0.6777581790816732, None)
+
+
+epoch 17/40
+model.reset
+self.reset_num:  17
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6800127105179536
+np.mean(reliability_np):  0.672829144253182
+np.median(reliability_np):  0.6780609488487244
+np.mean(c_reliability_np):  0.7211108423792685
+np.median(c_reliability_np):  0.7546159029006958
+np.mean(w_reliability_np):  0.53094196542037
+np.median(w_reliability_np):  0.4924895465373993
+Accuracy:  0.7311725452812202
+Confusion Metric: 
+ [[3330  164    4  634   89   20   28]
+ [ 491 1495   23  122   90    8    9]
+ [  28   58  270    0    6    0    4]
+ [ 253   43    0 1294   42    0    5]
+ [ 105   44    0  101  107    1    3]
+ [  39    4    1   23    1  165    9]
+ [  48    9    0   13   12    4  242]]
+Micro Precision/Recall/F-score:  (0.7311725452812202, 0.7311725452812202, 0.7311725452812202, None)
+Macro Precision/Recall/F-score:  (0.7206230319694776, 0.6703209365972983, 0.689731123299592, None)
+
+
+epoch 18/40
+model.reset
+self.reset_num:  18
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6535324647812731
+np.mean(reliability_np):  0.6692655018896942
+np.median(reliability_np):  0.6744784712791443
+np.mean(c_reliability_np):  0.7183998263080271
+np.median(c_reliability_np):  0.7507317364215851
+np.mean(w_reliability_np):  0.5417723953086132
+np.median(w_reliability_np):  0.5093258619308472
+Accuracy:  0.7484376655015359
+Confusion Metric: 
+ [[3685  167    2  205  173   21   16]
+ [ 448 1491   20   46  219    9    5]
+ [  24   58  267    0   14    0    3]
+ [ 425   47    0 1066   95    2    2]
+ [ 126   41    0   27  164    3    0]
+ [  52    4    1    8    3  165    9]
+ [  51    6    1    8   29    5  228]]
+Micro Precision/Recall/F-score:  (0.7484376655015359, 0.7484376655015359, 0.7484376655015359, None)
+Macro Precision/Recall/F-score:  (0.7423335869301085, 0.6773361162476196, 0.6988025507878467, None)
+
+
+epoch 19/40
+model.reset
+self.reset_num:  19
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6883804681707446
+np.mean(reliability_np):  0.6666024106668197
+np.median(reliability_np):  0.6693837642669678
+np.mean(c_reliability_np):  0.7124913269248371
+np.median(c_reliability_np):  0.7390817999839783
+np.mean(w_reliability_np):  0.5308248170079787
+np.median(w_reliability_np):  0.49705302715301514
+Accuracy:  0.7401758288316915
+Confusion Metric: 
+ [[3640  145    7  250  179   25   23]
+ [ 472 1431   28   44  246   10    7]
+ [  20   66  266    0   10    0    4]
+ [ 390   41    0 1081  118    3    4]
+ [ 116   34    0   40  167    3    1]
+ [  48    2    1   13    3  167    8]
+ [  56    3    1   10   18    4  236]]
+Micro Precision/Recall/F-score:  (0.7401758288316915, 0.7401758288316915, 0.7401758288316915, None)
+Macro Precision/Recall/F-score:  (0.7250392288691383, 0.6787711243926892, 0.6914581584710289, None)
+
+
+epoch 20/40
+model.reset
+self.reset_num:  20
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6757758712000848
+np.mean(reliability_np):  0.6627483370954402
+np.median(reliability_np):  0.6627922058105469
+np.mean(c_reliability_np):  0.7070952853205436
+np.median(c_reliability_np):  0.7314891517162323
+np.mean(w_reliability_np):  0.5271622528635728
+np.median(w_reliability_np):  0.49944695830345154
+Accuracy:  0.7448363520813474
+Confusion Metric: 
+ [[3318  323    9  356  187   41   35]
+ [ 275 1716   32   38  156   10   11]
+ [  16   64  276    0    6    0    4]
+ [ 301   77    0 1143  107    3    6]
+ [  81   61    0   55  154    6    4]
+ [  34    5    1   10    5  179    8]
+ [  36   10    3    8   20    5  246]]
+Micro Precision/Recall/F-score:  (0.7448363520813474, 0.7448363520813474, 0.7448363520813472, None)
+Macro Precision/Recall/F-score:  (0.7009993058489423, 0.7017966114989751, 0.6971527306030492, None)
+
+
+epoch 21/40
+model.reset
+self.reset_num:  21
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6516258870882322
+np.mean(reliability_np):  0.6558361686689038
+np.median(reliability_np):  0.6515931487083435
+np.mean(c_reliability_np):  0.6991500056994248
+np.median(c_reliability_np):  0.717495322227478
+np.mean(w_reliability_np):  0.5218148089290644
+np.median(w_reliability_np):  0.4919144809246063
+Accuracy:  0.7446245101154538
+Confusion Metric: 
+ [[3396  328    9  280  182   44   30]
+ [ 280 1697   31   37  171   13    9]
+ [  14   60  280    0    9    0    3]
+ [ 348   86    1 1082  105   10    5]
+ [  90   64    0   36  161    6    4]
+ [  36    4    2    9    5  176   10]
+ [  45    9    1    6   23    6  238]]
+Micro Precision/Recall/F-score:  (0.7446245101154538, 0.7446245101154538, 0.7446245101154539, None)
+Macro Precision/Recall/F-score:  (0.7005356680032105, 0.6969467334686856, 0.6934777748935236, None)
+
+
+epoch 22/40
+model.reset
+self.reset_num:  22
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6575574621332486
+np.mean(reliability_np):  0.6487285991447765
+np.median(reliability_np):  0.6406598389148712
+np.mean(c_reliability_np):  0.692847230961335
+np.median(c_reliability_np):  0.709879070520401
+np.mean(w_reliability_np):  0.5166977494309791
+np.median(w_reliability_np):  0.48498448729515076
+Accuracy:  0.7413409596441055
+Confusion Metric: 
+ [[3626  323    9  102  168   30   11]
+ [ 310 1749   18   11  139   10    1]
+ [  15   81  263    0    5    0    2]
+ [ 570  121    0  816  124    4    2]
+ [ 108   70    0   14  162    5    2]
+ [  46    6    1    6    6  170    7]
+ [  51   16    1    8   33    6  213]]
+Micro Precision/Recall/F-score:  (0.7413409596441055, 0.7413409596441055, 0.7413409596441055, None)
+Macro Precision/Recall/F-score:  (0.7378067860244225, 0.664079383236657, 0.6856981333830336, None)
+
+
+epoch 23/40
+model.reset
+self.reset_num:  23
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6685732443597077
+np.mean(reliability_np):  0.6488688743740055
+np.median(reliability_np):  0.6403680443763733
+np.mean(c_reliability_np):  0.7021557216961007
+np.median(c_reliability_np):  0.7221258282661438
+np.mean(w_reliability_np):  0.5205487586288796
+np.median(w_reliability_np):  0.48892611265182495
+Accuracy:  0.7485435864844826
+Confusion Metric: 
+ [[3394  392    4  245  172   37   25]
+ [ 236 1857    6   27  100    7    5]
+ [  13  125  219    0    6    0    3]
+ [ 349  132    0 1029  119    6    2]
+ [  84   89    0   22  160    4    2]
+ [  33    8    0    8    6  178    9]
+ [  41   18    0    8   26    5  230]]
+Micro Precision/Recall/F-score:  (0.7485435864844826, 0.7485435864844826, 0.7485435864844826, None)
+Macro Precision/Recall/F-score:  (0.7295986277121216, 0.6759588879217786, 0.6914199409426559, None)
+
+
+epoch 24/40
+model.reset
+self.reset_num:  24
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6696324541891748
+np.mean(reliability_np):  0.6572071705768732
+np.median(reliability_np):  0.6538763046264648
+np.mean(c_reliability_np):  0.711393185428938
+np.median(c_reliability_np):  0.7356808483600616
+np.mean(w_reliability_np):  0.5271531344320041
+np.median(w_reliability_np):  0.49807220697402954
+Accuracy:  0.7306429403664866
+Confusion Metric: 
+ [[3107  403    1  525  175   34   24]
+ [ 214 1820    4   68  116   10    6]
+ [  13  133  204    0   12    0    4]
+ [ 230  113    0 1208   80    4    2]
+ [  67   78    0   60  149    5    2]
+ [  27    9    0   17    6  176    7]
+ [  38   17    0   12   17   10  234]]
+Micro Precision/Recall/F-score:  (0.7306429403664866, 0.7306429403664866, 0.7306429403664866, None)
+Macro Precision/Recall/F-score:  (0.7152562647029208, 0.669967605940632, 0.6799243562464513, None)
+
+
+epoch 25/40
+model.reset
+self.reset_num:  25
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6561804893549412
+np.mean(reliability_np):  0.6590032216130192
+np.median(reliability_np):  0.6558650434017181
+np.mean(c_reliability_np):  0.704042614357812
+np.median(c_reliability_np):  0.7241104245185852
+np.mean(w_reliability_np):  0.531100966738685
+np.median(w_reliability_np):  0.4999736249446869
+Accuracy:  0.7289482046393391
+Confusion Metric: 
+ [[3166  425    4  469  136   46   23]
+ [ 250 1835    7   48   77   13    8]
+ [  10  134  215    0    3    0    4]
+ [ 292  132    0 1137   65    5    6]
+ [  82   81    0   71  121    5    1]
+ [  33    6    1   18    4  174    6]
+ [  32   18    0   14   16   14  234]]
+Micro Precision/Recall/F-score:  (0.7289482046393391, 0.7289482046393391, 0.7289482046393391, None)
+Macro Precision/Recall/F-score:  (0.7006316947622997, 0.6587360077811598, 0.6715738494043998, None)
+
+
+epoch 26/40
+model.reset
+self.reset_num:  26
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6432581294354411
+np.mean(reliability_np):  0.6549011647377404
+np.median(reliability_np):  0.6518652439117432
+np.mean(c_reliability_np):  0.7065411809394491
+np.median(c_reliability_np):  0.7320413589477539
+np.mean(w_reliability_np):  0.5294792607798288
+np.median(w_reliability_np):  0.49677087366580963
+Accuracy:  0.7239699184408431
+Confusion Metric: 
+ [[3166  267    3  470  270   78   15]
+ [ 243 1637   12   56  269   16    5]
+ [  19   87  247    0    7    1    5]
+ [ 253   50    0 1185  138    8    3]
+ [  63   45    0   52  195    5    1]
+ [  28    5    1   15    5  182    6]
+ [  41   10    1   10   29   14  223]]
+Micro Precision/Recall/F-score:  (0.7239699184408431, 0.7239699184408431, 0.7239699184408431, None)
+Macro Precision/Recall/F-score:  (0.6977763933142309, 0.6919916063442795, 0.6782857473076745, None)
+
+
+epoch 27/40
+model.reset
+self.reset_num:  27
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6416693146912403
+np.mean(reliability_np):  0.6550273029475
+np.median(reliability_np):  0.650972843170166
+np.mean(c_reliability_np):  0.6995285631047692
+np.median(c_reliability_np):  0.7201134264469147
+np.mean(w_reliability_np):  0.5230418418881246
+np.median(w_reliability_np):  0.49061304330825806
+Accuracy:  0.7501324012286834
+Confusion Metric: 
+ [[3527  236    4  362  106   22   12]
+ [ 392 1643   14   76   96   12    5]
+ [  25   80  253    1    3    0    4]
+ [ 350   64    0 1151   68    2    2]
+ [ 107   62    0   65  123    3    1]
+ [  47    2    2   17    4  164    6]
+ [  59   11    0   12   16    9  221]]
+Micro Precision/Recall/F-score:  (0.7501324012286834, 0.7501324012286834, 0.7501324012286834, None)
+Macro Precision/Recall/F-score:  (0.7322364189077865, 0.6638407673432238, 0.692729398726434, None)
+
+
+epoch 28/40
+model.reset
+self.reset_num:  28
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6697383751721216
+np.mean(reliability_np):  0.6610979281427559
+np.median(reliability_np):  0.6613146364688873
+np.mean(c_reliability_np):  0.7111146589132797
+np.median(c_reliability_np):  0.7344096899032593
+np.mean(w_reliability_np):  0.5327096942566082
+np.median(w_reliability_np):  0.4974835366010666
+Accuracy:  0.7522508208876179
+Confusion Metric: 
+ [[3642  299    2  225   54   25   22]
+ [ 387 1733    7   33   60    9    9]
+ [  22  130  207    0    2    0    5]
+ [ 459   95    0 1035   44    1    3]
+ [ 150   72    0   45   89    4    1]
+ [  51    7    0   11    2  164    7]
+ [  64   15    0    6    6    5  232]]
+Micro Precision/Recall/F-score:  (0.7522508208876179, 0.7522508208876179, 0.7522508208876179, None)
+Macro Precision/Recall/F-score:  (0.7411904112400027, 0.6366925156783022, 0.6778850399377322, None)
+
+
+epoch 29/40
+model.reset
+self.reset_num:  29
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6798008685520601
+np.mean(reliability_np):  0.6643254384044665
+np.median(reliability_np):  0.6660118997097015
+np.mean(c_reliability_np):  0.7147532899423751
+np.median(c_reliability_np):  0.740888237953186
+np.mean(w_reliability_np):  0.5277518026538136
+np.median(w_reliability_np):  0.4963800311088562
+Accuracy:  0.747590297637962
+Confusion Metric: 
+ [[3656  201    1  337   47   11   16]
+ [ 464 1598   10  100   55    6    5]
+ [  27  105  221    1    7    0    5]
+ [ 420   58    0 1140   17    1    1]
+ [ 143   58    0   88   70    2    0]
+ [  56    5    1   22    0  152    6]
+ [  75    8    0   13    5    6  221]]
+Micro Precision/Recall/F-score:  (0.747590297637962, 0.747590297637962, 0.7475902976379619, None)
+Macro Precision/Recall/F-score:  (0.7474583213989939, 0.6237776425840748, 0.6720353173891818, None)
+
+
+epoch 30/40
+model.reset
+self.reset_num:  30
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6748225823535643
+np.mean(reliability_np):  0.6623719148723388
+np.median(reliability_np):  0.6614576280117035
+np.mean(c_reliability_np):  0.7165743804154787
+np.median(c_reliability_np):  0.7420235872268677
+np.mean(w_reliability_np):  0.5388788291802236
+np.median(w_reliability_np):  0.505926251411438
+Accuracy:  0.7541573985806588
+Confusion Metric: 
+ [[3697  220    3  280   38   20   11]
+ [ 459 1628   14   74   49    6    8]
+ [  29   89  240    1    2    0    5]
+ [ 455   68    0 1097   15    0    2]
+ [ 155   59    0   81   63    3    0]
+ [  49    5    1   16    1  163    7]
+ [  67    5    1   11    5    7  232]]
+Micro Precision/Recall/F-score:  (0.7541573985806588, 0.7541573985806588, 0.7541573985806588, None)
+Macro Precision/Recall/F-score:  (0.7466187889643747, 0.6392425716236546, 0.68178045413882, None)
+
+
+epoch 31/40
+model.reset
+self.reset_num:  31
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6822370511598348
+np.mean(reliability_np):  0.6613991878519435
+np.median(reliability_np):  0.6615633368492126
+np.mean(c_reliability_np):  0.7129238410949004
+np.median(c_reliability_np):  0.7383378744125366
+np.mean(w_reliability_np):  0.5311151221593221
+np.median(w_reliability_np):  0.49856136739254
+Accuracy:  0.7372100413091833
+Confusion Metric: 
+ [[3210  302    7  587  115   28   20]
+ [ 298 1724   22   90   87    9    8]
+ [  17   72  270    0    3    1    3]
+ [ 254   84    0 1248   47    1    3]
+ [  82   69    0   98  109    2    1]
+ [  34    5    2   24    3  167    7]
+ [  47   12    2   12   15    8  232]]
+Micro Precision/Recall/F-score:  (0.7372100413091833, 0.7372100413091833, 0.7372100413091833, None)
+Macro Precision/Recall/F-score:  (0.7113027938868933, 0.6745252960908906, 0.689170834409247, None)
+
+
+epoch 32/40
+model.reset
+self.reset_num:  32
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6423048405889207
+np.mean(reliability_np):  0.6523395219633376
+np.median(reliability_np):  0.6466954946517944
+np.mean(c_reliability_np):  0.6962402081903375
+np.median(c_reliability_np):  0.7139438390731812
+np.mean(w_reliability_np):  0.5267848720697387
+np.median(w_reliability_np):  0.4929942190647125
+Accuracy:  0.7353034636161424
+Confusion Metric: 
+ [[3241  308    6  481  143   64   26]
+ [ 296 1688   29   86  111   15   13]
+ [  18   63  279    0    3    0    3]
+ [ 296   75    1 1190   64    9    2]
+ [  77   62    0   87  128    5    2]
+ [  33    3    2   14    2  181    7]
+ [  48   11    0    8   12   14  235]]
+Micro Precision/Recall/F-score:  (0.7353034636161424, 0.7353034636161424, 0.7353034636161423, None)
+Macro Precision/Recall/F-score:  (0.6872840294075422, 0.6888059419567237, 0.6850170309163407, None)
+
+
+epoch 33/40
+model.reset
+self.reset_num:  33
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6361614235780108
+np.mean(reliability_np):  0.6449671063055535
+np.median(reliability_np):  0.6357885003089905
+np.mean(c_reliability_np):  0.6861432887591444
+np.median(c_reliability_np):  0.6975414752960205
+np.mean(w_reliability_np):  0.5166505543989559
+np.median(w_reliability_np):  0.4841238856315613
+Accuracy:  0.7401758288316915
+Confusion Metric: 
+ [[3363  289    5  468   85   37   22]
+ [ 338 1713    8   83   75   15    6]
+ [  22  118  223    0    0    0    3]
+ [ 320   85    0 1192   39    0    1]
+ [  90   76    0   88  101    4    2]
+ [  36    8    0   19    2  170    7]
+ [  45   12    0   15   12   18  226]]
+Micro Precision/Recall/F-score:  (0.7401758288316915, 0.7401758288316915, 0.7401758288316915, None)
+Macro Precision/Recall/F-score:  (0.7130556702355936, 0.6517029817366744, 0.6754001323216057, None)
+
+
+epoch 34/40
+model.reset
+self.reset_num:  34
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.655862726406101
+np.mean(reliability_np):  0.6449024643212408
+np.median(reliability_np):  0.6351893246173859
+np.mean(c_reliability_np):  0.6862924032644862
+np.median(c_reliability_np):  0.6976936161518097
+np.mean(w_reliability_np):  0.5105127964103431
+np.median(w_reliability_np):  0.4777766764163971
+Accuracy:  0.7429297743883063
+Confusion Metric: 
+ [[3616  217    3  268  124   19   22]
+ [ 448 1571   12   53  138    7    9]
+ [  26   94  233    0   10    0    3]
+ [ 441   58    0 1062   71    3    2]
+ [ 127   47    0   53  129    3    2]
+ [  47    4    1   16    3  163    8]
+ [  52    6    0   10   14    6  240]]
+Micro Precision/Recall/F-score:  (0.7429297743883063, 0.7429297743883063, 0.7429297743883064, None)
+Macro Precision/Recall/F-score:  (0.7318397031014304, 0.6567091864651423, 0.6867770669263356, None)
+
+
+epoch 35/40
+model.reset
+self.reset_num:  35
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6733396885923101
+np.mean(reliability_np):  0.6443103426716098
+np.median(reliability_np):  0.636745274066925
+np.mean(c_reliability_np):  0.6903294113394185
+np.median(c_reliability_np):  0.7032244205474854
+np.mean(w_reliability_np):  0.5052357751359117
+np.median(w_reliability_np):  0.47435252368450165
+Accuracy:  0.7464251668255482
+Confusion Metric: 
+ [[3571  205    5  298  141   27   22]
+ [ 397 1585   21   72  153    4    6]
+ [  21   71  267    0    4    0    3]
+ [ 416   53    0 1086   78    3    1]
+ [ 120   41    0   55  140    3    2]
+ [  49    5    1   15    3  162    7]
+ [  52    6    1   12   16    5  236]]
+Micro Precision/Recall/F-score:  (0.7464251668255482, 0.7464251668255482, 0.746425166825548, None)
+Macro Precision/Recall/F-score:  (0.7281612463169889, 0.6734827830120867, 0.6954358290305395, None)
+
+
+epoch 36/40
+model.reset
+self.reset_num:  36
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6700561381209618
+np.mean(reliability_np):  0.6426749123786764
+np.median(reliability_np):  0.633341372013092
+np.mean(c_reliability_np):  0.6794589687512149
+np.median(c_reliability_np):  0.6867393255233765
+np.mean(w_reliability_np):  0.5048173224705945
+np.median(w_reliability_np):  0.47240063548088074
+Accuracy:  0.7411291176782121
+Confusion Metric: 
+ [[3598  224    6  262  138   21   20]
+ [ 444 1563   17   72  127    6    9]
+ [  21   96  242    0    3    1    3]
+ [ 445   62    0 1062   60    5    3]
+ [ 123   49    0   53  133    2    1]
+ [  49    4    1   12    5  163    8]
+ [  63    7    1    3   12    6  236]]
+Micro Precision/Recall/F-score:  (0.7411291176782121, 0.7411291176782121, 0.7411291176782121, None)
+Macro Precision/Recall/F-score:  (0.727148433809946, 0.6589498021886365, 0.687012665895951, None)
+
+
+epoch 37/40
+model.reset
+self.reset_num:  37
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6645482470077322
+np.mean(reliability_np):  0.6418004457865027
+np.median(reliability_np):  0.6310829520225525
+np.mean(c_reliability_np):  0.6861547581758854
+np.median(c_reliability_np):  0.6996795237064362
+np.mean(w_reliability_np):  0.5077277318438334
+np.median(w_reliability_np):  0.4779205620288849
+Accuracy:  0.7437771422518801
+Confusion Metric: 
+ [[3612  198    5  338   78   25   13]
+ [ 446 1565   20   82  110   14    1]
+ [  25   72  263    0    1    1    4]
+ [ 444   63    1 1088   35    5    1]
+ [ 130   49    0   76  102    3    1]
+ [  46    2    2   13    2  171    6]
+ [  67    3    1   13   12   11  221]]
+Micro Precision/Recall/F-score:  (0.7437771422518801, 0.7437771422518801, 0.7437771422518801, None)
+Macro Precision/Recall/F-score:  (0.7248072770969156, 0.6559335794458578, 0.6857220122346436, None)
+
+
+epoch 38/40
+model.reset
+self.reset_num:  38
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6548035165766338
+np.mean(reliability_np):  0.6377366917591343
+np.median(reliability_np):  0.6249306499958038
+np.mean(c_reliability_np):  0.6807250251245707
+np.median(c_reliability_np):  0.6909518837928772
+np.mean(w_reliability_np):  0.5109446294132498
+np.median(w_reliability_np):  0.480630099773407
+Accuracy:  0.748013981569749
+Confusion Metric: 
+ [[3587  237   13  218  159   38   17]
+ [ 350 1632   30   47  159   13    7]
+ [  15   62  281    0    5    0    3]
+ [ 454   80    2 1000   93    7    1]
+ [ 112   51    0   35  158    3    2]
+ [  41    3    2    6    3  180    7]
+ [  60    9    1    2   18   14  224]]
+Micro Precision/Recall/F-score:  (0.748013981569749, 0.748013981569749, 0.748013981569749, None)
+Macro Precision/Recall/F-score:  (0.7159651026870071, 0.6875001230358467, 0.6953377857338142, None)
+
+
+epoch 39/40
+model.reset
+self.reset_num:  39
+self.cheat:  False
+self.mask_p:  0.0
+self.valid_flag:  True
+self.BiLSTM_1_require_grad:  True
+ex_acc:  0.6488719415316174
+np.mean(reliability_np):  0.6350057912174225
+np.median(reliability_np):  0.6229670941829681
+np.mean(c_reliability_np):  0.6795271255302149
+np.median(c_reliability_np):  0.6872681975364685
+np.mean(w_reliability_np):  0.5038902448942578
+np.median(w_reliability_np):  0.47173404693603516
+Accuracy:  0.7407054337464252
+Confusion Metric: 
+ [[3450  248    6  350  146   31   38]
+ [ 345 1598   32   76  166    7   14]
+ [  19   60  276    0    6    1    4]
+ [ 382   70    1 1111   69    1    3]
+ [  97   50    0   67  143    3    1]
+ [  40    4    2   14    3  167   12]
+ [  50    3    2   10   11    4  248]]
+Micro Precision/Recall/F-score:  (0.7407054337464252, 0.7407054337464252, 0.7407054337464252, None)
+Macro Precision/Recall/F-score:  (0.7055771815893824, 0.6853233056157377, 0.6923010041401739, None)
+best_epoch:  9 0.7129617720921239 0.7680330473466794
+
+
+test print 
+Accuracy:  0.7189863842662633
+Confusion Metric: 
+ [[2841  178    6  336  122   18   39]
+ [ 277 1199   20   74  140    5   18]
+ [  14   76  221    1    4    3    4]
+ [ 425   60    3 1027   52    2    8]
+ [ 100   51    2   57   95    3    8]
+ [  46    4    1    8    2  130   16]
+ [  21    3    2   13    7    0  190]]
+Micro Precision/Recall/F-score:  (0.7189863842662633, 0.7189863842662633, 0.7189863842662634, None)
+Macro Precision/Recall/F-score:  (0.6820221150422422, 0.6519414607195281, 0.661848317479917, None)
+test f1:   0.661848317479917 [0.661848317479917]
+test ass:  0.7189863842662633 [0.7189863842662633]
+valid f1:  0.7129617720921239 [0.7129617720921239]
+valid acc: 0.7680330473466794 [0.7680330473466794]

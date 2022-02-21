@@ -6,7 +6,7 @@ from xml.dom import minidom
 from stanfordcorenlp import StanfordCoreNLP
 from transformers import BertTokenizer
 from tools.from_sentence_2_word_embeddings_list import from_sentence_2_word_embeddings_list
-
+from train_valid_test.test_paragraph_level_model_long_short import long_short_get
 
 word2vec_vocab = gensim.models.KeyedVectors.load_word2vec_format('./resource/GoogleNews-vectors-negative300.bin', binary=True)
 seType_dict = {'STATE': 0, 'EVENT': 1, 'REPORT': 2, 'GENERIC_SENTENCE': 3, 'GENERALIZING_SENTENCE': 4, 'QUESTION': 5, 'IMPERATIVE': 6, 'no': 7}
@@ -106,5 +106,10 @@ def get_data(if_do_embedding, stanford_path, random_seed):
 
     valid_list_len = len(test_data_list)  # choose the same len as test
     train_list_len = len(train_data_list) - valid_list_len  # from train get valid
+
+    print("train data long short")
+    long_short_get(train_data_list[:train_list_len], model=None, valid=True)
+    print("\n\nvalid data long short")
+    long_short_get(train_data_list[train_list_len:], model=None, valid=True)
 
     return train_data_list[:train_list_len], train_data_list[train_list_len:], test_data_list

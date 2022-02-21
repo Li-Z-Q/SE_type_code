@@ -88,10 +88,11 @@ class MyModel(nn.Module):
         print("self.threshold: ", self.threshold)
 
     def forward(self, sentences_list, gold_labels_list):  # [4*3336, 7*336, 1*336]
-        old_sentence_embeddings_list = []
-        joint_sentence_embeddings_list = []
-        ex_pre_label_list = []
+        # old_sentence_embeddings_list = []
+        # joint_sentence_embeddings_list = []
+        # ex_pre_label_list = []
         reliability_list = []
+        sentence_embeddings_list = []
         for i in range(len(sentences_list)):
 
             # get sentence embedding
@@ -101,36 +102,54 @@ class MyModel(nn.Module):
             ex_pre_label, _, sentence_embedding, softmax_output = self.BiLSTM_1(word_embeddings_list, 0)  # 1 * 300
             sentence_embedding = sentence_embedding.squeeze(0)  # size is 300
 
-            ex_pre_label_list.append(ex_pre_label)
             reliability = softmax_output[ex_pre_label]
             reliability_list.append(float(reliability))
             self.reliability_list.append(float(reliability))
 
             if self.valid_flag:
+                self.ex_pre_label_list.append(ex_pre_label)
+                self.gold_labels_list.append(gold_labels_list[i])
+
                 if ex_pre_label == gold_labels_list[i]:
                     self.c_reliability_list.append(float(reliability))
                 else:
                     self.w_reliability_list.append(float(reliability))
 
-            old_sentence_embeddings_list.append(sentence_embedding)
-
-            # get joint sentence embedding
-            average_label_embedding = None
             if self.cheat == "False":
+                if self.mask_p == 0.0:  # use all pre_label
+                    average_label_embedding = self.label_embedding_list[ex_pre_label, :]
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    sentence_embeddings_list.append(joint_sentence_embedding)
+                if self.mask_p == 1.0:  # only cat correct_pre, others use un-cat
+                    if ex_pre_label == gold_labels_list[i]:
+                        average_label_embedding = self.label_embedding_list[ex_pre_label, :]
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                        sentence_embeddings_list.append(joint_sentence_embedding)
+                    else:
+                        sentence_embeddings_list.append(sentence_embedding)
+                if self.mask_p == 2.0:  # only cat up_threshold__pre, others use un-cat
+                    if reliability_list[i] > self.threshold:
+                        average_label_embedding = self.label_embedding_list[ex_pre_label, :]
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                        sentence_embeddings_list.append(joint_sentence_embedding)
+                    else:
+                        sentence_embeddings_list.append(sentence_embedding)
                 if self.mask_p == 3.0:  # only cat up_threshold__pre, others cat random
                     if float(reliability) > self.threshold:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                elif self.mask_p == 4.0:  # cat all pre_label's random_reverse
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    sentence_embeddings_list.append(joint_sentence_embedding)
+                if self.mask_p == 4.0:  # cat all pre_label's random_reverse
                     while True:
                         random_pre = random.randint(0, 6)
                         if random_pre != ex_pre_label:
                             break
                     average_label_embedding = self.label_embedding_list[random_pre, :]
-                else:
-                    average_label_embedding = self.label_embedding_list[ex_pre_label, :]
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    sentence_embeddings_list.append(joint_sentence_embedding)
 
             else:  # cheat == True
                 if self.mask_p >= 0:  # use masked gold label
@@ -141,78 +160,39 @@ class MyModel(nn.Module):
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                if self.mask_p == -1:  # if ex_pre_label is correct, then cat it
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    sentence_embeddings_list.append(joint_sentence_embedding)
+                if self.mask_p == -1:  # if ex_pre_label is correct, then cat it, else random
                     if ex_pre_label == gold_labels_list[i]:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                if self.mask_p == -2:  # if ex_pre_label is wrong, then cat it
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    sentence_embeddings_list.append(joint_sentence_embedding)
+                if self.mask_p == -2:  # if ex_pre_label is wrong, then cat it, else random
                     if ex_pre_label != gold_labels_list[i]:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                # if self.mask_p == -3:  # if golden label is 0, cat it, else use un-cat
-                #     average_label_embedding = self.label_embedding_list[gold_labels_list[i], :]
-
-            joint_sentence_embedding = torch.cat((sentence_embedding, average_label_embedding), dim=0).unsqueeze(0)  # size is 1 * 600
-            joint_sentence_embedding = self.mlp(joint_sentence_embedding).squeeze(0)  # size is 300
-            joint_sentence_embedding = self.relu(joint_sentence_embedding)  # size is 300
-            joint_sentence_embeddings_list.append(joint_sentence_embedding)
-
-        # get sentences_embedding list from old or joint
-        sentence_embeddings_list = []
-        for i in range(len(old_sentence_embeddings_list)):
-            if self.cheat == "False":
-                if self.mask_p == 0.0:  # cat all the pre_label
-                    sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                    if self.valid_flag:
-                        self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                        self.used_gold_labels_list.append(gold_labels_list[i])
-
-                if self.mask_p == 1.0:  # only cat correct_pre, others use un-cat
-                    if ex_pre_label_list[i] == gold_labels_list[i]:
-                        sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                        if self.valid_flag:
-                            self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                            self.used_gold_labels_list.append(gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    sentence_embeddings_list.append(joint_sentence_embedding)
+                if self.mask_p == -2.5:  # if ex_pre_label is wrong, then cat it, else random
+                    if ex_pre_label != gold_labels_list[i]:
+                        average_label_embedding = self.label_embedding_list[gold_labels_list[i], :]
                     else:
-                        sentence_embeddings_list.append(old_sentence_embeddings_list[i])
-
-                if self.mask_p == 2.0:  # only cat up_threshold__pre, others use un-cat
-                    if reliability_list[i] > self.threshold:
-                        sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                        if self.valid_flag:
-                            self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                            self.used_gold_labels_list.append(gold_labels_list[i])
+                        random_gold = random.randint(0, 6)
+                        average_label_embedding = self.label_embedding_list[random_gold, :]
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    sentence_embeddings_list.append(joint_sentence_embedding)
+                if self.mask_p == -3:  # if golden label is 0, cat it, else use un-cat
+                    if gold_labels_list[i] == 0:
+                        average_label_embedding = self.label_embedding_list[gold_labels_list[i], :]
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                        sentence_embeddings_list.append(joint_sentence_embedding)
                     else:
-                        sentence_embeddings_list.append(old_sentence_embeddings_list[i])
-
-                if self.mask_p == 3.0:  # only cat up_threshold__pre, others cat random
-                    sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                    if self.valid_flag:
-                        self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                        self.used_gold_labels_list.append(gold_labels_list[i])
-
-                if self.mask_p == 4.0:  # cat all pre_label's random_reverse
-                    sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                    if self.valid_flag:
-                        self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                        self.used_gold_labels_list.append(gold_labels_list[i])
-
-            # cheat is True
-            else:
-                sentence_embeddings_list.append(joint_sentence_embeddings_list[i])
-                if self.valid_flag:
-                    self.used_ex_pre_label_list.append(ex_pre_label_list[i])
-                    self.used_gold_labels_list.append(gold_labels_list[i])
-
-            if self.valid_flag:
-                self.ex_pre_label_list.append(ex_pre_label_list[i])
-                self.gold_labels_list.append(gold_labels_list[i])
-
-
+                        sentence_embeddings_list.append(sentence_embedding)
 
         sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # s.num * 300
         sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 307
@@ -278,3 +258,14 @@ class MyModel(nn.Module):
         self.reliability_list = []
         self.c_reliability_list = []
         self.w_reliability_list = []
+
+    def cat_and_get_new_embedding(self, sentence_embedding, average_label_embedding, ex_pre_label, gold_label):
+        joint_sentence_embedding = torch.cat((sentence_embedding, average_label_embedding), dim=0).unsqueeze(0)  # size is 1 * 600
+        joint_sentence_embedding = self.mlp(joint_sentence_embedding).squeeze(0)  # size is 300
+        joint_sentence_embedding = self.relu(joint_sentence_embedding)  # size is 300
+
+        if self.valid_flag:
+            self.used_ex_pre_label_list.append(ex_pre_label)
+            self.used_gold_labels_list.append(gold_label)
+
+        return joint_sentence_embedding

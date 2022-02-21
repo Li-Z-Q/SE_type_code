@@ -69,3 +69,12 @@ print(torch.randn(10))
 # for name, parameters in model.named_parameters():
 #     print(name, ':')
 # # print(model.parameters())
+
+
+t = dict()
+t[0] = 1
+t[1] = 2
+print(t)
+for k, v in zip(t.keys(), t.values()):
+    print(k, v)
+
