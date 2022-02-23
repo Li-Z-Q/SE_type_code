@@ -21,7 +21,7 @@ def from_paragraph_to_sentence(paragraph_data_list):
     return sentence_data_list
 
 
-def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_data_list):
+def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_data_list, pre_model_id):
     print("\n\nstart sentence level BiLSTM  extra")
 
     EPOCHs = 4
@@ -39,11 +39,13 @@ def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_da
     model = MyModel(dropout=DROPOUT).cuda()
     optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
 
-    best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid_extra(model, optimizer, train_batch_list,
+    best_epoch, sentence_level_best_model, best_macro_Fscore, best_acc = train_and_valid_extra(model, optimizer, train_batch_list,
                                                                           valid_data_list, EPOCHs)
-    torch.save(best_model, 'models/model_sentence_level_BiLSTM_extra.pt')
+    torch.save(sentence_level_best_model, 'models/' + str(pre_model_id) + '_model_sentence_level_BiLSTM_extra.pt')
     print("sentence level BiLSTM  extra best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
     # test_model(test_data_list, best_model)
 
     print("sentence level BiLSTM  extra end\n\n********************************************")
+
+    return sentence_level_best_model

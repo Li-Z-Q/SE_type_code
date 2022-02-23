@@ -24,7 +24,7 @@ def helper(test_data_list, model):
                 useful_target_Y_list.append(gold_labels_list[i])
                 useful_predict_Y_list.append(pre_labels_list[i])
 
-    print('\n\ntest print ')
+    print('test print ')
 
     f1_score, acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
 
@@ -55,11 +55,11 @@ def long_short_get(data_list, model=None, valid=False):
     if valid == False:  # for test
         for l in range(1, 15):
             if l in length_list:
-                print("-------------------- test data.sen_num == {} ---------------".format(l))
+                print("\n\n-------------------- test data.sen_num == {} ---------------".format(l))
                 test_data_list = data_sort_list[l]
                 helper(test_data_list, model)
 
-        print("-------------------- test data.sen_num == lager than 15 ---------------")
+        print("\n\n-------------------- test data.sen_num == lager than 15 ---------------")
         test_data_list = []
         for l in range(15, 211):
             if l in length_list:

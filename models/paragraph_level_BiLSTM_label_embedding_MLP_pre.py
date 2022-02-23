@@ -41,17 +41,32 @@ def do_label_embedding_random():
 
 
 class MyModel(nn.Module):
-    def __init__(self, dropout, stanford_path, pre_model_path, cheat, mask_p):
+    def __init__(self, dropout, stanford_path, pre_model, cheat, mask_p, bilstm_1_grad, if_control_loss, if_use_independent, if_use_memory):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
-        tmp = MyModel_ex()
-        self.BiLSTM_1 = tmp.load_model(path=pre_model_path)
-        self.BiLSTM_1_r = True
+        # tmp = MyModel_ex()
+        # self.BiLSTM_1 = tmp.load_model(path=pre_model_path)
+
+        self.if_control_loss = bool(if_control_loss)
+        self.if_use_independent = bool(if_use_independent)
+        self.if_use_memory = bool(if_use_memory)
+        print("self.if_control_loss: ", self.if_control_loss)
+        print("self.if_use_memory: ", self.if_use_memory)
+        print("self.if_use_independent: ", self.if_use_independent)
+
+        self.BiLSTM_1 = pre_model
+        self.BiLSTM_1_r = bool(bilstm_1_grad)
         print("self.BiLSTM_1_require_grad: ", self.BiLSTM_1_r)
         for p in self.BiLSTM_1.parameters():
             p.requires_grad = self.BiLSTM_1_r
 
+        self.BiLSTM_1_independent = nn.LSTM(300,
+                                            300 // 2,
+                                            num_layers=1,
+                                            batch_first=True,
+                                            bidirectional=True,
+                                            dropout=dropout)
         self.BiLSTM_2 = nn.LSTM(300,
                                 300 // 2,
                                 num_layers=1,
@@ -91,6 +106,7 @@ class MyModel(nn.Module):
         # old_sentence_embeddings_list = []
         # joint_sentence_embeddings_list = []
         # ex_pre_label_list = []
+        ex_total_loss = 0
         reliability_list = []
         sentence_embeddings_list = []
         for i in range(len(sentences_list)):
@@ -99,7 +115,21 @@ class MyModel(nn.Module):
             sentence = sentences_list[i]
             word_embeddings_list = sentence.cuda()  # sentence_len * 300
 
-            ex_pre_label, _, sentence_embedding, softmax_output = self.BiLSTM_1(word_embeddings_list, 0)  # 1 * 300
+            ex_pre_label, ex_loss, sentence_embedding, softmax_output = self.BiLSTM_1(word_embeddings_list, gold_labels_list[i])  # 1 * 300
+            if self.if_control_loss:
+                ex_total_loss += ex_loss
+
+            if self.if_use_independent:  # use extra bilstm to provide pre_label for original 2 layer bilstm
+                # print("self.if_use_independent: "self.if_use_independent)
+                init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
+                independent_BiLSTM_output, _ = self.BiLSTM_1_independent(word_embeddings_list.unsqueeze(0), init_hidden)  # get 1 * sentence_len * 300
+                sentence_embedding = torch.max(independent_BiLSTM_output, 1)[0]  # 1 * 300
+
+            if self.if_use_memory:
+                init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
+                independent_BiLSTM_output, _ = self.BiLSTM_1_independent(word_embeddings_list.unsqueeze(0), init_hidden)  # get 1 * sentence_len * 300
+                sentence_embedding = torch.max(independent_BiLSTM_output, 1)[0]  # 1 * 300
+
             sentence_embedding = sentence_embedding.squeeze(0)  # size is 300
 
             reliability = softmax_output[ex_pre_label]
@@ -170,7 +200,7 @@ class MyModel(nn.Module):
                         average_label_embedding = self.label_embedding_list[random_gold, :]
                     joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
                     sentence_embeddings_list.append(joint_sentence_embedding)
-                if self.mask_p == -2:  # if ex_pre_label is wrong, then cat it, else random
+                if self.mask_p == -2:  # if ex_pre_label is wrong, then cat ex_pre_label, else random
                     if ex_pre_label != gold_labels_list[i]:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
                     else:
@@ -212,6 +242,9 @@ class MyModel(nn.Module):
         for i in range(len(gold_labels_list)):
             label = gold_labels_list[i]
             loss += -output[i][label]
+
+        if self.if_control_loss:
+            loss += 0.5 * ex_total_loss
 
         return pre_labels_list, loss
 

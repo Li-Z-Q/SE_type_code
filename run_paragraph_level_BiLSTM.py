@@ -14,6 +14,7 @@ import numpy as np
 from torch import optim
 from models.paragraph_level_BiLSTM import MyModel
 from tools.get_paragraph_level_data import get_data
+from train_valid_test.test_paragraph_level_model_long_short import long_short_get
 from tools.devide_train_batch import get_train_batch_list
 from train_valid_test.test_paragraph_level_model import test_model
 from train_valid_test.train_valid_paragraph_level_model import train_and_valid
@@ -57,6 +58,7 @@ if __name__ == '__main__':
         print("best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
         f1_score, acc = test_model(test_data_list, best_model)
+        long_short_get(test_data_list, best_model)
 
         test_f1_list.append(f1_score)
         test_acc_list.append(acc)

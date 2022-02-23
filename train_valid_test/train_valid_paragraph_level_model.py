@@ -25,7 +25,7 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
                 gold_labels_list = []
                 for sentence, label in zip(train_data[3], train_data[1]):
                     # for BiLSTM, sentence is words_embeddings_list
-                    # for BERT, sentence is words_ids_list
+                    # for BERT, sreentence is words_ids_list
                     if label != 7:
                         gold_labels_list.append(label)
                         sentences_list.append(sentence)
