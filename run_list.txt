@@ -1,0 +1,6 @@
+只拼gold_label=4, 其他的不拼什么效果, control_T
+只拼gold_label=0, 其他的不拼什么效果, control_T
+随机拼0.5 gold_label， control_T
+全拼pre_label， control_T
+memory p = 0.5
+看看0.0 false 独立情况下有没有梯度更新

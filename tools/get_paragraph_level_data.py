@@ -40,6 +40,9 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
             if begin > 1 and int(ord(raw_text[pre_pre_begin])) == 10 and int(ord(raw_text[pre_begin])) == 10:  # NOT belong to a same paragraph
 
                 if set(label_list) != {'no'}:
+                    # label_to_num_list = [seType_dict[label] for label in label_list]
+                    # all_data_list.append([segment_list, label_to_num_list, label_list_len, segment_embeddings_list])
+                    #
                     if label_list_len < 1000:
                         label_to_num_list = [seType_dict[label] for label in label_list]
                         all_data_list.append([segment_list, label_to_num_list, label_list_len, segment_embeddings_list])

@@ -17,6 +17,7 @@ import torch
 import numpy as np
 import run_sentence_level_BiLSTM_extra
 from torch import optim
+from tools.get_memory_house import get_memory
 from tools.get_paragraph_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list
 from train_valid_test.test_paragraph_level_model import test_model
@@ -27,7 +28,7 @@ from train_valid_test.test_paragraph_level_model_long_short import long_short_ge
 import argparse
 
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=40)
+parser.add_argument('--EPOCHs', type=int, default=20)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
@@ -70,8 +71,16 @@ if __name__ == '__main__':
                                                                     random_seed=fold_num)
         train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)
 
-        pre_model_id = random.randint(0, 10000)
-        sentence_level_best_model = run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list, pre_model_id)
+        if int(if_use_memory) == 0:  # use pre_model do ex_pre_label
+            pre_model_id = random.randint(0, 10000)
+            sentence_level_best_model = run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list, pre_model_id)
+            train_data_memory = None
+        else:
+            print('use memory sim, no need pre_bilstm')
+            sentence_level_best_model = None
+            train_data_memory = get_memory(stanford_path='stanford-corenlp-4.3.1')
+            print("already get memory")
+            print("len(train_data_memory): ", len(train_data_memory))
 
         model = MyModel(dropout=DROPOUT,
                         stanford_path='stanford-corenlp-4.3.1',
@@ -82,17 +91,18 @@ if __name__ == '__main__':
                         bilstm_1_grad=bilstm_1_grad,
                         if_control_loss=if_control_loss,
                         if_use_independent=if_use_independent,
-                        if_use_memory=if_use_memory).cuda()
+                        if_use_memory=if_use_memory,
+                        train_data_memory=train_data_memory).cuda()
         optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
         print('paragraph level model init done')
 
         best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list,
-                                                                              valid_data_list, EPOCHs)
-        torch.save(best_model, 'output/model_paragraph_level_BiLSTM_label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '.pt')
+                                                                              valid_data_list, EPOCHs, with_raw_text=True)
+        # torch.save(best_model, 'output/model_paragraph_level_BiLSTM_label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '.pt')
         print("best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
-        f1_score, acc = test_model(test_data_list, best_model)
-        long_short_get(test_data_list, best_model)
+        f1_score, acc = test_model(test_data_list, best_model, with_raw_text=True)
+        long_short_get(test_data_list, best_model, with_raw_text=True)
 
         test_f1_list.append(f1_score)
         test_acc_list.append(acc)
