@@ -17,8 +17,9 @@ class MyModel(nn.Module):
                               batch_first=True,
                               bidirectional=True,
                               dropout=dropout)
+
+        print("two_C: ", two_C)
         if two_C:
-            print("two_C: ", two_C)
             self.hidden2tag = nn.Linear(300, 2)
         else:
             self.hidden2tag = nn.Linear(300, 7)

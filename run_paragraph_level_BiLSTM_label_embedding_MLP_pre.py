@@ -28,7 +28,7 @@ from train_valid_test.test_paragraph_level_model_long_short import long_short_ge
 import argparse
 
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=20)
+parser.add_argument('--EPOCHs', type=int, default=10)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
@@ -38,7 +38,6 @@ parser.add_argument('--cheat', type=str, default='False')
 parser.add_argument('--mask_p', type=float, default=0.0)
 parser.add_argument('--bilstm_1_grad', type=int, default=1)  # default is True: use grad
 parser.add_argument('--if_control_loss', type=int, default=0)  # default is False
-parser.add_argument('--if_use_independent', type=int, default=0)  # default is False
 parser.add_argument('--if_use_memory', type=int, default=0)  # default is False
 args = parser.parse_args()
 print(args)
@@ -53,7 +52,6 @@ cheat = args.cheat
 mask_p = args.mask_p
 bilstm_1_grad = args.bilstm_1_grad
 if_control_loss = args.if_control_loss
-if_use_independent = args.if_use_independent
 if_use_memory = args.if_use_memory
 
 if __name__ == '__main__':
@@ -73,7 +71,7 @@ if __name__ == '__main__':
 
         if int(if_use_memory) == 0:  # use pre_model do ex_pre_label
             pre_model_id = random.randint(0, 10000)
-            sentence_level_best_model = run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list, pre_model_id)
+            sentence_level_best_model = run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=False)
             train_data_memory = None
         else:
             print('use memory sim, no need pre_bilstm')
@@ -82,17 +80,23 @@ if __name__ == '__main__':
             print("already get memory")
             print("len(train_data_memory): ", len(train_data_memory))
 
+        ex_model_extra = None
+        if mask_p == 0.1:
+            print("will get ex_model_extra")
+            pre_model_id = random.randint(0, 10000)
+            ex_model_extra = run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=True)
+
         model = MyModel(dropout=DROPOUT,
                         stanford_path='stanford-corenlp-4.3.1',
                         # pre_model_path='models/' + str(pre_model_id) + '_model_sentence_level_BiLSTM_extra.pt',
-                        pre_model=sentence_level_best_model,
+                        ex_model=sentence_level_best_model,
                         cheat=cheat,
                         mask_p=mask_p,
                         bilstm_1_grad=bilstm_1_grad,
                         if_control_loss=if_control_loss,
-                        if_use_independent=if_use_independent,
                         if_use_memory=if_use_memory,
-                        train_data_memory=train_data_memory).cuda()
+                        train_data_memory=train_data_memory,
+                        ex_model_extra=ex_model_extra).cuda()
         optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
         print('paragraph level model init done')
 

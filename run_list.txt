@@ -1,6 +1,5 @@
-只拼gold_label=4, 其他的不拼什么效果, control_T
-只拼gold_label=0, 其他的不拼什么效果, control_T
-随机拼0.5 gold_label， control_T
-全拼pre_label， control_T
-memory p = 0.5
-看看0.0 false 独立情况下有没有梯度更新
+//false 0.1, 2 类 pre_label 只拼 pre_label=0 and gold_label = 0 , ex_model_extra, control_loss_ex_model
+//cheat, -100, only cat 0, others un-cat, control_T
+//cheat, 0.5, control_T
+//cheat 0.5 check code
+false 0.0 check code

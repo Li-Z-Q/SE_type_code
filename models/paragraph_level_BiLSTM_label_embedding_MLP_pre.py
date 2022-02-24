@@ -37,31 +37,39 @@ def do_label_embedding_random():
 
 
 class MyModel(nn.Module):
-    def __init__(self, dropout, stanford_path, pre_model, cheat, mask_p, bilstm_1_grad, if_control_loss, if_use_independent, if_use_memory, train_data_memory):
+    def __init__(self, dropout, stanford_path, ex_model, cheat, mask_p, bilstm_1_grad, if_control_loss, if_use_memory, train_data_memory, ex_model_extra):
         super(MyModel, self).__init__()
 
         self.dropout = nn.Dropout(p=dropout)
         # tmp = MyModel_ex()
-        # self.BiLSTM_1 = tmp.load_model(path=pre_model_path)
+        # self.BiLSTM_ex = tmp.load_model(path=ex_model_path)
 
         self.if_control_loss = bool(if_control_loss)
-        self.if_use_independent = bool(if_use_independent)
         self.if_use_memory = bool(if_use_memory)
         print("\nself.if_control_loss: ", self.if_control_loss)
         print("self.if_use_memory: ", self.if_use_memory)
-        print("self.if_use_independent: ", self.if_use_independent)
+
+        self.cheat = cheat
+        self.mask_p = mask_p
+        print("self.mask_p: ", self.mask_p)
+        print("self.cheat: ", self.cheat)
 
         self.train_data_memory = train_data_memory
 
         self.stanford_nlp = StanfordCoreNLP(stanford_path)
 
-        if self.if_use_memory == False:  # use pre_model do pre_label
-            self.BiLSTM_1 = pre_model
+        if self.if_use_memory == False:  # use ex_model do pre_label
+            self.BiLSTM_ex = ex_model
             self.BiLSTM_1_r = bool(bilstm_1_grad)
             print("self.BiLSTM_1_require_grad: ", self.BiLSTM_1_r)
-            for p in self.BiLSTM_1.parameters():
+            for p in self.BiLSTM_ex.parameters():
                 p.requires_grad = self.BiLSTM_1_r
-
+        
+        if self.mask_p == 0.1:
+            self.BiLSTM_ex_extra = ex_model_extra
+            for p in self.BiLSTM_ex_extra.parameters():
+                p.requires_grad = False
+        
         self.BiLSTM_1_independent = nn.LSTM(300,
                                             300 // 2,
                                             num_layers=1,
@@ -84,16 +92,12 @@ class MyModel(nn.Module):
         self.log_softmax = nn.LogSoftmax()
 
         self.reset_num = 0
-        self.cheat = cheat
-        self.mask_p = mask_p
-        print("self.cheat: ", self.cheat)
-        print("self.mask_p: ", self.mask_p)
 
-        self.ex_pre_label_list = []
-        self.gold_labels_list = []
+        self.ex_pre_labels_list = []
+        self.ex_gold_labels_list = []
 
         self.used_ex_pre_label_list = []
-        self.used_gold_labels_list = []
+        self.used_ex_gold_labels_list = []
 
         self.reliability_list = []
         self.c_reliability_list = []
@@ -120,6 +124,11 @@ class MyModel(nn.Module):
             sentence = sentences_list[i]
             word_embeddings_list = sentence.cuda()  # sentence_len * 300
 
+            if self.mask_p == 0.1:  # only 2 class for ex_model
+                ex_gold_label = int(gold_labels_list[i] != 0)
+            else:
+                ex_gold_label = gold_labels_list[i]
+
             if self.if_use_memory:
                 init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
                 independent_BiLSTM_output, _ = self.BiLSTM_1_independent(word_embeddings_list.unsqueeze(0), init_hidden)  # get 1 * sentence_len * 300
@@ -128,49 +137,56 @@ class MyModel(nn.Module):
                 ex_pre_label = self.get_most_similar_memory(raw_sentence)
 
             else:  # use ex_pre_label
-                if self.if_use_independent:  # use extra bilstm to provide pre_label for original 2 layer bilstm
-                    init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
-                    independent_BiLSTM_output, _ = self.BiLSTM_1_independent(word_embeddings_list.unsqueeze(0), init_hidden)  # get 1 * sentence_len * 300
-                    sentence_embedding = torch.max(independent_BiLSTM_output, 1)[0]  # 1 * 300
-                    ex_pre_label, _, _, softmax_output = self.BiLSTM_1(word_embeddings_list, gold_labels_list[i])  # 1 * 300
-                    ex_pre_label = int(ex_pre_label)
+                if self.mask_p == 0.1:  # use BiLSTM_ex -> BiLSTM_2, and BiLSTM_ex_extra for ex_pre_label
+                    _, ex_loss, sentence_embedding, softmax_output = self.BiLSTM_ex(word_embeddings_list, ex_gold_label) # sentence_embedding is 1 * 300
+                    ex_pre_label, _, _, _ = self.BiLSTM_ex_extra(word_embeddings_list, ex_gold_label)
+                    if ex_pre_label != ex_gold_label:
+                        ex_pre_label = 1
                 else:  # the first layer bilstm as ex_pre_label provider and embedding
-                    ex_pre_label, ex_loss, sentence_embedding, softmax_output = self.BiLSTM_1(word_embeddings_list, gold_labels_list[i])  # 1 * 300
-                    if self.if_control_loss:
-                        ex_total_loss += ex_loss
+                    ex_pre_label, ex_loss, sentence_embedding, softmax_output = self.BiLSTM_ex(word_embeddings_list, ex_gold_label)  # 1 * 300
+
+                if self.if_control_loss:
+                    ex_total_loss += ex_loss
 
                 reliability = softmax_output[ex_pre_label]
                 reliability_list.append(float(reliability))
                 self.reliability_list.append(float(reliability))
 
                 if self.valid_flag:
-                    if ex_pre_label == gold_labels_list[i]:
+                    if ex_pre_label == ex_gold_label:
                         self.c_reliability_list.append(float(reliability))
                     else:
                         self.w_reliability_list.append(float(reliability))
 
             if self.valid_flag:
-                self.ex_pre_label_list.append(ex_pre_label)
-                self.gold_labels_list.append(gold_labels_list[i])
+                self.ex_pre_labels_list.append(ex_pre_label)
+                self.ex_gold_labels_list.append(ex_gold_label)
 
             sentence_embedding = sentence_embedding.squeeze(0)  # size is 300
 
             if self.cheat == "False":
                 if self.mask_p == 0.0:  # use all pre_label
                     average_label_embedding = self.label_embedding_list[ex_pre_label, :]
-                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                     sentence_embeddings_list.append(joint_sentence_embedding)
-                if self.mask_p == 1.0:  # only cat correct_pre, others use un-cat
-                    if ex_pre_label == gold_labels_list[i]:
+                if self.mask_p == 0.1:  # use ex_pre_label == 0:, only have two class
+                    if ex_pre_label == 0:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
-                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
+                        sentence_embeddings_list.append(joint_sentence_embedding)
+                    else:
+                        sentence_embeddings_list.append(sentence_embedding)
+                if self.mask_p == 1.0:  # only cat correct_pre, others use un-cat
+                    if ex_pre_label == ex_gold_label:
+                        average_label_embedding = self.label_embedding_list[ex_pre_label, :]
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                         sentence_embeddings_list.append(joint_sentence_embedding)
                     else:
                         sentence_embeddings_list.append(sentence_embedding)
                 if self.mask_p == 2.0:  # only cat up_threshold__pre, others use un-cat
                     if reliability_list[i] > self.threshold:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
-                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                         sentence_embeddings_list.append(joint_sentence_embedding)
                     else:
                         sentence_embeddings_list.append(sentence_embedding)
@@ -180,7 +196,7 @@ class MyModel(nn.Module):
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                     sentence_embeddings_list.append(joint_sentence_embedding)
                 if self.mask_p == 4.0:  # cat all pre_label's random_reverse
                     while True:
@@ -188,7 +204,7 @@ class MyModel(nn.Module):
                         if random_pre != ex_pre_label:
                             break
                     average_label_embedding = self.label_embedding_list[random_pre, :]
-                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                     sentence_embeddings_list.append(joint_sentence_embedding)
 
             else:  # cheat == True
@@ -196,41 +212,41 @@ class MyModel(nn.Module):
                     save_p = 1 - self.mask_p
                     r = random.randint(1, 100000)
                     if r < int(save_p*100000):
-                        average_label_embedding = self.label_embedding_list[gold_labels_list[i], :]
+                        average_label_embedding = self.label_embedding_list[ex_gold_label, :]
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                     sentence_embeddings_list.append(joint_sentence_embedding)
                 if self.mask_p == -1:  # if ex_pre_label is correct, then cat it, else random
-                    if ex_pre_label == gold_labels_list[i]:
+                    if ex_pre_label == ex_gold_label:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                     sentence_embeddings_list.append(joint_sentence_embedding)
                 if self.mask_p == -2:  # if ex_pre_label is wrong, then cat ex_pre_label, else random
-                    if ex_pre_label != gold_labels_list[i]:
+                    if ex_pre_label != ex_gold_label:
                         average_label_embedding = self.label_embedding_list[ex_pre_label, :]
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                     sentence_embeddings_list.append(joint_sentence_embedding)
                 if self.mask_p == -2.5:  # if ex_pre_label is wrong, then cat it, else random
-                    if ex_pre_label != gold_labels_list[i]:
-                        average_label_embedding = self.label_embedding_list[gold_labels_list[i], :]
+                    if ex_pre_label != ex_gold_label:
+                        average_label_embedding = self.label_embedding_list[ex_gold_label, :]
                     else:
                         random_gold = random.randint(0, 6)
                         average_label_embedding = self.label_embedding_list[random_gold, :]
-                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                     sentence_embeddings_list.append(joint_sentence_embedding)
                 if self.mask_p < -10:  # if golden label is someone, cat it, else use un-cat
                     someone = -(self.mask_p + 100)  # if self.mask_p = -101, someone = 1
-                    if gold_labels_list[i] == someone:
-                        average_label_embedding = self.label_embedding_list[gold_labels_list[i], :]
-                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, gold_labels_list[i])
+                    if ex_gold_label == someone:
+                        average_label_embedding = self.label_embedding_list[ex_gold_label, :]
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label)
                         sentence_embeddings_list.append(joint_sentence_embedding)
                     else:
                         sentence_embeddings_list.append(sentence_embedding)
@@ -251,7 +267,7 @@ class MyModel(nn.Module):
 
         loss = 0
         for i in range(len(gold_labels_list)):
-            label = gold_labels_list[i]
+            label = ex_gold_label
             loss += -output[i][label]
 
         if self.if_control_loss:
@@ -267,13 +283,13 @@ class MyModel(nn.Module):
         print("self.valid_flag: ", self.valid_flag)
 
         if self.valid_flag:
-            ex_acc = metrics.accuracy_score(self.gold_labels_list, self.ex_pre_label_list)
+            ex_acc = metrics.accuracy_score(self.ex_gold_labels_list, self.ex_pre_labels_list)
             print("ex_acc: ", ex_acc)
-            print('ex_Confusion Metric: \n', metrics.confusion_matrix(self.gold_labels_list, self.ex_pre_label_list))
+            print('ex_Confusion Metric: \n', metrics.confusion_matrix(self.ex_gold_labels_list, self.ex_pre_labels_list))
 
-            used_ex_acc = metrics.accuracy_score(self.used_gold_labels_list, self.used_ex_pre_label_list)
+            used_ex_acc = metrics.accuracy_score(self.used_ex_gold_labels_list, self.used_ex_pre_label_list)
             print("used_ex_acc: ", used_ex_acc)
-            print('used_ex_Confusion Metric: \n', metrics.confusion_matrix(self.used_gold_labels_list, self.used_ex_pre_label_list))
+            print('used_ex_Confusion Metric: \n', metrics.confusion_matrix(self.used_ex_gold_labels_list, self.used_ex_pre_label_list))
 
             reliability_np = np.array(self.reliability_list)
             print("np.mean(reliability_np): ", np.mean(reliability_np))
@@ -292,24 +308,24 @@ class MyModel(nn.Module):
 
         self.valid_flag = False
 
-        self.ex_pre_label_list = []
-        self.gold_labels_list = []
+        self.ex_pre_labels_list = []
+        self.ex_gold_labels_list = []
 
         self.used_ex_pre_label_list = []
-        self.used_gold_labels_list = []
+        self.used_ex_gold_labels_list = []
 
         self.reliability_list = []
         self.c_reliability_list = []
         self.w_reliability_list = []
 
-    def cat_and_get_new_embedding(self, sentence_embedding, average_label_embedding, ex_pre_label, gold_label):
+    def cat_and_get_new_embedding(self, sentence_embedding, average_label_embedding, ex_pre_label, ex_gold_label):
         joint_sentence_embedding = torch.cat((sentence_embedding, average_label_embedding), dim=0).unsqueeze(0)  # size is 1 * 600
         joint_sentence_embedding = self.mlp(joint_sentence_embedding).squeeze(0)  # size is 300
         joint_sentence_embedding = self.relu(joint_sentence_embedding)  # size is 300
 
         if self.valid_flag:
             self.used_ex_pre_label_list.append(ex_pre_label)
-            self.used_gold_labels_list.append(gold_label)
+            self.used_ex_gold_labels_list.append(ex_gold_label)
 
         return joint_sentence_embedding
 
