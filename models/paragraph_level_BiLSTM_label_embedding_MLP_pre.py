@@ -135,13 +135,14 @@ class MyModel(nn.Module):
                 sentence_embedding = torch.max(independent_BiLSTM_output, 1)[0]  # 1 * 300
                 raw_sentence = raw_sentences_list[i]  # is a text: "i love you"
                 ex_pre_label = self.get_most_similar_memory(raw_sentence)
+                reliability = 0
 
             else:  # use ex_pre_label
                 if self.mask_p == 0.1:  # use BiLSTM_ex -> BiLSTM_2, and BiLSTM_ex_extra for ex_pre_label
                     _, ex_loss, sentence_embedding, softmax_output = self.BiLSTM_ex(word_embeddings_list, ex_gold_label) # sentence_embedding is 1 * 300
                     ex_pre_label, _, _, _ = self.BiLSTM_ex_extra(word_embeddings_list, ex_gold_label)
-                    if ex_pre_label != ex_gold_label:
-                        ex_pre_label = 1
+                    # if ex_pre_label != ex_gold_label:
+                    #     ex_pre_label = 1
                 else:  # the first layer bilstm as ex_pre_label provider and embedding
                     ex_pre_label, ex_loss, sentence_embedding, softmax_output = self.BiLSTM_ex(word_embeddings_list, ex_gold_label)  # 1 * 300
 
@@ -152,15 +153,14 @@ class MyModel(nn.Module):
                 reliability_list.append(float(reliability))
                 self.reliability_list.append(float(reliability))
 
-                if self.valid_flag:
-                    if ex_pre_label == ex_gold_label:
-                        self.c_reliability_list.append(float(reliability))
-                    else:
-                        self.w_reliability_list.append(float(reliability))
-
             if self.valid_flag:
                 self.ex_pre_labels_list.append(ex_pre_label)
                 self.ex_gold_labels_list.append(ex_gold_label)
+
+                if ex_pre_label == ex_gold_label:
+                    self.c_reliability_list.append(float(reliability))
+                else:
+                    self.w_reliability_list.append(float(reliability))
 
             sentence_embedding = sentence_embedding.squeeze(0)  # size is 300
 
@@ -267,8 +267,7 @@ class MyModel(nn.Module):
 
         loss = 0
         for i in range(len(gold_labels_list)):
-            label = ex_gold_label
-            loss += -output[i][label]
+            loss += -output[i][gold_labels_list[i]]
 
         if self.if_control_loss:
             loss += 0.5 * ex_total_loss

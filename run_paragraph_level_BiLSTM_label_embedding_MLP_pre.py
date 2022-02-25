@@ -28,7 +28,7 @@ from train_valid_test.test_paragraph_level_model_long_short import long_short_ge
 import argparse
 
 parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=10)
+parser.add_argument('--EPOCHs', type=int, default=20)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
 parser.add_argument('--LEARN_RATE', type=float, default=1e-3)

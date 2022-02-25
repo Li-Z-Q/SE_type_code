@@ -23,7 +23,7 @@ def from_paragraph_to_sentence(paragraph_data_list):
 
 def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_data_list, pre_model_id, two_C):
 
-    EPOCHs = 2 + int(two_C) * 4
+    EPOCHs = 4 + int(two_C) * 4
     DROPOUT = 0.5
     BATCH_SIZE = 128
     LEARN_RATE = 1e-3

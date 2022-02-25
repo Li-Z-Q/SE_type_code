@@ -1,5 +1,6 @@
-//false 0.1, 2 类 pre_label 只拼 pre_label=0 and gold_label = 0 , ex_model_extra, control_loss_ex_model
-//cheat, -100, only cat 0, others un-cat, control_T
-//cheat, 0.5, control_T
-//cheat 0.5 check code
-false 0.0 check code
+// false 0.0 check
+// false 0.0 grad_F check
+// false 0.0 control check
+
+false 0.1 control
+// true -100 control
