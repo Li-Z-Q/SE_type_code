@@ -115,6 +115,6 @@ def train_and_valid_ex(model, optimizer, train_batch_list, valid_data_list, tota
             best_acc = tmp_acc
             best_macro_Fscore = tmp_macro_Fscore
 
-    print("choose the best first BiLSTM")
+    print("choose the best ex_model")
 
     return best_epoch, best_model, best_macro_Fscore, best_acc

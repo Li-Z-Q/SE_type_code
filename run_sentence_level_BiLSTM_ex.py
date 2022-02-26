@@ -23,7 +23,7 @@ def from_paragraph_to_sentence(paragraph_data_list):
 
 def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_data_list, pre_model_id, two_C):
 
-    EPOCHs = 2 + int(two_C) * 4
+    EPOCHs = 4 + int(two_C) * 4
     DROPOUT = 0.5
     BATCH_SIZE = 128
     LEARN_RATE = 1e-3
@@ -41,10 +41,10 @@ def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_da
 
     best_epoch, sentence_level_best_model, best_macro_Fscore, best_acc = train_and_valid_ex(model, optimizer, train_batch_list, valid_data_list, EPOCHs, two_C)
     # torch.save(sentence_level_best_model, 'models/' + str(pre_model_id) + '_model_sentence_level_BiLSTM_extra.pt')
-    print("sentence level BiLSTM  extra best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
+    print("sentence level model_ex best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
     # test_model(test_data_list, best_model)
 
-    print("sentence level BiLSTM  extra end\n\n********************************************")
+    print("sentence level model_ex end\n\n********************************************")
 
     return sentence_level_best_model

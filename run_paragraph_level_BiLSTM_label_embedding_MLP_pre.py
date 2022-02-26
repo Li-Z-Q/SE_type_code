@@ -22,11 +22,10 @@ from tools.get_paragraph_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list
 from train_valid_test.test_paragraph_level_model import test_model
 from models.paragraph_level_BiLSTM_label_embedding_MLP_pre import MyModel
-from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 from train_valid_test.test_paragraph_level_model_long_short import long_short_get
+from train_valid_test.train_valid_paragraph_level_model import train_and_valid_special_deepcopy
 
 import argparse
-
 parser = argparse.ArgumentParser(description='para transfer')
 parser.add_argument('--EPOCHs', type=int, default=20)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
@@ -92,16 +91,28 @@ if __name__ == '__main__':
                         ex_model=sentence_level_best_model,
                         cheat=cheat,
                         mask_p=mask_p,
-                        bilstm_1_grad=bilstm_1_grad,
+                        ex_model_grad=bilstm_1_grad,
                         if_control_loss=if_control_loss,
                         if_use_memory=if_use_memory,
                         train_data_memory=train_data_memory,
                         ex_model_extra=ex_model_extra).cuda()
+        temp_best_model = MyModel(dropout=DROPOUT,
+                                  stanford_path='stanford-corenlp-4.3.1',
+                                  # pre_model_path='models/' + str(pre_model_id) + '_model_sentence_level_BiLSTM_extra.pt',
+                                  ex_model=sentence_level_best_model,
+                                  cheat=cheat,
+                                  mask_p=mask_p,
+                                  ex_model_grad=bilstm_1_grad,
+                                  if_control_loss=if_control_loss,
+                                  if_use_memory=if_use_memory,
+                                  train_data_memory=train_data_memory,
+                                  ex_model_extra=ex_model_extra).cuda()
+
         optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
         print('paragraph level model init done')
 
-        best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list,
-                                                                              valid_data_list, EPOCHs, with_raw_text=True)
+        best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid_special_deepcopy(model, temp_best_model, optimizer, train_batch_list,
+                                                                                               valid_data_list, EPOCHs, with_raw_text=True)
         # torch.save(best_model, 'output/model_paragraph_level_BiLSTM_label_embedding_MLP_pre_' + str(cheat) + '_' + str(mask_p) + '.pt')
         print("best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 

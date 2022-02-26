@@ -1,6 +1,3 @@
-// false 0.0 check
-// false 0.0 grad_F check
-// false 0.0 control check
-
-false 0.1 control
-// true -100 control
+true -100 freeze
+false 0.1 freeze
+false 2.0 freeze
