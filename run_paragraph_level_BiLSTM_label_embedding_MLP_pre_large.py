@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 
 import torch
 import numpy as np
-import run_sentence_level_BiLSTM_extra
+import run_sentence_level_BiLSTM_ex
 from torch import optim
 from tools.get_paragraph_level_data import get_data
 from tools.devide_train_batch import get_train_batch_list_large

@@ -7,7 +7,7 @@ import torch.nn as nn
 from sklearn import metrics
 from torch.autograd import Variable
 from stanfordcorenlp import StanfordCoreNLP
-from models.sentence_level_BiLSTM_extra import MyModel as MyModel_ex
+from models.sentence_level_BiLSTM_ex import MyModel as MyModel_ex
 from tools.from_sentence_2_word_embeddings_list import from_sentence_2_word_embeddings_list
 
 print("paragraph level BiLSTM label embedding MLP pre large")

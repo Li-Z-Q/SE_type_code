@@ -1,3 +1,4 @@
+import copy
 import torch
 from tools.print_evaluation_result import print_evaluation_result
 
@@ -48,13 +49,13 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
         tmp_macro_Fscore, tmp_acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
-            best_model = model
+            best_model = copy.deepcopy(model)
             best_acc = tmp_acc
             best_macro_Fscore = tmp_macro_Fscore
 
     return best_epoch, best_model, best_macro_Fscore, best_acc
 
-def train_and_valid_extra(model, optimizer, train_batch_list, valid_data_list, total_epoch, two_C):
+def train_and_valid_ex(model, optimizer, train_batch_list, valid_data_list, total_epoch, two_C):
 
     print("two_C: ", two_C)
 
@@ -110,7 +111,7 @@ def train_and_valid_extra(model, optimizer, train_batch_list, valid_data_list, t
         tmp_macro_Fscore, tmp_acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
-            best_model = model
+            best_model = copy.deepcopy(model)
             best_acc = tmp_acc
             best_macro_Fscore = tmp_macro_Fscore
 

@@ -15,7 +15,7 @@ warnings.filterwarnings('ignore')
 
 import torch
 import numpy as np
-import run_sentence_level_BiLSTM_extra
+import run_sentence_level_BiLSTM_ex
 from torch import optim
 from tools.get_memory_house import get_memory
 from tools.get_paragraph_level_data import get_data
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
         if int(if_use_memory) == 0:  # use pre_model do ex_pre_label
             pre_model_id = random.randint(0, 10000)
-            sentence_level_best_model = run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=False)
+            sentence_level_best_model = run_sentence_level_BiLSTM_ex.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=False)
             train_data_memory = None
         else:
             print('use memory sim, no need pre_bilstm')
@@ -84,7 +84,7 @@ if __name__ == '__main__':
         if mask_p == 0.1:
             print("will get ex_model_extra")
             pre_model_id = random.randint(0, 10000)
-            ex_model_extra = run_sentence_level_BiLSTM_extra.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=True)
+            ex_model_extra = run_sentence_level_BiLSTM_ex.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=True)
 
         model = MyModel(dropout=DROPOUT,
                         stanford_path='stanford-corenlp-4.3.1',
