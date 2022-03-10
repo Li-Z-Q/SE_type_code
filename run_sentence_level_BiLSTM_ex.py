@@ -26,7 +26,7 @@ def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_da
     EPOCHs = 4 + int(two_C) * 4
     DROPOUT = 0.5
     BATCH_SIZE = 128
-    LEARN_RATE = 1e-3
+    LEARN_RATE = 5e-3
     WEIGHT_DECAY = 1e-4
 
     test_data_list = from_paragraph_to_sentence(paragraph_test_data_list)

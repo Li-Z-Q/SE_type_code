@@ -7,6 +7,7 @@ from stanfordcorenlp import StanfordCoreNLP
 from transformers import BertTokenizer
 from tools.from_sentence_2_word_embeddings_list import from_sentence_2_word_embeddings_list
 from train_valid_test.test_paragraph_level_model_long_short import long_short_get
+from tools.devide_long_paragraph import devide_long_paragraph_to_short
 
 word2vec_vocab = gensim.models.KeyedVectors.load_word2vec_format('./resource/GoogleNews-vectors-negative300.bin', binary=True)
 seType_dict = {'STATE': 0, 'EVENT': 1, 'REPORT': 2, 'GENERIC_SENTENCE': 3, 'GENERALIZING_SENTENCE': 4, 'QUESTION': 5, 'IMPERATIVE': 6, 'no': 7}
@@ -43,11 +44,16 @@ def helper(filename_list, stanford_nlp, if_do_embedding, tokenizer):
                     # label_to_num_list = [seType_dict[label] for label in label_list]
                     # all_data_list.append([segment_list, label_to_num_list, label_list_len, segment_embeddings_list])
                     #
+                    label_to_num_list = [seType_dict[label] for label in label_list]
                     if label_list_len < 1000:
-                        label_to_num_list = [seType_dict[label] for label in label_list]
                         all_data_list.append([segment_list, label_to_num_list, label_list_len, segment_embeddings_list])
                     else:
                         print("this paragraph.len is: ", label_list_len, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+                        print("this paragraph.len is: ", label_list_len, "$$$$$ do devide $$$$")
+                        devide_long_paragraph_to_short([segment_list, label_to_num_list, label_list_len, segment_embeddings_list],
+                                                       all_data_list)  # devide to short adn then append
+
                 label_list = []
                 segment_list = []
                 segment_embeddings_list = []

@@ -1,5 +1,6 @@
 import copy
 import torch
+from sklearn import metrics
 from tools.print_evaluation_result import print_evaluation_result
 
 
@@ -109,6 +110,10 @@ def train_and_valid_ex(model, optimizer, train_batch_list, valid_data_list, tota
 
         ################################### print and save models ##############################
         tmp_macro_Fscore, tmp_acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)
+        if two_C:
+            matrix = metrics.confusion_matrix(useful_target_Y_list, useful_predict_Y_list)
+            tmp_macro_Fscore = matrix[0][0] / matrix[1][0]
+
         if tmp_macro_Fscore > best_macro_Fscore:
             best_epoch = epoch
             best_model = copy.deepcopy(model)

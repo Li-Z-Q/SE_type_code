@@ -19,6 +19,7 @@ class MyModel(nn.Module):
                               dropout=dropout)
 
         print("two_C: ", two_C)
+        self.two_C = two_C
         if two_C:
             self.hidden2tag = nn.Linear(300, 2)
         else:
@@ -45,6 +46,10 @@ class MyModel(nn.Module):
 
         pre_label = int(torch.argmax(output))
         loss = -output[gold_label]
+
+        # if self.two_C:
+        #     if gold_label == 1 and pre_label == 0:
+        #         loss *= 1.5
 
         return pre_label, loss, sentence_embedding, softmax_output
 

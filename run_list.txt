@@ -1,3 +1,1 @@
-true -100 freeze
-false 0.1 freeze
-false 2.0 freeze
+false 0.1 freeze 不用任何过滤 能提一点点

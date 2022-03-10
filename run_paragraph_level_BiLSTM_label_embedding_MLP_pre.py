@@ -79,11 +79,9 @@ if __name__ == '__main__':
             print("already get memory")
             print("len(train_data_memory): ", len(train_data_memory))
 
-        ex_model_extra = None
-        if mask_p == 0.1:
-            print("will get ex_model_extra")
-            pre_model_id = random.randint(0, 10000)
-            ex_model_extra = run_sentence_level_BiLSTM_ex.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=True)
+        print("will get ex_model_extra")
+        pre_model_id = random.randint(0, 10000)
+        ex_model_extra = run_sentence_level_BiLSTM_ex.main(train_data_list, valid_data_list, test_data_list, pre_model_id, two_C=True)
 
         model = MyModel(dropout=DROPOUT,
                         stanford_path='stanford-corenlp-4.3.1',
