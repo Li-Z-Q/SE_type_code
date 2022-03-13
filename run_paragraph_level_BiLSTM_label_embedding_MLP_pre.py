@@ -30,8 +30,8 @@ parser = argparse.ArgumentParser(description='para transfer')
 parser.add_argument('--EPOCHs', type=int, default=20)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
-parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
-parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
+parser.add_argument('--LEARN_RATE', type=float, default=5e-4)
+parser.add_argument('--WEIGHT_DECAY', type=float, default=5e-4)
 parser.add_argument('--fold_num', type=int, default=0)
 parser.add_argument('--cheat', type=str, default='False')
 parser.add_argument('--mask_p', type=float, default=0.0)
@@ -128,16 +128,19 @@ if __name__ == '__main__':
     print("valid f1: ", np.mean(np.array(valid_best_f1_list)), valid_best_f1_list)
     print("valid acc:", np.mean(np.array(valid_best_acc_list)), valid_best_acc_list)
 
-    if os.path.exists('output/paragraph_level_BiLSTM/temp/' + str(args) + '/valid_f1') == False:
-        os.mkdir(path='output/paragraph_level_BiLSTM/temp/' + str(args) + '/valid_f1')
-    if os.path.exists('output/paragraph_level_BiLSTM/temp/' + str(args) + '/valid_acc') == False:
-        os.mkdir(path='output/paragraph_level_BiLSTM/temp/' + str(args) + '/valid_acc')
-    if os.path.exists('output/paragraph_level_BiLSTM/temp/' + str(args) + '/test_f1') == False:
-        os.mkdir(path='output/paragraph_level_BiLSTM/temp/' + str(args) + '/test_f1')
-    if os.path.exists('output/paragraph_level_BiLSTM/temp/' + str(args) + '/test_acc') == False:
-        os.mkdir(path='output/paragraph_level_BiLSTM/temp/' + str(args) + '/test_acc')
+    import xlrd
+    from xlutils.copy import copy
+    def writeExcel(row, col, str):
+        file = './result.xls'
+        rb = xlrd.open_workbook(file, formatting_info=False)
+        wb = copy(rb)
+        ws = wb.get_sheet(0)
+        ws.write(row, col, str)
+        wb.save(file)
 
-    open('output/paragraph_level_BiLSTM/temp/' + str(args) + '/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/temp/' + str(args) + '/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/temp/' + str(args) + '/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/temp/' + str(args) + '/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')
+    writeExcel(50, fold_num + 3, np.mean(np.array(valid_best_f1_list)))  # row, column, value
+    writeExcel(51, fold_num + 3, np.mean(np.array(test_f1_list)))  # row, column, value
+    writeExcel(52, fold_num + 3, np.mean(np.array(valid_best_acc_list)))  # row, column, value
+    writeExcel(53, fold_num + 3, np.mean(np.array(test_acc_list)))  # row, column, value
+
+

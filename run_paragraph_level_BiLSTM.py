@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser(description='para transfer')
 parser.add_argument('--EPOCHs', type=int, default=20)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
-parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
+parser.add_argument('--LEARN_RATE', type=float, default=5e-4)
 parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
 parser.add_argument('--fold_num', type=int)
 args = parser.parse_args()
@@ -44,8 +44,9 @@ if __name__ == '__main__':
     valid_best_f1_list = []
     valid_best_acc_list = []
 
-    for t in range(1):
+    for t in range(9):
         print("\n\n\n\ntime=", t)
+        fold_num = t
 
         train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=True, stanford_path='stanford-corenlp-4.3.1', random_seed=fold_num)
         train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)

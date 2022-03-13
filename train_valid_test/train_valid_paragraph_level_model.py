@@ -170,6 +170,7 @@ def train_and_valid_special_deepcopy(model, temp_best_model, optimizer, train_ba
                         useful_target_Y_list.append(gold_labels_list[i])
                         useful_predict_Y_list.append(pre_labels_list[i])
                 except:
+                    print('error')
                     print("gold_labels_list: ", gold_labels_list)
                     print("pre_labels_list:  ", pre_labels_list)
 

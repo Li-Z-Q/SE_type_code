@@ -126,6 +126,8 @@ class MyModel(nn.Module):
         loss = 0
         ex_total_loss = 0
         reliability_list = []
+        ex_pre_labels_list = []
+        ex_gold_labels_list = []
         sentence_embeddings_list = []
         for i in range(len(sentences_list)):
 
@@ -147,7 +149,7 @@ class MyModel(nn.Module):
                 reliability = 0
 
             else:  # use ex_pre_label
-                if self.mask_p == 0.1 or self.mask_p == 0.2:  # use BiLSTM_ex -> BiLSTM_2, and BiLSTM_ex_extra for ex_pre_label
+                if self.mask_p == 0.1 or self.mask_p == 0.2 or self.mask_p == 0.12:  # use BiLSTM_ex -> BiLSTM_2, and BiLSTM_ex_extra for ex_pre_label
                     _, ex_loss, sentence_embedding, softmax_output = self.BiLSTM_ex(word_embeddings_list, ex_gold_label) # sentence_embedding is 1 * 300
                     ex_pre_label, _, sentence_embedding_two_C, _ = self.BiLSTM_ex_extra(word_embeddings_list, ex_gold_label)
                     sentence_embedding_two_C = sentence_embedding_two_C.squeeze(0)  # size is 300
@@ -160,7 +162,8 @@ class MyModel(nn.Module):
                         ex_total_loss += ex_loss
 
                 elif self.mask_p == 0.15:
-                    ex_pre_label, _, _, _ = self.BiLSTM_ex_extra(word_embeddings_list, ex_gold_label)
+                    ex_pre_label, _, sentence_embedding_two_C, _ = self.BiLSTM_ex_extra(word_embeddings_list, ex_gold_label)
+                    sentence_embedding_two_C = sentence_embedding_two_C.squeeze(0)  # size is 300
                     init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
                     independent_BiLSTM_output, _ = self.BiLSTM_1_independent(word_embeddings_list.unsqueeze(0), init_hidden)  # get 1 * sentence_len * 300
                     sentence_embedding = torch.max(independent_BiLSTM_output, 1)[0]  # 1 * 300
@@ -193,6 +196,46 @@ class MyModel(nn.Module):
                 if self.mask_p == 0.1:  # use ex_pre_label == 0:, only have two class
                     if ex_pre_label == 0:  # and ex_gold_label == 0:
 
+                        selected_label_embedding = self.label_embedding_list[ex_pre_label, :]
+                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, selected_label_embedding, ex_pre_label, ex_gold_label)
+                        sentence_embeddings_list.append(joint_sentence_embedding)
+
+                        # ############################################################
+                        # label_embedding_average = torch.mean(self.label_embedding_list[1:7, :], dim=0)  # size is 300
+                        # label_embedding_average = self.linear_mask_0_dot_1(label_embedding_average)
+                        # #
+                        # cos_0 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[0, :], dim=0)
+                        # # cos_1 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[1, :], dim=0)
+                        # # cos_2 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[2, :], dim=0)
+                        # # cos_3 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[3, :], dim=0)
+                        # # cos_4 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[4, :], dim=0)
+                        # # cos_5 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[5, :], dim=0)
+                        # # cos_6 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[6, :], dim=0)
+                        # cos_average = torch.cosine_similarity(sentence_embedding_two_C, label_embedding_average, dim=0)
+                        #
+                        # # if ex_gold_label == 0:
+                        # #     loss += -cos_0 * 0.5
+                        # # else:
+                        # #     loss += -cos_average * 0.5
+                        # #
+                        # # cos_0 *= 0.4
+                        # if cos_0 > cos_average + 10:
+                        # # if cos_0 > cos_1 and cos_0 > cos_2 and cos_0 > cos_3 and cos_0 > cos_4 and cos_0 > cos_5 and cos_0 > cos_6:
+                        #     selected_label_embedding = self.label_embedding_list[ex_pre_label, :]
+                        #     joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, selected_label_embedding, ex_pre_label, ex_gold_label)
+                        #     sentence_embeddings_list.append(joint_sentence_embedding)
+                        # else:
+                        #     sentence_embeddings_list.append(sentence_embedding)
+                    else:
+                        sentence_embeddings_list.append(sentence_embedding)
+                if self.mask_p == 0.12:  # only have two class
+                    ex_pre_labels_list.append(ex_pre_label)
+                    ex_gold_labels_list.append(ex_gold_label)
+                    sentence_embeddings_list.append(sentence_embedding)
+
+                if self.mask_p == 0.15:
+                    if ex_pre_label == 0:  # and ex_gold_label == 0:
+
                         # selected_label_embedding = self.label_embedding_list[ex_pre_label, :]
                         # joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, selected_label_embedding, ex_pre_label, ex_gold_label)
                         # sentence_embeddings_list.append(joint_sentence_embedding)
@@ -201,7 +244,8 @@ class MyModel(nn.Module):
                         label_embedding_average = torch.mean(self.label_embedding_list[1:7, :], dim=0)  # size is 300
                         label_embedding_average = self.linear_mask_0_dot_1(label_embedding_average)
                         #
-                        cos_0 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[0, :], dim=0)
+                        cos_0 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[0, :],
+                                                        dim=0)
                         # cos_1 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[1, :], dim=0)
                         # cos_2 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[2, :], dim=0)
                         # cos_3 = torch.cosine_similarity(sentence_embedding_two_C, self.label_embedding_list[3, :], dim=0)
@@ -216,21 +260,15 @@ class MyModel(nn.Module):
                             loss += -cos_average * 0.5
                         #
                         # cos_0 *= 0.4
-                        if cos_0 > cos_average:
-                        # if cos_0 > cos_1 and cos_0 > cos_2 and cos_0 > cos_3 and cos_0 > cos_4 and cos_0 > cos_5 and cos_0 > cos_6:
+                        if cos_0 > cos_average + 10:
+                            # if cos_0 > cos_1 and cos_0 > cos_2 and cos_0 > cos_3 and cos_0 > cos_4 and cos_0 > cos_5 and cos_0 > cos_6:
                             selected_label_embedding = self.label_embedding_list[ex_pre_label, :]
-                            joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, selected_label_embedding, ex_pre_label, ex_gold_label)
+                            joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding,
+                                                                                      selected_label_embedding,
+                                                                                      ex_pre_label, ex_gold_label)
                             sentence_embeddings_list.append(joint_sentence_embedding)
                         else:
                             sentence_embeddings_list.append(sentence_embedding)
-                    else:
-                        sentence_embeddings_list.append(sentence_embedding)
-
-                if self.mask_p == 0.15:
-                    if ex_pre_label == 0:
-                        selected_label_embedding = self.label_embedding_list[ex_pre_label, :]
-                        joint_sentence_embedding = self.cat_and_get_new_embedding(sentence_embedding, selected_label_embedding, ex_pre_label, ex_gold_label)
-                        sentence_embeddings_list.append(joint_sentence_embedding)
                     else:
                         sentence_embeddings_list.append(sentence_embedding)
 
@@ -317,6 +355,12 @@ class MyModel(nn.Module):
                         sentence_embeddings_list.append(joint_sentence_embedding)
                     else:
                         sentence_embeddings_list.append(sentence_embedding)
+
+        if self.mask_p == 0.12:
+            for i in range(len(sentence_embeddings_list)):
+                for j in range(len(sentence_embeddings_list)):
+                    if ex_pre_labels_list[j] == ex_pre_labels_list[i]:
+                        sentence_embeddings_list[i] = self.cat_and_get_new_embedding(sentence_embeddings_list[i], sentence_embeddings_list[i], 0, 0)
 
         sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # s.num * 300
         sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 307
