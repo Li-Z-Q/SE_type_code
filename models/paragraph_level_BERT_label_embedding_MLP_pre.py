@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import torch.nn as nn
 from sklearn import metrics
-from models.sentence_level_BERT_extra import MyModel as MyModel_ex
+from models.sentence_level_BERT_ex import MyModel as MyModel_ex
 from transformers import BertTokenizer, BertConfig, BertModel, BertForTokenClassification
 
 
