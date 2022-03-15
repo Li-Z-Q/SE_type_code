@@ -25,7 +25,7 @@ def from_paragraph_to_sentence(paragraph_data_list):
 def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_data_list, two_C):
     print("\n\nstart sentence level BERT  ex")
 
-    EPOCHs = 4
+    EPOCHs = 2
     # DROPOUT = 0.5
     BATCH_SIZE = 8
     LEARN_RATE = 1e-5

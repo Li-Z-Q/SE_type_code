@@ -138,9 +138,9 @@ if __name__ == '__main__':
         ws.write(row, col, str)
         wb.save(file)
 
-    writeExcel(45, fold_num + 3, np.mean(np.array(valid_best_f1_list)))  # row, column, value
-    writeExcel(46, fold_num + 3, np.mean(np.array(test_f1_list)))  # row, column, value
-    writeExcel(47, fold_num + 3, np.mean(np.array(valid_best_acc_list)))  # row, column, value
-    writeExcel(48, fold_num + 3, np.mean(np.array(test_acc_list)))  # row, column, value
+    writeExcel(60, fold_num + 3, np.mean(np.array(valid_best_f1_list)))  # row, column, value
+    writeExcel(61, fold_num + 3, np.mean(np.array(test_f1_list)))  # row, column, value
+    writeExcel(62, fold_num + 3, np.mean(np.array(valid_best_acc_list)))  # row, column, value
+    writeExcel(63, fold_num + 3, np.mean(np.array(test_acc_list)))  # row, column, value
 
 

@@ -48,3 +48,9 @@ def main(paragraph_train_data_list, paragraph_valid_data_list, paragraph_test_da
     print("sentence level model_ex end\n\n********************************************")
 
     return sentence_level_best_model
+
+
+if __name__ == '__main__':
+    from tools.get_paragraph_level_data import get_data
+    train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=True, stanford_path='stanford-corenlp-4.3.1', random_seed=0)
+    main(train_data_list, valid_data_list, test_data_list, pre_model_id=0, two_C=1)

@@ -262,27 +262,7 @@ export PYTHONUNBUFFERED=1
 #  python run_paragraph_level_BiLSTM_label_embedding_MLP_pre.py \
 #    --fold_num 2 --cheat False --mask_p 0.0 --if_use_memory 1 \
 #  > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.0_memory/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_2.txt &
-#
 
-##
-###
-############################################################# cheat = False, mask_p = 0.0, grad = False
-#CUDA_VISIBLE_DEVICES=7 nohup \
-#  python run_paragraph_level_BiLSTM_label_embedding_MLP_pre.py \
-#    --fold_num 0 --cheat False --mask_p 0.0 --bilstm_1_grad 0 \
-#  > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.0_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_0.txt &
-#
-#CUDA_VISIBLE_DEVICES=7 nohup \
-#  python run_paragraph_level_BiLSTM_label_embedding_MLP_pre.py \
-#    --fold_num 1 --cheat False --mask_p 0.0 --bilstm_1_grad 0 \
-#  > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.0_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_1.txt &
-#
-#CUDA_VISIBLE_DEVICES=7 nohup \
-#  python run_paragraph_level_BiLSTM_label_embedding_MLP_pre.py \
-#    --fold_num 2 --cheat False --mask_p 0.0 --bilstm_1_grad 0 \
-#  > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.0_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_2.txt &
-#
-#
 #
 ############################################################# cheat = False, mask_p = 0.0, if_control_loss = True
 #CUDA_VISIBLE_DEVICES=7 nohup \
@@ -301,23 +281,33 @@ export PYTHONUNBUFFERED=1
 #  > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.0_control_T/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_2.txt &
 #
 
-############################################################# cheat = False, mask_p = 0.1, grad = F
+############################################################### cheat = False, mask_p = 0.0, grad = False
 #for i in {0..8}
 #do
-#  CUDA_VISIBLE_DEVICES=7 nohup \
+#  CUDA_VISIBLE_DEVICES=3 nohup \
 #    python run_paragraph_level_BiLSTM_label_embedding_MLP_pre.py \
-#      --fold_num ${i} --cheat False --mask_p 0.1 --bilstm_1_grad 0 \
-#    > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.1_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_${i}.txt &
+#      --fold_num ${i} --cheat False --mask_p 0.0 --bilstm_1_grad 0 \
+#    > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.0_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_${i}.txt &
 #done
-
-########################################################### cheat = False, mask_p = 0.12, grad = F
+#
+#
+############################################################# cheat = False, mask_p = 0.1, grad = F
 for i in {0..8}
 do
-  CUDA_VISIBLE_DEVICES=2 nohup \
+  CUDA_VISIBLE_DEVICES=7 nohup \
     python run_paragraph_level_BiLSTM_label_embedding_MLP_pre.py \
-      --fold_num ${i} --cheat False --mask_p 0.12 --bilstm_1_grad 0 \
-    > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.12_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_${i}.txt &
+      --fold_num ${i} --cheat False --mask_p 0.1 --bilstm_1_grad 0 \
+    > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.1_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_${i}.txt &
 done
+
+########################################################### cheat = False, mask_p = 0.12, grad = F
+#for i in {0..8}
+#do
+#  CUDA_VISIBLE_DEVICES=2 nohup \
+#    python run_paragraph_level_BiLSTM_label_embedding_MLP_pre.py \
+#      --fold_num ${i} --cheat False --mask_p 0.12 --bilstm_1_grad 0 \
+#    > output/paragraph_level_BiLSTM/label_embedding_MLP_pre_False_0.12_grad_F/log_paragraph_level_BiLSTM_300_label_embedding_MLP_pre_${i}.txt &
+#done
 
 ############################################################## cheat = False, mask_p = 0.15
 #CUDA_VISIBLE_DEVICES=2 nohup \

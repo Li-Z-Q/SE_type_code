@@ -47,9 +47,12 @@ class MyModel(nn.Module):
         pre_label = int(torch.argmax(output))
         loss = -output[gold_label]
 
+        if gold_label != 0 and pre_label == 0:
+            loss *= 5
+
         # if self.two_C:
         #     if gold_label == 1 and pre_label == 0:
-        #         loss *= 1.5
+        #         loss *= 15
 
         return pre_label, loss, sentence_embedding, softmax_output
 
