@@ -1,78 +1,79 @@
 import os
 import sys
 sys.path.append(os.getcwd() + '/data')
-sys.path.append(os.getcwd() + '/models')
 sys.path.append(os.getcwd() + '/tools')
+sys.path.append(os.getcwd() + '/models')
 sys.path.append(os.getcwd() + '/pre_train')
 print(sys.path)
 
 import warnings
 warnings.filterwarnings('ignore')
 
-import torch
 import numpy as np
 from torch import optim
+from tools.load_data_from_author import re_load
 from models.paragraph_level_BiLSTM import MyModel
-from tools.get_paragraph_level_data import get_data
-from train_valid_test.test_paragraph_level_model_long_short import long_short_get
+from models.paragraph_level_BiLSTM import AuthorModel
+from tools.load_data_from_json import get_paragraph_data
 from tools.devide_train_batch import get_train_batch_list
-from train_valid_test.test_paragraph_level_model import test_model
+# from train_valid_test.test_paragraph_level_model import test_fn
 from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 
 import argparse
-parser = argparse.ArgumentParser(description='para transfer')
-parser.add_argument('--EPOCHs', type=int, default=20)
+parser = argparse.ArgumentParser()
+parser.add_argument('--METHOD', type=int, default=0)
+parser.add_argument('--FREEZE', type=int, default=0)
+parser.add_argument('--EPOCHs', type=int, default=50)
+parser.add_argument('--EX_LOSS', type=int, default=0)
 parser.add_argument('--DROPOUT', type=float, default=0.5)
 parser.add_argument('--BATCH_SIZE', type=int, default=128)
-parser.add_argument('--LEARN_RATE', type=float, default=5e-4)
-parser.add_argument('--WEIGHT_DECAY', type=float, default=1e-4)
-parser.add_argument('--fold_num', type=int)
+# parser.add_argument('--RANDOM_SEED', type=int, default=1234)  #
+parser.add_argument('--LEARN_RATE', type=float, default=1e-3)
+parser.add_argument('--IF_USE_EX_INITIAL_1', type=int, default=0)
+parser.add_argument('--IF_USE_EX_INITIAL_2', type=int, default=0)
 args = parser.parse_args()
 print(args)
 
-EPOCHs = args.EPOCHs
-DROPOUT = args.DROPOUT
-BATCH_SIZE = args.BATCH_SIZE
-LEARN_RATE = args.LEARN_RATE
-WEIGHT_DECAY = args.WEIGHT_DECAY
-fold_num = args.fold_num
-
 if __name__ == '__main__':
 
-    test_f1_list = []
-    test_acc_list = []
     valid_best_f1_list = []
     valid_best_acc_list = []
 
-    for t in range(9):
-        print("\n\n\n\ntime=", t)
-        fold_num = t
+    dim = 343
+    for t in range(1230, 1235):
+        print("\ntime=", t)
 
-        train_data_list, valid_data_list, test_data_list = get_data(if_do_embedding=True, stanford_path='stanford-corenlp-4.3.1', random_seed=fold_num)
-        train_batch_list = get_train_batch_list(train_data_list, BATCH_SIZE, each_data_len=0)
+        train_data_list, test_data_list = re_load(random_seed=t)  # from author
+        # train_data_list, test_data_list = get_paragraph_data(dim=dim, random_seed=t)
+        train_batch_list = get_train_batch_list(train_data_list, args.BATCH_SIZE, each_data_len=0)  #
 
-        model = MyModel(dropout=DROPOUT).cuda()
-        optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE, weight_decay=WEIGHT_DECAY)
+        if args.METHOD == 0:
+            model = MyModel(input_dim=dim,
+                            dropout=args.DROPOUT,
+                            if_use_ex_initial_1=args.IF_USE_EX_INITIAL_1,
+                            if_use_ex_initial_2=args.IF_USE_EX_INITIAL_2,
+                            random_seed=t,
+                            ex_loss=args.EX_LOSS,
+                            freeze=args.FREEZE).cuda()
+        else:
+            model = AuthorModel(input_dim=dim,
+                                dropout=args.DROPOUT,
+                                if_use_ex_initial_1=args.IF_USE_EX_INITIAL_1,
+                                if_use_ex_initial_2=args.IF_USE_EX_INITIAL_2,
+                                random_seed=t).cuda()
+        optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()),
+                               lr=args.LEARN_RATE,
+                               weight_decay=1e-4)
 
-        best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list, valid_data_list, EPOCHs)
-        torch.save(best_model, 'output/model_paragraph_level_BiLSTM.pt')
-        print("best_epoch: ", best_epoch, best_macro_Fscore, best_acc)
+        best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list, test_data_list, args.EPOCHs)
+        print("\nbest_epoch: ", best_epoch, best_macro_Fscore, best_acc)
 
-        f1_score, acc = test_model(test_data_list, best_model)
-        long_short_get(test_data_list, best_model)
+        if args.METHOD == 0 and args.IF_USE_EX_INITIAL_1 == 0 and args.IF_USE_EX_INITIAL_2 == 0:
+            best_model.save()
 
-        test_f1_list.append(f1_score)
-        test_acc_list.append(acc)
         valid_best_f1_list.append(best_macro_Fscore)
         valid_best_acc_list.append(best_acc)
 
     # ###############################
-    print("test f1:  ", np.mean(np.array(test_f1_list)), test_f1_list)
-    print("test ass: ", np.mean(np.array(test_acc_list)), test_acc_list)
     print("valid f1: ", np.mean(np.array(valid_best_f1_list)), valid_best_f1_list)
     print("valid acc:", np.mean(np.array(valid_best_acc_list)), valid_best_acc_list)
-    
-    open('output/paragraph_level_BiLSTM/base/test_acc/' + str(np.mean(np.array(test_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/base/test_f1/' + str(np.mean(np.array(test_f1_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/base/valid_acc/' + str(np.mean(np.array(valid_best_acc_list))) + '.txt', 'w')
-    open('output/paragraph_level_BiLSTM/base/valid_f1/' + str(np.mean(np.array(valid_best_f1_list))) + '.txt', 'w')

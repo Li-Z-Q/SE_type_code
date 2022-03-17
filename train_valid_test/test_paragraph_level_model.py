@@ -2,7 +2,7 @@ import torch
 from tools.print_evaluation_result import print_evaluation_result
 
 
-def test_model(test_data_list, model, with_raw_text=False):
+def test_fn(test_data_list, model, with_raw_text=False):
     model.eval()
     useful_target_Y_list = []
     useful_predict_Y_list = []
@@ -17,7 +17,7 @@ def test_model(test_data_list, model, with_raw_text=False):
                 if label != 7:
                     gold_labels_list.append(label)
                     sentences_list.append(sentence)
-                    raw_sentences_list.append(raw_sentence)
+                    raw_sentences_list.append(torch.tensor(raw_sentence))
 
             if with_raw_text:
                 pre_labels_list, _ = model.forward([sentences_list, raw_sentences_list], gold_labels_list)  # sentence_num * 7

@@ -1,10 +1,11 @@
-import torch
+import os
+import sys
+sys.path.append(os.getcwd() + '/data')
+sys.path.append(os.getcwd() + '/tools')
+sys.path.append(os.getcwd() + '/models')
+sys.path.append(os.getcwd() + '/pre_train')
+print(sys.path)
 
-a = torch.randn(7, 300)
-print(a.shape)
+from tools.load_data_from_author import re_load
 
-b = torch.randn(7)
-print(b.shape)
-
-c = torch.einsum("ij, i->ij", a, b)
-print(c.shape)
+re_load(0)
