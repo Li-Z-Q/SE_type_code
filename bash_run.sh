@@ -18,20 +18,13 @@ CUDA_VISIBLE_DEVICES=7 nohup \
     --IF_USE_EX_INITIAL_2 0 \
   > output/paragraph_author.txt &
 
-## paragraph_base
-#CUDA_VISIBLE_DEVICES=7 nohup \
-#  python run_paragraph_level_BiLSTM.py \
-#    --IF_USE_EX_INITIAL_1 0 \
-#    --IF_USE_EX_INITIAL_2 0 \
-#  > output/paragraph_base.txt &
+# paragraph_base
+CUDA_VISIBLE_DEVICES=7 nohup \
+  python run_paragraph_level_BiLSTM.py \
+    --IF_USE_EX_INITIAL_1 0 \
+    --IF_USE_EX_INITIAL_2 0 \
+  > output/paragraph_base.txt &
 
-## paragraph_1st_initial_freeze
-#CUDA_VISIBLE_DEVICES=2 nohup \
-#  python run_paragraph_level_BiLSTM.py \
-#    --IF_USE_EX_INITIAL_1 1 \
-#    --IF_USE_EX_INITIAL_2 0 \
-#    --FREEZE 1 \
-#  > output/paragraph_1st_initial_freeze.txt &
 #
 ## paragraph_1st_initial_loss
 #CUDA_VISIBLE_DEVICES=2 nohup \
@@ -40,6 +33,7 @@ CUDA_VISIBLE_DEVICES=7 nohup \
 #    --IF_USE_EX_INITIAL_2 0 \
 #    --EX_LOSS 1 \
 #  > output/paragraph_1st_initial_loss.txt &
+
 #
 ## paragraph_1st_initial_non-loss
 #CUDA_VISIBLE_DEVICES=2 nohup \

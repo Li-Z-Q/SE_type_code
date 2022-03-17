@@ -15,14 +15,16 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
 
         # ################################### train ##############################
         model.train()
+        if hasattr(model, 'valid_flag'):
+            model.valid_flag = 0
+            model.display_first()
         for train_batch in train_batch_list:
             batch_loss = 0
             optimizer.zero_grad()
             for train_data in train_batch:
                 raw_sentence_list = train_data[0]
                 inputs = [torch.tensor(sentence)[:, :].cuda() for sentence in train_data[3]]
-                pre_labels_list, loss, _ = model.forward(inputs, train_data[1])  # sentence_num * 7
-
+                _, loss, _ = model.forward(inputs, train_data[1])  # sentence_num * 7
                 batch_loss += loss
 
             batch_loss.backward()
@@ -30,22 +32,20 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
 
         # ################################### valid ##############################
         model.eval()
+        if hasattr(model, 'valid_flag'):
+            model.valid_flag = 1
+
         useful_target_Y_list = []
         useful_predict_Y_list = []
-        
         with torch.no_grad():
             for valid_data in valid_data_list:
                 raw_sentence_list = valid_data[0]
                 inputs = [torch.tensor(sentence)[:, :].cuda() for sentence in valid_data[3]]
                 pre_labels_list, _, _ = model.forward(inputs, valid_data[1])  # sentence_num * 7
-                gold_labels_list = []
+                useful_predict_Y_list += pre_labels_list
                 for gold_label in valid_data[1]:
                     if gold_label != 7:
-                        gold_labels_list.append(gold_label)
-
-                for i in range(len(pre_labels_list)):
-                    useful_target_Y_list.append(gold_labels_list[i])
-                    useful_predict_Y_list.append(pre_labels_list[i])
+                        useful_target_Y_list.append(gold_label)
 
         # ################################### print and save models ##############################
         tmp_macro_f1, tmp_acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)

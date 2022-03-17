@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     dim = 343
     for t in range(1230, 1235):
-        print("\ntime=", t)
+        print("\n\ntime=", t)
 
         train_data_list, test_data_list = re_load(random_seed=t)  # from author
         # train_data_list, test_data_list = get_paragraph_data(dim=dim, random_seed=t)

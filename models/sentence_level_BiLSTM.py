@@ -27,7 +27,7 @@ class MyModel(nn.Module):
         self.hidden2tag = nn.Linear(300, 7)
         self.softmax = nn.LogSoftmax()
 
-    def forward(self, word_embeddings_list, gold_label):
+    def forward(self, word_embeddings_list):
         word_embeddings_list = word_embeddings_list.unsqueeze(0).cuda()  # 1 * sentence_len * 348
 
         if not self.if_use_ex_initial:
@@ -35,16 +35,16 @@ class MyModel(nn.Module):
             BiLSTM_output, _ = self.BiLSTM(word_embeddings_list, init_hidden)  # 1 * sentence_len * 300
             sentence_embedding = torch.max(BiLSTM_output, 1)[0]  # 1 * 300
         else:
-            _, _, sentence_embedding = self.BiLSTM(word_embeddings_list, gold_label)
+            _, _, sentence_embedding = self.BiLSTM(word_embeddings_list)
+            sentence_embedding = sentence_embedding.unsqueeze(0)  # 1 * 300
 
         output = self.hidden2tag(sentence_embedding)  # 1 * 7
         output = self.softmax(output)  # 1 * 7
-        output = output.squeeze(0)
+        output = output.squeeze(0)  # size is 7
 
         pre_label = int(torch.argmax(output))
-        loss = -output[gold_label]
 
-        return pre_label, loss, sentence_embedding
+        return pre_label, output, sentence_embedding.squeeze(0)
 
     def save(self):
         torch.save(self, 'models/model_sentence_level_BiLSTM_' + str(self.random_seed) + '.pt')

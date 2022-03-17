@@ -65,8 +65,7 @@ def from_paragraph_to_sentence(paragraph_data_list, random_seed):
 
     for data in paragraph_data_list:
         for raw_sentence, label, word_embeddings_list in zip(data[0], data[1], data[3]):
-            if label != 7:
-                data_list.append([raw_sentence, label, word_embeddings_list])
+            data_list.append([raw_sentence, label, word_embeddings_list])
 
     print("len(data_list): ", len(data_list))
 

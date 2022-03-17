@@ -13,9 +13,6 @@ def train_and_valid_fn(model, optimizer, train_batch_list, valid_data_list, tota
     for epoch in range(total_epoch):
         print('\n\nepoch ' + str(epoch) + '/' + str(total_epoch))
 
-        if hasattr(model, 'reset'):
-            model.reset()
-
         # ################################### train ##############################
         model.train()
         for train_batch in train_batch_list:
@@ -25,9 +22,9 @@ def train_and_valid_fn(model, optimizer, train_batch_list, valid_data_list, tota
                 gold_label = train_data[1]
                 inputs = torch.tensor(train_data[2])  # for BiLSTM is words_embeddings_list, for BERT is words_ids_list
 
-                pre_label, loss, _ = model.forward(inputs, gold_label)  # 1 * 7
-
-                batch_loss += loss
+                pre_label, output, _ = model.forward(inputs)  # 1 * 7
+                if gold_label != 7:
+                    batch_loss += -output[gold_label]
 
             batch_loss.backward()
             optimizer.step()
@@ -41,10 +38,10 @@ def train_and_valid_fn(model, optimizer, train_batch_list, valid_data_list, tota
                 gold_label = valid_data[1]
                 inputs = torch.tensor(valid_data[2])  # for BiLSTM is words_embeddings_list, for BERT is words_ids_list
 
-                pre_label, loss, _ = model.forward(inputs, gold_label)  # 1 * 7
-
-                useful_target_Y_list.append(gold_label)
-                useful_predict_Y_list.append(pre_label)
+                pre_label, _, _ = model.forward(inputs)  # 1 * 7
+                if gold_label != 7:
+                    useful_target_Y_list.append(gold_label)
+                    useful_predict_Y_list.append(pre_label)
 
         # ################################### print and save models ##############################
         tmp_macro_Fscore, tmp_acc = print_evaluation_result(useful_target_Y_list, useful_predict_Y_list)

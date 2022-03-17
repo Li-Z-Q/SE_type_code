@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
+from tools.print_evaluation_result import print_evaluation_result
 from models.sentence_level_BiLSTM import MyModel as SentenceLevelModelBase
 
 
@@ -45,23 +46,32 @@ class MyModel(nn.Module):
         self.hidden2tag = nn.Linear(300, 7)
         self.softmax = nn.LogSoftmax()
 
+        self.valid_flag = 0
+        self.first_pre_labels_list = []
+        self.first_gold_labels_list = []
+
     def forward(self, sentences_list, gold_labels_list):  # [4*3336, 7*336, 1*336]
         if self.if_use_ex_initial_2:
             pre_labels_list, loss, sentence_embeddings_output = self.BiLSTM_1_2(sentences_list, gold_labels_list)
         else:
+            loss_1 = 0
             sentence_embeddings_list = []
             for gold_label, sentence in zip(gold_labels_list, sentences_list):
-                word_embeddings_list = sentence.unsqueeze(0)  # 1 * sentence_len * 336
-
                 if self.if_use_ex_initial_1:
-                    _, loss_1, sentence_embedding = self.BiLSTM_1(word_embeddings_list, gold_label)
-                    sentence_embedding = sentence_embedding.squeeze(0)
+                    word_embeddings_list = sentence  # sentence_len * 336
+                    ex_pre_label, output_1, sentence_embedding = self.BiLSTM_1(word_embeddings_list, gold_label)
+                    sentence_embeddings_list.append(sentence_embedding)  # sentence_embedding size is 300
+                    if gold_label != 7:
+                        loss_1 += -output_1[gold_label]
+                        if self.valid_flag:
+                            self.first_gold_labels_list.append(gold_label)
+                            self.first_pre_labels_list.append(ex_pre_label)
                 else:
+                    word_embeddings_list = sentence.unsqueeze(0)  # 1 * sentence_len * 336
                     init_hidden = (Variable(torch.zeros(2, 1, 150)).cuda(), Variable(torch.zeros(2, 1, 150)).cuda())
                     word_embeddings_output, _ = self.BiLSTM_1(word_embeddings_list, init_hidden)  # 1 * sentence_len * 300
                     sentence_embedding = torch.max(word_embeddings_output[0, :, :], 0)[0]  # size = 300
-
-                sentence_embeddings_list.append(sentence_embedding)
+                    sentence_embeddings_list.append(sentence_embedding)
 
             sentence_embeddings_list = torch.stack(sentence_embeddings_list)  # sentence_num * 300
             sentence_embeddings_list = sentence_embeddings_list.unsqueeze(0)  # 1 * sentence_num * 300
@@ -98,6 +108,15 @@ class MyModel(nn.Module):
             return torch.load('models/model_paragraph_level_BiLSTM_base_' + str(self.random_seed) + '.pt')
         else:
             return 0
+
+    def display_first(self):
+        if len(self.first_pre_labels_list) > 0:
+            print('first BiLSTM result')
+            _, _ = print_evaluation_result(self.first_gold_labels_list, self.first_pre_labels_list)
+            self.first_pre_labels_list = []
+            self.first_gold_labels_list = []
+        else:
+            print('first LSTM no result')
 
 
 class AuthorModel(nn.Module):
