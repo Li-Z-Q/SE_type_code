@@ -1,11 +1,7 @@
-import os
-import sys
-sys.path.append(os.getcwd() + '/data')
-sys.path.append(os.getcwd() + '/tools')
-sys.path.append(os.getcwd() + '/models')
-sys.path.append(os.getcwd() + '/pre_train')
-print(sys.path)
+a = [0, 1, 2, 1, 2, 0, 3, 5, 3, 2]
+c = [0, 1, 9, 1, 9, 0, 9, 5, 3, 2]
 
-from tools.load_data_from_author import re_load
-
-re_load(0)
+b = [i for i in a if i != 2]
+d = [c[i] for i in range(len(a)) if a[i] != 2]
+print(b)
+print(d)

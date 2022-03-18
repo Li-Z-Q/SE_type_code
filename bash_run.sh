@@ -10,6 +10,13 @@ export PYTHONUNBUFFERED=1
 #    --IF_USE_EX_INITIAL 0 \
 #  > output/sentence_base.txt &
 
+## sentence_base_5
+#CUDA_VISIBLE_DEVICES=7 nohup \
+#  python run_sentence_level_BiLSTM.py \
+#    --EPOCHs 5 \
+#    --IF_USE_EX_INITIAL 0 \
+#  > output/sentence_base_5.txt &
+
 ## paragraph_author
 #CUDA_VISIBLE_DEVICES=7 nohup \
 #  python run_paragraph_level_BiLSTM.py \
@@ -25,29 +32,38 @@ export PYTHONUNBUFFERED=1
 #    --IF_USE_EX_INITIAL_2 0 \
 #  > output/paragraph_base.txt &
 
-# paragraph_1st_initial_freeze
+## paragraph_1st_initial_freeze
+#CUDA_VISIBLE_DEVICES=2 nohup \
+#  python run_paragraph_level_BiLSTM.py \
+#    --IF_USE_EX_INITIAL_1 1 \
+#    --IF_USE_EX_INITIAL_2 0 \
+#    --FREEZE 1 \
+#  > output/paragraph_1st_initial_freeze.txt &
+
+# paragraph_1st_initial_freeze_5
 CUDA_VISIBLE_DEVICES=2 nohup \
   python run_paragraph_level_BiLSTM.py \
     --IF_USE_EX_INITIAL_1 1 \
     --IF_USE_EX_INITIAL_2 0 \
     --FREEZE 1 \
-  > output/paragraph_1st_initial_freeze.txt &
+  > output/paragraph_1st_initial_freeze_5.txt &
 
-# paragraph_1st_initial_loss
-CUDA_VISIBLE_DEVICES=2 nohup \
-  python run_paragraph_level_BiLSTM.py \
-    --IF_USE_EX_INITIAL_1 1 \
-    --IF_USE_EX_INITIAL_2 0 \
-    --EX_LOSS 1 \
-  > output/paragraph_1st_initial_loss.txt &
-
-
-# paragraph_1st_initial_non-loss
-CUDA_VISIBLE_DEVICES=2 nohup \
-  python run_paragraph_level_BiLSTM.py \
-    --IF_USE_EX_INITIAL_1 1 \
-    --IF_USE_EX_INITIAL_2 0 \
-  > output/paragraph_1st_initial_non-loss.txt &
+#
+## paragraph_1st_initial_loss
+#CUDA_VISIBLE_DEVICES=2 nohup \
+#  python run_paragraph_level_BiLSTM.py \
+#    --IF_USE_EX_INITIAL_1 1 \
+#    --IF_USE_EX_INITIAL_2 0 \
+#    --EX_LOSS 1 \
+#  > output/paragraph_1st_initial_loss.txt &
+#
+#
+## paragraph_1st_initial_non-loss
+#CUDA_VISIBLE_DEVICES=2 nohup \
+#  python run_paragraph_level_BiLSTM.py \
+#    --IF_USE_EX_INITIAL_1 1 \
+#    --IF_USE_EX_INITIAL_2 0 \
+#  > output/paragraph_1st_initial_non-loss.txt &
 
 ## paragraph_double_initial_loss
 #CUDA_VISIBLE_DEVICES=7 nohup \

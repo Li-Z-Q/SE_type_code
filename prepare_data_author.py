@@ -168,8 +168,7 @@ def process_sentence(sentence, posner_flag=True, sentencemarker=False):
         return tansfer_word2vec(word_list, posner_flag=False)
 
 
-entity_type_list = ['STATE', 'EVENT', 'REPORT', 'GENERIC_SENTENCE', 'GENERALIZING_SENTENCE', 'QUESTION',
-                    'IMPERATIVE']  # 'CANNOT_DECIDE'
+entity_type_list = ['STATE', 'EVENT', 'REPORT', 'GENERIC_SENTENCE', 'GENERALIZING_SENTENCE', 'QUESTION', 'IMPERATIVE']  # 'CANNOT_DECIDE'
 
 
 def process_entity_type_label(entity_type):
@@ -192,7 +191,7 @@ def transfer_docvec_labels(doc_clause_list, posner_flag=True, sentencemarker=Fal
     # print "doc_clause_list: ", doc_clause_list
 
     for i in range(len(doc_clause_list)):
-        clause_text, entity_type = doc_clause_list[i][0], doc_clause_list[i][1]
+        clause_text, entity_type, main_verb = doc_clause_list[i][0], doc_clause_list[i][1], doc_clause_list[i][3]
         y[i, :] = process_entity_type_label(entity_type)
 
         clause_count += 1
@@ -212,7 +211,7 @@ def transfer_docvec_labels(doc_clause_list, posner_flag=True, sentencemarker=Fal
         clause_embedding_list.append(clause_embedding)
         doc_length = doc_length + clause_embedding.size(0)
         eos_position_list.append(doc_length)
-        raw_sentences_list.append(clause_text)
+        raw_sentences_list.append([clause_text, main_verb])
 
         # print "eos_position_list: ", eos_position_list
 
@@ -230,12 +229,20 @@ def process_doc(doc_path):
     for clause in xml.find_all('segment'):
         end = int(clause.attrs['end'])
         clause_text = unicode(clause.find('text').string)
+        if clause.find('mainverb') == None:
+            main_verb = unicode('None')
+        else:
+            main_verb = unicode(clause.find('mainverb').string)
+        # print "clause_text: ", clause_text
+        # print "main_verb: ", main_verb
+        # input('aa')
+
         label = 'CANNOT_DECIDE'
         annotation = clause.find('annotation', attrs={"annotator": "gold"})
         if annotation.has_attr('setype'):
             label = annotation.attrs['setype']
 
-        clause_list.append((clause_text, label, end))
+        clause_list.append((clause_text, label, end, main_verb))
     return clause_list
 
 
@@ -367,5 +374,5 @@ print 'connective count: ' + str(connective_count)
 print 'connective percentage: ' + str(connective_count * 1.0 / clause_count)
 store_sentence_pos_ner_dict()
 
-with open('data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence.pt', 'w+') as outfile:
+with open('data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb.pt', 'w+') as outfile:
     torch.save(masc_data, outfile)
