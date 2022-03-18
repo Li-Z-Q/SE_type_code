@@ -59,7 +59,7 @@ class MyModel(nn.Module):
             for gold_label, sentence in zip(gold_labels_list, sentences_list):
                 if self.if_use_ex_initial_1:
                     word_embeddings_list = sentence  # sentence_len * 336
-                    ex_pre_label, output_1, sentence_embedding = self.BiLSTM_1(word_embeddings_list, gold_label)
+                    ex_pre_label, output_1, sentence_embedding = self.BiLSTM_1(word_embeddings_list)
                     sentence_embeddings_list.append(sentence_embedding)  # sentence_embedding size is 300
                     if gold_label != 7:
                         loss_1 += -output_1[gold_label]
