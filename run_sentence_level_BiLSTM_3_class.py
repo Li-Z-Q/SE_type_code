@@ -14,10 +14,10 @@ warnings.filterwarnings('ignore')
 import numpy as np
 from torch import optim
 from tools.load_data_from_author import re_load
-from models.sentence_level_BiLSTM import MyModel
+from models.sentence_level_BiLSTM_3_class import MyModel
 from tools.devide_train_batch import get_train_batch_list
 from tools.load_data_from_json import from_paragraph_to_sentence
-from train_valid_test.train_valid_sentence_level_model import train_and_valid_fn
+from train_valid_test.train_valid_sentence_level_model_3_class import train_and_valid_fn
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -54,8 +54,8 @@ if __name__ == '__main__':
                                weight_decay=1e-4)
 
         best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid_fn(model, optimizer, train_batch_list, test_data_list, args.EPOCHs)
-        if args.IF_USE_EX_INITIAL == 0:
-            best_model.save()
+        # if args.IF_USE_EX_INITIAL == 0:
+        #     best_model.save()
         print("\ntime={}, best_epoch: ".format(t), best_epoch, best_macro_Fscore, best_acc)
 
         valid_best_acc_list.append(best_acc)

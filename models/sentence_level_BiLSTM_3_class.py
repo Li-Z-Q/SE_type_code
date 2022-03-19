@@ -24,7 +24,7 @@ class MyModel(nn.Module):
                                   batch_first=True,
                                   bidirectional=True,
                                   dropout=dropout)
-        self.hidden2tag = nn.Linear(300, 7)
+        self.hidden2tag = nn.Linear(300, 3)
         self.softmax = nn.LogSoftmax()
 
     def forward(self, word_embeddings_list):
@@ -47,7 +47,7 @@ class MyModel(nn.Module):
         return pre_label, output, sentence_embedding.squeeze(0)
 
     def save(self):
-        torch.save(self, 'models/model_sentence_level_BiLSTM_' + str(self.random_seed) + '.pt')
+        torch.save(self, 'models/model_sentence_level_BiLSTM_3_class_' + str(self.random_seed) + '.pt')
 
     def load(self):
-        return torch.load('models/model_sentence_level_BiLSTM_' + str(self.random_seed) + '.pt')
+        return torch.load('models/model_sentence_level_BiLSTM_3_class' + str(self.random_seed) + '.pt')

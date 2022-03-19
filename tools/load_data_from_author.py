@@ -66,6 +66,19 @@ def helper(train_X, train_Y, train_X_eos_list, train_X_raw_sentence):
         for eos in paragraph_X_eos_list:
             sentence_X_list.append(paragraph_X[0, start:eos, :])
             start = eos
+
+        # tmp_sentence_X_list = []
+        # tmp_gold_labels_list = []
+        # tem_raw_sentence_list = []
+        # for i in range(len(gold_labels_list)):
+        #     if gold_labels_list[i] != 7:
+        #         tmp_gold_labels_list.append(gold_labels_list[i])
+        #         tmp_sentence_X_list.append(sentence_X_list[i])
+        #         tem_raw_sentence_list.append(raw_sentence_list[i])
+        # raw_sentence_list = tem_raw_sentence_list
+        # gold_labels_list = tmp_gold_labels_list
+        # sentence_X_list = tmp_sentence_X_list
+
         data_list.append([raw_sentence_list, gold_labels_list, useful_gold_labels_num, sentence_X_list])
 
     return data_list
