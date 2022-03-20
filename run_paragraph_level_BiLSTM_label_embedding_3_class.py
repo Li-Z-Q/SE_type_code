@@ -14,7 +14,7 @@ from torch import optim
 from tools.load_data_from_author import re_load
 from tools.load_data_from_json import get_paragraph_data
 from tools.devide_train_batch import get_train_batch_list
-from models.paragraph_level_BiLSTM_label_embedding import MyModel
+from models.paragraph_level_BiLSTM_label_embedding_3_class import MyModel
 from train_valid_test.train_valid_paragraph_level_model import train_and_valid
 
 import argparse

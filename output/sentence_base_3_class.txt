@@ -1,0 +1,766 @@
+['/home/lizhuoqun/SE_type_code', '/home/lizhuoqun/anconda/envs/py38/lib/python38.zip', '/home/lizhuoqun/anconda/envs/py38/lib/python3.8', '/home/lizhuoqun/anconda/envs/py38/lib/python3.8/lib-dynload', '/home/lizhuoqun/anconda/envs/py38/lib/python3.8/site-packages', '/home/lizhuoqun/SE_type_code/tools', '/home/lizhuoqun/SE_type_code/data', '/home/lizhuoqun/SE_type_code/models', '/home/lizhuoqun/SE_type_code/pre_train']
+sentence level BiLSTM
+Namespace(BATCH_SIZE=128, DROPOUT=0.5, EPOCHs=30, IF_USE_EX_INITIAL=0, LEARN_RATE=0.001)
+
+
+time= 1230
+use 343 from author
+Loading Data...
+len(test_X):  981
+len(train_X):  3803
+from paragraph to sentence
+len(data_list):  9436
+from paragraph to sentence
+len(data_list):  38467
+
+epoch 0/30
+Accuracy:  0.8168073579438074
+Confusion Metric: 
+ [[5114  427   59]
+ [ 857 1013   24]
+ [  72   15  356]]
+Macro Precision/Recall/F-score:  (0.7844740939254105, 0.7505576362543177, 0.7635602293944072, None)
+
+epoch 1/30
+Accuracy:  0.8183192642056193
+Confusion Metric: 
+ [[5040  458  102]
+ [ 787 1073   34]
+ [  48   13  382]]
+Macro Precision/Recall/F-score:  (0.7634240881352556, 0.7762761180807001, 0.7658788972697881, None)
+
+epoch 2/30
+Accuracy:  0.820209147032884
+Confusion Metric: 
+ [[4979  523   98]
+ [ 713 1147   34]
+ [  43   16  384]]
+Macro Precision/Recall/F-score:  (0.7642241080291874, 0.7871736398404939, 0.7733780634063114, None)
+
+epoch 3/30
+Accuracy:  0.820209147032884
+Confusion Metric: 
+ [[4916  579  105]
+ [ 657 1204   33]
+ [  35   18  390]]
+Macro Precision/Recall/F-score:  (0.7612529013778399, 0.7979699915129966, 0.7774058653830962, None)
+
+epoch 4/30
+Accuracy:  0.8241149048758977
+Confusion Metric: 
+ [[4918  619   63]
+ [ 627 1245   22]
+ [  41   24  378]]
+Macro Precision/Recall/F-score:  (0.7854193256503653, 0.7962754628549726, 0.7907107740527568, None)
+
+epoch 5/30
+Accuracy:  0.8223510142371173
+Confusion Metric: 
+ [[4900  619   81]
+ [ 632 1237   25]
+ [  33   20  390]]
+Macro Precision/Recall/F-score:  (0.7753917101159131, 0.8028254247105627, 0.7882157649922329, None)
+
+epoch 6/30
+Accuracy:  0.8241149048758977
+Confusion Metric: 
+ [[4907  621   72]
+ [ 626 1245   23]
+ [  33   21  389]]
+Macro Precision/Recall/F-score:  (0.7816996732946513, 0.8038976008749662, 0.7922468442888048, None)
+
+epoch 7/30
+Accuracy:  0.8180672798286506
+Confusion Metric: 
+ [[4868  613  119]
+ [ 635 1228   31]
+ [  31   15  397]]
+Macro Precision/Recall/F-score:  (0.7556893167161663, 0.8046038316261143, 0.7771307305738059, None)
+
+epoch 8/30
+Accuracy:  0.8204611314098526
+Confusion Metric: 
+ [[4881  639   80]
+ [ 626 1240   28]
+ [  32   20  391]]
+Macro Precision/Recall/F-score:  (0.7725827927539642, 0.8029749008818561, 0.7867883063834795, None)
+
+epoch 9/30
+Accuracy:  0.8159254126244173
+Confusion Metric: 
+ [[4809  705   86]
+ [ 598 1271   25]
+ [  32   15  396]]
+Macro Precision/Recall/F-score:  (0.7678692166579969, 0.8079072392482538, 0.7864234122699564, None)
+
+epoch 10/30
+Accuracy:  0.8257528033261938
+Confusion Metric: 
+ [[5240  290   70]
+ [ 938  929   27]
+ [  46   12  385]]
+Macro Precision/Recall/F-score:  (0.7984428331781075, 0.7650950273106255, 0.7711084382352583, None)
+
+epoch 11/30
+Accuracy:  0.8281466549073957
+Confusion Metric: 
+ [[5238  320   42]
+ [ 896  988   10]
+ [  75   21  347]]
+Macro Precision/Recall/F-score:  (0.8189014654494473, 0.7467667204014193, 0.7748138043264857, None)
+
+epoch 12/30
+Accuracy:  0.8161773970013859
+Confusion Metric: 
+ [[4821  735   44]
+ [ 585 1301    8]
+ [  63   24  356]]
+Macro Precision/Recall/F-score:  (0.7952054685326919, 0.7838035380997445, 0.7886039758901262, None)
+
+epoch 13/30
+Accuracy:  0.8184452563941036
+Confusion Metric: 
+ [[4905  646   49]
+ [ 649 1237    8]
+ [  65   24  354]]
+Macro Precision/Recall/F-score:  (0.7943026054444057, 0.7760350076408004, 0.7847768811905119, None)
+
+epoch 14/30
+Accuracy:  0.8239889126874134
+Confusion Metric: 
+ [[5083  473   44]
+ [ 785 1100    9]
+ [  65   21  357]]
+Macro Precision/Recall/F-score:  (0.8058510203441581, 0.7647763536384637, 0.7830834095573049, None)
+
+epoch 15/30
+Accuracy:  0.8238629204989291
+Confusion Metric: 
+ [[5074  488   38]
+ [ 771 1115    8]
+ [  72   21  350]]
+Macro Precision/Recall/F-score:  (0.8093146306017752, 0.7616134367415173, 0.7831139021880005, None)
+
+epoch 16/30
+Accuracy:  0.8217210532946957
+Confusion Metric: 
+ [[5061  499   40]
+ [ 778 1109    7]
+ [  69   22  352]]
+Macro Precision/Recall/F-score:  (0.8064028943446725, 0.7612885519040367, 0.7816883225854871, None)
+
+epoch 17/30
+Accuracy:  0.8208391079753056
+Confusion Metric: 
+ [[5064  494   42]
+ [ 786 1102    6]
+ [  71   23  349]]
+Macro Precision/Recall/F-score:  (0.8050070710295628, 0.7579778264122314, 0.7791422466565011, None)
+
+epoch 18/30
+Accuracy:  0.817815295451682
+Confusion Metric: 
+ [[5016  540   44]
+ [ 762 1125    7]
+ [  70   23  350]]
+Macro Precision/Recall/F-score:  (0.7990054291973033, 0.7599209994709385, 0.7779449541033999, None)
+
+epoch 19/30
+Accuracy:  0.8160514048129016
+Confusion Metric: 
+ [[4953  600   47]
+ [ 719 1163   12]
+ [  59   23  361]]
+Macro Precision/Recall/F-score:  (0.7916488995642704, 0.7711356853865423, 0.7809734951647269, None)
+
+epoch 20/30
+Accuracy:  0.8173113266977448
+Confusion Metric: 
+ [[4994  567   39]
+ [ 738 1145   11]
+ [  69   26  348]]
+Macro Precision/Recall/F-score:  (0.7980203785064809, 0.760626472129609, 0.7780521060091802, None)
+
+epoch 21/30
+Accuracy:  0.815799420435933
+Confusion Metric: 
+ [[4970  593   37]
+ [ 726 1159    9]
+ [  73   24  346]]
+Macro Precision/Recall/F-score:  (0.798914759342105, 0.7601569309601506, 0.7782191571131788, None)
+
+epoch 22/30
+Accuracy:  0.8170593423207761
+Confusion Metric: 
+ [[5091  466   43]
+ [ 833 1049   12]
+ [  78   20  345]]
+Macro Precision/Recall/F-score:  (0.7980349610209553, 0.7472474859650026, 0.7693176112687562, None)
+
+epoch 23/30
+Accuracy:  0.8204611314098526
+Confusion Metric: 
+ [[5108  460   32]
+ [ 825 1064    5]
+ [  83   20  340]]
+Macro Precision/Recall/F-score:  (0.8133483612821185, 0.7471370790110853, 0.7759031303191458, None)
+
+epoch 24/30
+Accuracy:  0.819831170467431
+Confusion Metric: 
+ [[5146  421   33]
+ [ 864 1024    6]
+ [  85   21  337]]
+Macro Precision/Recall/F-score:  (0.813024839676905, 0.7401018727026663, 0.7708376117097794, None)
+
+epoch 25/30
+Accuracy:  0.8163033891898702
+Confusion Metric: 
+ [[4950  616   34]
+ [ 700 1186    8]
+ [  73   27  343]]
+Macro Precision/Recall/F-score:  (0.801427280874672, 0.7614609663674251, 0.779983203005623, None)
+
+epoch 26/30
+Accuracy:  0.8192012095250094
+Confusion Metric: 
+ [[4998  537   65]
+ [ 754 1123   17]
+ [  50   12  381]]
+Macro Precision/Recall/F-score:  (0.7853239934251176, 0.7818233910420057, 0.7825284185744733, None)
+
+epoch 27/30
+Accuracy:  0.8209651001637899
+Confusion Metric: 
+ [[5024  536   40]
+ [ 746 1142    6]
+ [  71   22  350]]
+Macro Precision/Recall/F-score:  (0.8052432601186341, 0.7633890942061928, 0.7826917016875107, None)
+
+epoch 28/30
+Accuracy:  0.8261307798916467
+Confusion Metric: 
+ [[5068  494   38]
+ [ 763 1121   10]
+ [  57   18  368]]
+Macro Precision/Recall/F-score:  (0.8106052353698557, 0.7758562781521466, 0.79159664281738, None)
+
+epoch 29/30
+Accuracy:  0.8170593423207761
+Confusion Metric: 
+ [[4903  660   37]
+ [ 655 1232    7]
+ [  62   31  350]]
+Macro Precision/Recall/F-score:  (0.8004701428490448, 0.7720262063900315, 0.785276125644185, None)
+
+time=1230, best_epoch:  6 0.7922468442888048 0.8241149048758977
+
+
+time= 1231
+use 343 from author
+Loading Data...
+len(test_X):  981
+len(train_X):  3803
+from paragraph to sentence
+len(data_list):  9436
+from paragraph to sentence
+len(data_list):  38467
+
+epoch 0/30
+Accuracy:  0.8127756079123094
+Confusion Metric: 
+ [[5246  327   27]
+ [ 993  888   13]
+ [  99   27  317]]
+Macro Precision/Recall/F-score:  (0.8102123094661907, 0.7070701106284366, 0.7459002379641754, None)
+
+epoch 1/30
+Accuracy:  0.8249968501952879
+Confusion Metric: 
+ [[5244  320   36]
+ [ 929  947   18]
+ [  67   19  357]]
+Macro Precision/Recall/F-score:  (0.8151298889929964, 0.7474325486402235, 0.772491289619344, None)
+
+epoch 2/30
+Accuracy:  0.8281466549073957
+Confusion Metric: 
+ [[5239  319   42]
+ [ 905  973   16]
+ [  60   22  361]]
+Macro Precision/Recall/F-score:  (0.8155058105341183, 0.7547205649561103, 0.777286894667145, None)
+
+epoch 3/30
+Accuracy:  0.8292805846037545
+Confusion Metric: 
+ [[5257  300   43]
+ [ 918  958   18]
+ [  60   16  367]]
+Macro Precision/Recall/F-score:  (0.8175275011372433, 0.7576667506910658, 0.7786298090381286, None)
+
+epoch 4/30
+Accuracy:  0.8301625299231448
+Confusion Metric: 
+ [[5279  282   39]
+ [ 940  938   16]
+ [  57   14  372]]
+Macro Precision/Recall/F-score:  (0.8241549643605669, 0.7592186143755106, 0.7813121771093927, None)
+
+epoch 5/30
+Accuracy:  0.8275166939649742
+Confusion Metric: 
+ [[5281  282   37]
+ [ 956  923   15]
+ [  64   15  364]]
+Macro Precision/Recall/F-score:  (0.8232261034114631, 0.7506781828902147, 0.7759307385000144, None)
+
+epoch 6/30
+Accuracy:  0.827012725211037
+Confusion Metric: 
+ [[5282  283   35]
+ [ 961  918   15]
+ [  66   13  364]]
+Macro Precision/Recall/F-score:  (0.8242072173164708, 0.7498577348588373, 0.7757562365951557, None)
+
+epoch 7/30
+Accuracy:  0.8249968501952879
+Confusion Metric: 
+ [[5274  294   32]
+ [ 968  915   11]
+ [  72   12  359]]
+Macro Precision/Recall/F-score:  (0.8259024132704512, 0.7450913340395809, 0.774176350035957, None)
+
+epoch 8/30
+Accuracy:  0.8213430767292428
+Confusion Metric: 
+ [[5247  326   27]
+ [ 966  918   10]
+ [  73   16  354]]
+Macro Precision/Recall/F-score:  (0.822884777034664, 0.7402499470484535, 0.7713087464553462, None)
+
+epoch 9/30
+Accuracy:  0.8248708580068036
+Confusion Metric: 
+ [[5016  558   26]
+ [ 710 1177    7]
+ [  65   24  354]]
+Macro Precision/Recall/F-score:  (0.8166768384780637, 0.7720824884071301, 0.7927030651427976, None)
+
+epoch 10/30
+Accuracy:  0.826256772080131
+Confusion Metric: 
+ [[5085  491   24]
+ [ 750 1139    5]
+ [  85   24  334]]
+Macro Precision/Recall/F-score:  (0.8225655036725993, 0.7544529363193239, 0.7845494931032103, None)
+
+epoch 11/30
+Accuracy:  0.8223510142371173
+Confusion Metric: 
+ [[4988  587   25]
+ [ 680 1210    4]
+ [  88   26  329]]
+Macro Precision/Recall/F-score:  (0.8164365030861923, 0.7574124996977846, 0.7836713936518539, None)
+
+epoch 12/30
+Accuracy:  0.8200831548443996
+Confusion Metric: 
+ [[5007  573   20]
+ [ 714 1176    4]
+ [  92   25  326]]
+Macro Precision/Recall/F-score:  (0.8185608376661087, 0.7503023072174945, 0.780278686233518, None)
+
+epoch 13/30
+Accuracy:  0.8213430767292428
+Confusion Metric: 
+ [[5272  310   18]
+ [ 963  925    6]
+ [ 105   16  322]]
+Macro Precision/Recall/F-score:  (0.8338633508988776, 0.7188917485372489, 0.7625134794477368, None)
+
+epoch 14/30
+Accuracy:  0.8174373188862291
+Confusion Metric: 
+ [[5363  220   17]
+ [1088  800    6]
+ [ 104   14  325]]
+Macro Precision/Recall/F-score:  (0.8419188391823296, 0.7045664555245036, 0.7502093087776774, None)
+
+epoch 15/30
+Accuracy:  0.8232329595565075
+Confusion Metric: 
+ [[5282  295   23]
+ [ 971  917    6]
+ [  91   17  335]]
+Macro Precision/Recall/F-score:  (0.8330208232101014, 0.7278608225072108, 0.7673173669291818, None)
+
+epoch 16/30
+Accuracy:  0.8267607408340683
+Confusion Metric: 
+ [[5050  504   46]
+ [ 737 1148    9]
+ [  59   20  364]]
+Macro Precision/Recall/F-score:  (0.8063921588039955, 0.7765269157307637, 0.790270187455914, None)
+
+epoch 17/30
+Accuracy:  0.8028222250220486
+Confusion Metric: 
+ [[4611  937   52]
+ [ 495 1387   12]
+ [  40   29  374]]
+Macro Precision/Recall/F-score:  (0.779792432653053, 0.7999830718219338, 0.7867939721618605, None)
+
+epoch 18/30
+Accuracy:  0.8173113266977448
+Confusion Metric: 
+ [[4845  696   59]
+ [ 612 1268   14]
+ [  44   25  374]]
+Macro Precision/Recall/F-score:  (0.7849814257773101, 0.7929683134370594, 0.7888156809043517, None)
+
+epoch 19/30
+Accuracy:  0.8260047877031624
+Confusion Metric: 
+ [[5070  476   54]
+ [ 769 1111   14]
+ [  50   18  375]]
+Macro Precision/Recall/F-score:  (0.7998800396640943, 0.7794825002233273, 0.7880410172356496, None)
+
+epoch 20/30
+Accuracy:  0.828650623661333
+Confusion Metric: 
+ [[5128  419   53]
+ [ 807 1076   11]
+ [  53   17  373]]
+Macro Precision/Recall/F-score:  (0.8071888493043541, 0.7752701873939905, 0.7882023218099364, None)
+
+epoch 21/30
+Accuracy:  0.8257528033261938
+Confusion Metric: 
+ [[5174  380   46]
+ [ 875 1008   11]
+ [  55   16  372]]
+Macro Precision/Recall/F-score:  (0.8109074921001526, 0.7652882201481259, 0.7828775820539701, None)
+
+epoch 22/30
+Accuracy:  0.8278946705304271
+Confusion Metric: 
+ [[5219  328   53]
+ [ 897  979   18]
+ [  60   10  373]]
+Macro Precision/Recall/F-score:  (0.8094971797514227, 0.763615400347176, 0.7790650550760366, None)
+
+epoch 23/30
+Accuracy:  0.8255008189492251
+Confusion Metric: 
+ [[5238  324   38]
+ [ 929  954   11]
+ [  72   11  360]]
+Macro Precision/Recall/F-score:  (0.8199539439207676, 0.7505647027034574, 0.7764589838016113, None)
+
+epoch 24/30
+Accuracy:  0.8238629204989291
+Confusion Metric: 
+ [[5260  309   31]
+ [ 957  931    6]
+ [  83   12  348]]
+Macro Precision/Recall/F-score:  (0.8274756541529705, 0.7387970106723757, 0.7721586687873598, None)
+
+epoch 25/30
+Accuracy:  0.8234849439334762
+Confusion Metric: 
+ [[5261  302   37]
+ [ 971  913   10]
+ [  70   11  362]]
+Macro Precision/Recall/F-score:  (0.8215327082570371, 0.7462228721225261, 0.7730249229305489, None)
+
+epoch 26/30
+Accuracy:  0.82184704548318
+Confusion Metric: 
+ [[5236  326   38]
+ [ 957  928    9]
+ [  70   14  359]]
+Macro Precision/Recall/F-score:  (0.8173729093672416, 0.7451173560640191, 0.7718052549251849, None)
+
+epoch 27/30
+Accuracy:  0.8252488345722565
+Confusion Metric: 
+ [[5247  315   38]
+ [ 940  945    9]
+ [  71   14  358]]
+Macro Precision/Recall/F-score:  (0.8213852157178033, 0.7480115767801396, 0.7753009008062918, None)
+
+epoch 28/30
+Accuracy:  0.824240897064382
+Confusion Metric: 
+ [[5125  434   41]
+ [ 831 1057    6]
+ [  63   20  360]]
+Macro Precision/Recall/F-score:  (0.8118426530245975, 0.7619659321498293, 0.7833620862814742, None)
+
+epoch 29/30
+Accuracy:  0.8238629204989291
+Confusion Metric: 
+ [[5058  490   52]
+ [ 771 1113   10]
+ [  53   22  368]]
+Macro Precision/Recall/F-score:  (0.8002162083690436, 0.7738530851114667, 0.7855557077136663, None)
+
+time=1231, best_epoch:  9 0.7927030651427976 0.8248708580068036
+
+
+time= 1232
+use 343 from author
+Loading Data...
+len(test_X):  981
+len(train_X):  3803
+from paragraph to sentence
+len(data_list):  9436
+from paragraph to sentence
+len(data_list):  38467
+
+epoch 0/30
+Accuracy:  0.8161773970013859
+Confusion Metric: 
+ [[5231  343   26]
+ [ 960  924   10]
+ [ 103   17  323]]
+Macro Precision/Recall/F-score:  (0.8168188697945725, 0.7170277234262977, 0.7555290809679606, None)
+
+epoch 1/30
+Accuracy:  0.8272647095880056
+Confusion Metric: 
+ [[5247  322   31]
+ [ 906  979    9]
+ [  86   17  340]]
+Macro Precision/Recall/F-score:  (0.8261763705479362, 0.7404513672395763, 0.7740756387961695, None)
+
+epoch 2/30
+Accuracy:  0.8339422955776742
+Confusion Metric: 
+ [[5270  298   32]
+ [ 880 1005    9]
+ [  80   19  344]]
+Macro Precision/Recall/F-score:  (0.8332083986319142, 0.7494060502221297, 0.7822910243478806, None)
+
+epoch 3/30
+Accuracy:  0.8336903112007056
+Confusion Metric: 
+ [[5241  326   33]
+ [ 859 1026    9]
+ [  74   19  350]]
+Macro Precision/Recall/F-score:  (0.8300328050361543, 0.7558904141639541, 0.7856913209921296, None)
+
+epoch 4/30
+Accuracy:  0.8320524127504094
+Confusion Metric: 
+ [[5199  366   35]
+ [ 837 1048    9]
+ [  67   19  357]]
+Macro Precision/Recall/F-score:  (0.8244944362728308, 0.7625294083978543, 0.7881528963353003, None)
+
+epoch 5/30
+Accuracy:  0.8319264205619251
+Confusion Metric: 
+ [[5171  398   31]
+ [ 811 1074    9]
+ [  63   22  358]]
+Macro Precision/Recall/F-score:  (0.8245968966747363, 0.7661910407515782, 0.7911587548275985, None)
+
+epoch 6/30
+Accuracy:  0.8292805846037545
+Confusion Metric: 
+ [[5173  398   29]
+ [ 835 1051    8]
+ [  65   20  358]]
+Macro Precision/Recall/F-score:  (0.8245282885215901, 0.7622622179024808, 0.7885904330452113, None)
+
+epoch 7/30
+Accuracy:  0.8311704674310193
+Confusion Metric: 
+ [[5214  356   30]
+ [ 858 1027    9]
+ [  65   22  356]]
+Macro Precision/Recall/F-score:  (0.827275819672816, 0.7589739383612217, 0.7869090900556962, None)
+
+epoch 8/30
+Accuracy:  0.8294065767922388
+Confusion Metric: 
+ [[5233  341   26]
+ [ 890  996    8]
+ [  69   20  354]]
+Macro Precision/Recall/F-score:  (0.8304886233636758, 0.7531441744331774, 0.7840903282460419, None)
+
+epoch 9/30
+Accuracy:  0.8309184830540507
+Confusion Metric: 
+ [[5140  436   24]
+ [ 789 1096    9]
+ [  66   18  359]]
+Macro Precision/Recall/F-score:  (0.8267647505610979, 0.76897012420401, 0.7943128361196842, None)
+
+epoch 10/30
+Accuracy:  0.8300365377346605
+Confusion Metric: 
+ [[5178  398   24]
+ [ 831 1057    6]
+ [  69   21  353]]
+Macro Precision/Recall/F-score:  (0.829906884948068, 0.759853575920656, 0.7896056456977991, None)
+
+epoch 11/30
+Accuracy:  0.8102557641426231
+Confusion Metric: 
+ [[4698  856   46]
+ [ 524 1352   18]
+ [  37   25  381]]
+Macro Precision/Recall/F-score:  (0.7849896682069039, 0.804268958498133, 0.7928595445059763, None)
+
+epoch 12/30
+Accuracy:  0.8147914829280585
+Confusion Metric: 
+ [[4775  775   50]
+ [ 564 1315   15]
+ [  42   24  377]]
+Macro Precision/Recall/F-score:  (0.787455407820734, 0.799330718417978, 0.7926163418387256, None)
+
+epoch 13/30
+Accuracy:  0.824240897064382
+Confusion Metric: 
+ [[4948  607   45]
+ [ 660 1218   16]
+ [  46   21  376]]
+Macro Precision/Recall/F-score:  (0.7984498441712874, 0.7918044383044108, 0.7950713820271312, None)
+
+epoch 14/30
+Accuracy:  0.8260047877031624
+Confusion Metric: 
+ [[5182  375   43]
+ [ 882  999   13]
+ [  54   14  375]]
+Macro Precision/Recall/F-score:  (0.8122730219960234, 0.7664377976538095, 0.7837833261512045, None)
+
+epoch 15/30
+Accuracy:  0.8253748267607408
+Confusion Metric: 
+ [[5150  418   32]
+ [ 843 1040   11]
+ [  63   19  361]]
+Macro Precision/Recall/F-score:  (0.8160302169513555, 0.761214568576566, 0.784370986806992, None)
+
+epoch 16/30
+Accuracy:  0.8192012095250094
+Confusion Metric: 
+ [[4928  640   32]
+ [ 669 1213   12]
+ [  56   26  361]]
+Macro Precision/Recall/F-score:  (0.8028878950368791, 0.778447308557458, 0.79008669506856, None)
+
+epoch 17/30
+Accuracy:  0.8217210532946957
+Confusion Metric: 
+ [[4898  669   33]
+ [ 626 1255   13]
+ [  49   25  369]]
+Macro Precision/Recall/F-score:  (0.8039856337558984, 0.7900729213169532, 0.796677299263305, None)
+
+epoch 18/30
+Accuracy:  0.820209147032884
+Confusion Metric: 
+ [[4857  704   39]
+ [ 596 1285   13]
+ [  51   24  368]]
+Macro Precision/Recall/F-score:  (0.7989967748051288, 0.7921598307241785, 0.7951508407621547, None)
+
+epoch 19/30
+Accuracy:  0.8155474360589643
+Confusion Metric: 
+ [[4828  719   53]
+ [ 605 1273   16]
+ [  50   21  372]]
+Macro Precision/Recall/F-score:  (0.7854889112892881, 0.7913314896206455, 0.788174696751261, None)
+
+epoch 20/30
+Accuracy:  0.8170593423207761
+Confusion Metric: 
+ [[4877  664   59]
+ [ 642 1233   19]
+ [  48   20  375]]
+Macro Precision/Recall/F-score:  (0.782354127942572, 0.7894657179032186, 0.7858647646136555, None)
+
+epoch 21/30
+Accuracy:  0.8193272017134937
+Confusion Metric: 
+ [[4948  594   58]
+ [ 692 1180   22]
+ [  51   17  375]]
+Macro Precision/Recall/F-score:  (0.7841562029661198, 0.7843642068658575, 0.7840245907921618, None)
+
+epoch 22/30
+Accuracy:  0.8171853345092605
+Confusion Metric: 
+ [[4950  588   62]
+ [ 711 1161   22]
+ [  50   18  375]]
+Macro Precision/Recall/F-score:  (0.7802625615928136, 0.781139361489481, 0.7803309004296061, None)
+
+epoch 23/30
+Accuracy:  0.817815295451682
+Confusion Metric: 
+ [[4957  578   65]
+ [ 713 1156   25]
+ [  48   17  378]]
+Macro Precision/Recall/F-score:  (0.7782659966565669, 0.7829333926583617, 0.7800335556458712, None)
+
+epoch 24/30
+Accuracy:  0.8188232329595565
+Confusion Metric: 
+ [[4977  559   64]
+ [ 725 1145   24]
+ [  51   15  377]]
+Macro Precision/Recall/F-score:  (0.7806504916380872, 0.7814354853511505, 0.7803304811036572, None)
+
+epoch 25/30
+Accuracy:  0.8189492251480408
+Confusion Metric: 
+ [[4997  545   58]
+ [ 741 1129   24]
+ [  52   17  374]]
+Macro Precision/Recall/F-score:  (0.7836224796724302, 0.7775527153076279, 0.779772841921243, None)
+
+epoch 26/30
+Accuracy:  0.8168073579438074
+Confusion Metric: 
+ [[4987  570   43]
+ [ 744 1135   15]
+ [  58   24  361]]
+Macro Precision/Recall/F-score:  (0.7931617952122992, 0.7682316526013057, 0.7799656324598462, None)
+
+epoch 27/30
+Accuracy:  0.8232329595565075
+Confusion Metric: 
+ [[5018  546   36]
+ [ 726 1155   13]
+ [  62   20  361]]
+Macro Precision/Recall/F-score:  (0.8052958595533082, 0.7735967780601481, 0.7884387707550213, None)
+
+epoch 28/30
+Accuracy:  0.8179412876401663
+Confusion Metric: 
+ [[4893  643   64]
+ [ 656 1221   17]
+ [  46   19  378]]
+Macro Precision/Recall/F-score:  (0.7821645312998277, 0.790563502780552, 0.7862741967831098, None)
+
+epoch 29/30
+Accuracy:  0.8213430767292428
+Confusion Metric: 
+ [[5001  529   70]
+ [ 734 1138   22]
+ [  46   17  380]]
+Macro Precision/Recall/F-score:  (0.7819773212520983, 0.7838894325455755, 0.7818479314220855, None)
+
+time=1232, best_epoch:  17 0.796677299263305 0.8217210532946957
+
+
+valid f1:  0.7938757362316359 [0.7922468442888048, 0.7927030651427976, 0.796677299263305]
+valid acc: 0.8235689387257988 [0.8241149048758977, 0.8248708580068036, 0.8217210532946957]

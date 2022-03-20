@@ -1,0 +1,918 @@
+learned
+Nothing worth doing was learned perfectly the first time.
+
+'s
+It's play.
+
+is
+Seedbombing is a hit-or-miss way
+
+'s
+It's chlorophyll graffiti.
+
+know
+you know of much better places to never throw those seedbombs
+
+made
+you haven't made.
+
+get
+You could get better soil
+
+put
+if you put it on the shopping list.
+
+write
+You undoubtedly write much better
+
+have
+and could have a real serious article with awesome non-blurry pictures
+
+is
+A job worth doing is worth doing crappily.
+
+loves
+who loves
+
+bring
+another guest would bring a box of See's.
+
+is
+Self-sufficiency is a major tenet of the bike movement,
+
+is
+Bike rescue is not just for kids.
+
+is
+Fall is exactly
+
+experienced
+79% more tingly when experienced by bike.
+
+deceiving
+But appearances are deceiving,
+
+has
+Salt marsh hay has no weed seeds,
+
+squeeze
+You can't squeeze blood from a stone,
+
+'s
+Tayari's Blog: There's A Sucker Born Every Minute
+
+be
+and there won’t be anyone of color to put in an opinion,
+
+fear
+The end result of such roundtables, one can only fear,
+
+challenge
+that do not challenge white assumptions.
+
+are
+and now vampires are hot.
+
+known
+If you jumped off Vampires would you have known to jump back on
+
+get
+you can "get off" any of these,
+
+have
+you have to triangulate your decision across several nodes of popular culture, a triangulation
+
+None
+You can't.
+
+broaden
+If you broaden your scope a bit,
+
+is
+If all you're looking at is 1 or 2 content categories
+
+is
+anything is possible.
+
+find
+You can find more information on our website.
+
+is
+used in symbolic referencing, a la \label/\ref in LaTeX or ID/IDREF in SGML, is fraught with difficulties.
+
+has
+- Every type of numbered object, table, figure, equation, reference, has its own counter.
+
+are
+- The values of the |id| attributes are unique within the document instance.
+
+is
+- The |id| attribute is not identical to the counter value.
+
+referenced
+even when they are not referenced.
+
+are
+that there are logical sub-figures (hidden) inside the figure.
+
+derived
+that is `derived from' an earlier one.
+
+exists
+that exists
+
+lies
+which lies *outside* the document, to the document.
+
+specifies
+that specifies the labels of the individual components.
+
+look
+(Lists look like a special case of nesting:
+
+is
+that is unique within the document.
+
+is
+"liA">a footnote is ...
+
+be
+"liB">footnotes should be ... </l> A paragraph of text comes between the two numbered lists.
+
+is
+<l> <li id="liC">a figure is ...
+
+is
+<li id="liD">a table is ... </l>
+
+named
+For instance if one uses an SGML named character entity
+
+allowed
+whether the character is allowed as part of an identifier?
+
+spanning
+o cells spanning multiple rows or columns
+
+spanning
+spanning several columns with dots
+
+like
+For instance one would like to know the current font family, size and baseline position, as well as the background color or texture tile and pattern origin.
+
+like
+One would like to set the visible size according to the expression
+
+*
+as Dave refers to it in his minutes is *really* useful
+
+be
+it would be very useful for small visual displays.
+
+lies
+And as the semantics of any formal discipline lies rather closer to form
+
+need/insist
+who need/insist on a P(resentation) (geometric, visual) notation.
+
+are
+that people are comfortable with dictionary definitions for the roles of symbols as prefix, infix or postfix operators
+
+valued
+that traditionally, loyalty and keeping ones word was valued on the man’s part as well as a woman’s.
+
+make
+you can’t make a buck,
+
+was
+Practical application was important to him,
+
+was
+mere calculation of theories alone was futile.
+
+abounds
+In a world, where research abounds...
+
+go
+”Where many go in,
+
+have
+that eagles have.
+
+is
+and in space, there is no medium.
+
+mattered
+Next to those, nothing else mattered.
+
+was
+and how breathing was like sex, only better.
+
+is
+Fact: Hell is other people.
+
+compared
+Luxurious, even compared to the fare one would find in the high-class space stations and pleasure cruisers.
+
+Compared
+Compared to what a mere engineer would get on your typical cargo ship,
+
+are
+Fact: Some places are timeless.
+
+is
+“Aging is relative, anyway.
+
+“
+“No one's immortal.
+
+buy
+“All the luxuries money can buy.”
+
+are
+Fact: Some places are timeless.
+
+is
+Fact: Sound is a vibration.
+
+is
+The speed of sound in dry air at twenty degrees Celsius or sixty-eight degrees Fahrenheit is three hundred and forty-three meters per second, or one thousand one hundred twenty-five feet per second.
+
+had
+Every ship had life boats.
+
+means
+; and over the means by which stamps and other postage are sold [§ 404
+
+defined
+"Minor" classification changes are defined as those
+
+change
+that would not change any existing rate or fee;
+
+impose
+would not impose any new restriction on eligibility for mailing;
+
+increase
+and would not significantly increase or decrease the estimated contribution of the affected mail subclass or service category to the institutional costs of the Postal Service.
+
+supported
+In such instances, the Service's request must be supported by testimony of a Postal Service witness
+
+explains
+that explains the rationale for the proposed multi-year test period.
+
+be
+For example, the legality of an agreement may be dependent on whether the contract is agreed upon
+
+performed
+and performed without any regulatory scrutiny,
+
+submitted
+or instead submitted for some form of review by the Postal Rate Commission prior to its effectiveness.
+
+desired
+that rate or mail classification changes desired by the Postal Service must be filed as a request with the Postal Rate Commission,
+
+run
+the intended change.12 Negotiated rate or service changes also may run afoul of the substantive standards
+
+merit
+changes negotiated by the Postal Service and a mail user for their mutual benefit may merit recommendation under the applicable statutory standards.
+
+are
+Conclusion: Rate and service agreements negotiated by the Postal Service and mail users are permissible under current law
+
+have
+who have difficulty
+
+made
+• Target users: Small volume mailers that might be made more inclined to mail before the holiday peak, and that also might, as a result of the test,
+
+increase
+increase their purchases of delivery confirmation service in the future.
+
+comply
+that recipients comply with the provisions of the LSC Act and regulations and any other laws,
+
+include
+(OCE) or the Office of Program Performance (OPP) for access to records of a recipient that may include information
+
+protected
+that may be protected by rules of professional responsibility or the law on attorney-client privilege.
+
+containing
+containing privileged or confidential information.
+
+proposed
+proposed by recipients to protect privileged or confidential information so long as such proposed approaches also ensure access by OCE to information
+
+have
+Recipients have the responsibility to bring such ethical rulings to the attention of OCE
+
+containing
+containing privileged or confidential information
+
+notify
+A recipient shall notify OCE under the procedures
+
+believes
+7. Procedures for Addressing Privileged or Confidential Information: If a recipient believes
+
+contain
+that documents or information requested by OCE contain information
+
+send
+that is protected by the attorney-client privilege, applicable rules of professional responsibility or other law, the recipient will send written notice to OCE as soon as possible setting
+
+explaining
+forth (1) a full description of the nature of the privileged or confidential information, (2) a statement explaining the basis for determining that such information is privileged or confidential,
+
+are
+why the proposed alternative methods of access are inadequate.
+
+has
+that the recipient has a reasonable claim
+
+is
+that the information is privileged or confidential,
+
+given
+The recipient would be given an opportunity to request a meeting with the Vice President
+
+convene
+If the recipient requests such a face-to-face meeting, the Vice President for Programs would convene such a meeting
+
+make
+and make a recommendation to LSC's President as to how LSC should proceed.
+
+request
+The recipient may then request a meeting with the LSC President to ask for reconsideration of the Vice President's recommendation.
+
+given
+The recipient would be given the opportunity to provide such additional written information
+
+believes
+as it believes
+
+assist
+will assist the President to fully and fairly consider its concerns and objections.
+
+had
+and throughout history they had trouble with unsympathetic Genitals.
+
+save
+"A couple of months research in the laboratory can save a couple of hours research in the library."
+
+'s
+It's not important
+
+have
+have no recognized national holidays.
+
+Really
+It Really Works!
+
+is
+"There is no snooze button on a cat
+
+wants
+who wants breakfast."
+
+was
+how difficult it was.
+
+enjoy
+that the French would enjoy feasting on rabbits
+
+is
+As they say, imitation is the sincerest form of flattery.
+
+appreciates
+appreciates
+
+was
+how difficult it was.
+
+are
+13. Comparisons are as bad as cliches.
+
+derailed
+it should be derailed.
+
+is
+30. Placing a comma between subject and predicate, is not correct.
+
+ecoNOmics
+that astroNOmy, ecoNOmics, and oceaNOgraphy are eNOugh to keep even an hoNOr student busy.
+
+is
+that the pursuit of kNOwledge is a NOble task,
+
+is
+"Not everyone in Calcutta, or India for that matter, is unanimous in praising the nun,
+
+believe
+... Nobody will believe
+
+needed
+needed to be physically tougher than the brainy shopkeepers
+
+owned
+By 1946, Jews owned only 7 percent of Palestine,
+
+formed
+Their lungs have barely formed
+
+been
+Too, too often, man has not been a good neighbor to animals.
+
+does
+No one does.
+
+is
+All they need is safe homeland and freedom from pain and fear.
+
+support
+who so desperately need support from all of us these days!
+
+looking
+Everyone is looking to get the latest and greatest in digital technology.
+
+carries
+But membership carries many tangible benefits
+
+are
+that are in grave peril by both the loss of habitat and the illegal trading in animal parts.
+
+including
+including whooping cranes, giant river otters, and Tibetan antelopes.
+
+found
+found in every country.
+
+is
+that theft of business data is "as serious a strategic threat to national security"
+
+is
+as it is a threat to the survival of victimized U.S. firms,
+
+is
+Still, encrypting corporate communications is only a partial remedy.
+
+None
+“A large number of people exposed to a small risk may generate many more cases than a small number
+
+None
+exposed to a very high risk.”
+
+None
+(linked to high blood pressure and cardiovascular disease) and speeding on the highway
+
+None
+(linked to injuries and accidents).
+
+None
+one must understand the existing health risks and disease burdens.
+
+None
+On a worldwide scale, this is a tough challenge.
+
+None
+Despite numerous caveats and limitations of studies like this one, such analyses are essential aids in guiding the distribution of limited funds to lower the burden of life years
+
+None
+Prostaglandin (PG)E 2 is thought to have antifibrotic properties in vitro ,
+
+None
+Because of these findings and the fact that PGs are important fibroblast regulators,
+
+None
+that fibroblasts from the lungs of patients with IPF (HF-IPF) have an altered PG balance compared to normal lung fibroblasts (HF-NL).
+
+None
+Because PGI 2 and TXA 2 have opposing effects in vivo ,
+
+None
+These mitogenic effects are potentiated by growth factors [ 15 16 27 28 ] .
+
+None
+Betaprost, an analog of PGI 2 , decreases procollagen I and III mRNA expression in cardiac fibroblasts [ 18 ] .
+
+None
+These effects may counteract the profibrotic effects
+
+None
+Hence, the pathway involved in the induction of the COX-2 gene by IL-1β and TGFβ may be different.
+
+None
+that loss of COX-2 expression is not a universal characteristic of fibroblasts
+
+be
+The impression of the visitor today will be that very little has changed.
+
+waiting
+waiting for buses at rush hour.
+
+is
+With a population of nearly eight million and a total area of just over 1,095 square km (423 square miles), housing is one of Hong Kong’s perennial nightmares.
+
+described
+The Chinese people have been described as hardworking and pragmatic, attitudes
+
+followed
+Old customs are still followed:
+
+taken
+Fate and luck are taken very seriously,
+
+take
+investigation must take place to ensure
+
+promote
+that the site and the building will promote health, harmony, and prosperity.
+
+are
+Custom-made garments by skillful Hong Kong tailors are still much in demand
+
+are
+that alcohol and tobacco are both exceptions to Hong Kong’s duty-free regime
+
+are
+and are subject to tax.
+
+point
+The experts point out
+
+is
+that it is not age alone
+
+are
+Fabrics from China are a bargain and well worth taking home.
+
+including
+including Spode and Wedgwood.
+
+are
+The latest gadgets are sometimes available in Hong Kong before anywhere else.
+
+is
+Rattan furniture is highly popular.
+
+are
+Thanks to the duty-free situation, prices in Hong Kong are lower
+
+is
+Leather is not a great bargain in Hong Kong.
+
+is
+and there is a wide range of locally produced leather accessories, all at extremely attractive prices.
+
+are
+There are still a great many factory outlet stores with reasonable prices.
+
+were
+as they were in the past,
+
+are
+An enormous variety of makes and models are on sale.
+
+are
+Culture buffs are well catered to,
+
+is
+and there is always a varied program of events,
+
+ranging
+ranging from world-class concerts to local amateur dramatic productions.
+
+shown
+and the latest Western releases are shown in some of the larger ones.
+
+have
+English-language films have Chinese subtitles.
+
+have
+Films with Mandarin dialogue also have Chinese subtitles, for the benefit of Cantonese speakers,
+
+appreciate
+but everyone can appreciate the spectacle and the elaborate, glittering costumes.
+
+is
+The classic Chinese puppet is the shadow puppet, manipulated behind a screen by three rods,
+
+are
+Pubs are numerous.
+
+love
+Children love riding on Hong Kong’s antique trams.
+
+’ll
+and in the Peak Tower they’ll enjoy the Peak Explorer ride and Ripley’s Believe it or Not!
+
+remained
+long after the Revolution and remained France's standard method of judicial execution until the abolition of capital punishment with the backing of President François Mitterrand in 1981.
+
+opposed
+as opposed to a round one.
+
+were
+There were other beheading machines in countries other than France before 1792.
+
+was
+The Halifax Gibbet was a wooden structure of two wooden uprights,
+
+capped
+capped by a horizontal beam, of a total height of .
+
+weighing
+weighing 3.5 kg (7.7 lb), attached to the bottom of a massive wooden block
+
+remained
+The machine remained in use
+
+punished
+* Article 1: All offences of the same kind will be punished by the same type of punishment irrespective of the rank or status of the guilty party.
+
+bring
+* Article 3: The punishment of the guilty party shall not bring discredit upon or discrimination against his family.
+
+confiscated
+* Article 5: The condemned person's property shall not be confiscated.
+
+registered
+and no reference to the nature of death shall be registered.
+
+is
+that human reason is wholly inadequate to make any assumptions about the divine, whether through a priori reasoning or observation of nature.
+
+pursued
+that authentic philosophy could only be pursued given an atheistic foundation of "unyielding despair".
+
+found
+The modern balalaika is found in the following sizes:
+
+has
+which has 2 strings, and the Mongolian Topshur
+
+was
+that was substantially shorter than that of its Asian counterparts.
+
+was
+It was popular as a village instrument for centuries, particularly with the skomorokhs, sort of free-lance musical jesters
+
+ridiculed
+whose tunes ridiculed the Tsar, the Russian Orthodox Church, and Russian society in general.
+
+derived
+that sovereignty derived from the people,
+
+vested
+that sovereignty was vested in the three estates of Crown, Lords, and Commons rather than solely in the Crown.
+
+represented
+tradition represented the wisdom of the species
+
+has
+Gang activity in South Central Los Angeles has its roots in a variety of factors
+
+dating
+dating back to the 1950s and '60s,
+
+involved
+By the early 1980s the gang was heavily involved with drug trade.
+
+consist
+Members typically consist of young African-American men, with some members being white, Hispanic, Asian, and Pacific Islander.
+
+sets
+that Crips sets feud only with Bloods.
+
+are
+There are five domesticated species: Cucurbita argyrosperma, C. ficifolia, C. maxima, C. moschata, and C. pepo.
+
+eaten
+(a green thing eaten raw), a word from the Narragansett language,
+
+comes
+Much of the Dukha income today comes from tourists
+
+resembles
+The internal construction of the flutina resembles the English Wheatstone concertina more than the "reed banks"
+
+has
+Thus, it has a concertina-like sound.
+
+is
+Underneath the pallet/keyboard face, there is a rectangular, wooden board, reed pan, with reed chambers,
+
+made
+made with airtight, leather covered, thin wooden dividers.
+
+had
+Larger versions had 5 to 7 folds in the bellows.
+
+supposed
+This feature was supposed to give a more "flute-like" tone to the reeds.
+
+had
+patent application, had 5 pallets with 10 chords (musical triads) available.
+
+depended
+It all depended on which direction
+
+had
+had 2 chords:
+
+had
+but only later French models had some buttons in the second row
+
+divided
+being divided in the middle.
+
+considered
+as a knock-out competition, with the top two counties meeting in the All-Ireland Football Final, considered the most prestigious event in Gaelic football.
+
+has
+although it has links to older varieties of football
+
+comprising
+comprising 20 or more tenants.
+
+were
+were popular in Kerry, especially the Dingle Peninsula.
+
+allowed
+which even allowed tripping.
+
+was
+that Gaelic football was in the worst shape at the time of the association's foundation (GAA Museum, 2001).
+
+are
+There are three main types of fouls in Gaelic Football
+
+is
+The average life span of various Grimpoteuthis species is 3 to 5 years.
+
+resemble
+that resemble the Disney character Dumbo.
+
+is
+Another noticeable feature about the Dumbo Octopus is the tentacles.
+
+is
+Related to this need to flee from predators in the wild is an unusual trait:
+
+defines
+For example, in the British Isles, Thoroughbred horse racing defines colts and fillies as less than five years old.
+
+defines
+However, Australian Thoroughbred racing defines colts and fillies as less than four years old.
+
+expressed
+The height is expressed as the number of full hands,
+
+followed
+followed by a point, then the number of additional inches,
+
+ending
+and ending with the abbreviation "h" or "hh" (for "hands high").
+
+described
+Thus, a horse described as "15.2 h" is 15 hands plus 2 inches, for a total of 62 inches (157.5 cm) in height.
+
+is
+However, height alone is not dispositive;
+
+is
+Height is not the sole criterion for distinguishing horses from ponies.
+
+contains
+It contains 2.7 billion DNA base pairs,
+
+has
+Each of these has variations:
+
+fixed
+where the term of a monarch’s reign is either fixed in years
+
+are
+but there are priestly families in two other clans, namely Garikuli and Bumai.
+
+associated
+associated with impending death,
+
+include
+that the general features of the experience include impressions of being outside one's physical body, visions of deceased relatives and religious figures, and transcendence of egotic and spatiotemporal boundaries.
+
+corresponds
+although the person's interpretation of these events often corresponds with the cultural, philosophical, or religious beliefs of the person
+
+found
+Even though no single feature is found in every NDE,
+
+have
+Some NDEs have elements
+
+bear
+that bear little resemblance to the "typical" near-death experience.
+
+according
+Anywhere from one percent (according to a 1982 Gallup poll) to 20 percent of subjects may have distressing experiences
+
+influenced
+the occurrence of NDEs is not influenced by psychopathology, by religious denomination or religiosity, or by experiencers' prior expectations of a pleasant dying process or continued postmortem existence.
+
+was
+that the long term recall of NDE incidents was stable
+
+change
+and did not change due to embellishment over time.
+
+known
+also known as "Paraná River Pacu".
+
+known
+With the proper equipment and commitment, pacu have been known to make responsive pets.
+
+were
+"They were delicious eating."
+
+believes
+he believes
+
+including
+including online, with many professional players and multi-million dollar tournament prizes.
+
+thought
+it is thought to have become a part of the frontier pioneer ethos.
+
+depicted
+By the 1980s, poker was being depicted in popular culture as a commonplace recreational activity.
+
+follow
+Not only could viewers now follow the action and drama of the game on television,
+
+has
+Poker has many variations,
+
+following
+all following a similar pattern of play
+
+are
+There are four main families of variants,
+
+grouped
+largely grouped by the protocol of card-dealing and betting:
+
+considered
+With its origins in Germany, the modern movement is popularly considered to have begun in 1517
+
+is
+Collectively encompassing more than 800 million adherents, or nearly forty percent of Christians worldwide, Protestantism is present on all populated continents.
+
+preferred
+French and Swiss Protestants preferred the word
+
+needed
+the four main doctrines on the Bible: that its teaching is needed for salvation (necessity);
+
+dates
+The study of psychology in a philosophical context dates back to the ancient civilizations of Egypt, Greece, China, India, and Persia.
+
+comprised
+which comprised a method of investigating the mind and interpreting experience;
+
+considered
+These were largely considered taboo subjects at the time,
+
+branched
+The rough and hairy stem is branched in the upper part in wild plants
+
+claim
+since the pope did not claim
+
+was
+he was a prophet
+
+is
+The head of state of the Vatican is the pope,
+
+has
+the Bishop of Rome as the Supreme Pontiff, "has the fullness of legislative, executive and judicial powers."
+
+promulgated
+promulgated by the Kingdom of Italy.”
+
+considered
+The government of the Vatican can also be considered an ecclesiocracy
+
+ruled
+(ruled by the Church).
+
+complying
+not complying with the Sharia code of Islamic law;
+
+based
+"all civil, penal financial, economic, administrative, cultural, military, political, and other laws and regulations must be based on Islamic criteria."
+

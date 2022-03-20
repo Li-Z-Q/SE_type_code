@@ -50,4 +50,4 @@ class MyModel(nn.Module):
         torch.save(self, 'models/model_sentence_level_BiLSTM_3_class_' + str(self.random_seed) + '.pt')
 
     def load(self):
-        return torch.load('models/model_sentence_level_BiLSTM_3_class' + str(self.random_seed) + '.pt')
+        return torch.load('models/model_sentence_level_BiLSTM_3_class_' + str(self.random_seed) + '.pt')

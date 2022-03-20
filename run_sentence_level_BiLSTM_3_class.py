@@ -54,8 +54,9 @@ if __name__ == '__main__':
                                weight_decay=1e-4)
 
         best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid_fn(model, optimizer, train_batch_list, test_data_list, args.EPOCHs)
-        # if args.IF_USE_EX_INITIAL == 0:
-        #     best_model.save()
+        if args.IF_USE_EX_INITIAL == 0:
+            best_model.save()
+            print('3 class sentence save')
         print("\ntime={}, best_epoch: ".format(t), best_epoch, best_macro_Fscore, best_acc)
 
         valid_best_acc_list.append(best_acc)
