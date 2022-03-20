@@ -1,3 +1,0 @@
-influence
-How can CSS based style sheets influence the style properties
-

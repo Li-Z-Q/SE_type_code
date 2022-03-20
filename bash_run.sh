@@ -108,12 +108,25 @@ export PYTHONUNBUFFERED=1
 #    --FREEZE 1 \
 #  > output/paragraph_1st_initial_freeze_label_embedding_3_class.txt &
 
-# paragraph_1st_initial_non-loss_label_embedding_3_class
+## paragraph_1st_initial_non-loss_label_embedding_3_class
+#CUDA_VISIBLE_DEVICES=7 nohup \
+#  python run_paragraph_level_BiLSTM_label_embedding_3_class.py \
+#    --IF_USE_EX_INITIAL_1 1 \
+#    --IF_USE_EX_INITIAL_2 0 \
+#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class.txt &
+##  > output/paragraph_1st_initial_non-loss_label_embedding_3_class.txt &
+##  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_without_label_1.txt &
+##  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_without_label_all.txt &
+
+
+
+
+
+# paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM
 CUDA_VISIBLE_DEVICES=7 nohup \
-  python run_paragraph_level_BiLSTM_label_embedding_3_class.py \
+  python run_paragraph_level_BiLSTM_label_embedding_3_class_with_double_LSTM.py \
     --IF_USE_EX_INITIAL_1 1 \
     --IF_USE_EX_INITIAL_2 0 \
-  > output/paragraph_1st_initial_non-loss_label_embedding_3_class.txt &
-#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class.txt &
-#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_without_label_1.txt &
-#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_without_label_all.txt &
+  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM_one_more_dropout.txt &
+#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM.txt &
+#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM_one_more_dropout.txt &

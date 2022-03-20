@@ -5,13 +5,10 @@ from tools.print_evaluation_result import print_evaluation_result
 from models.sentence_level_BiLSTM import MyModel as SentenceLevelModelBase
 
 
-print("paragraph level BiLSTM")
-
-
 class MyModel(nn.Module):
     def __init__(self, input_dim, dropout, random_seed, if_use_ex_initial_1, if_use_ex_initial_2, freeze):
         super(MyModel, self).__init__()
-
+        print("paragraph level BiLSTM")
         print('MyModel')
 
         self.random_seed = random_seed
