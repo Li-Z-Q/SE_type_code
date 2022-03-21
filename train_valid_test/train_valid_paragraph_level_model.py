@@ -68,15 +68,16 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
             best_macro_f1 = tmp_macro_f1
             best_model = copy.deepcopy(model)
 
-        # if tmp_macro_f1 < 0.62 or tmp_macro_f1 > 0.72:
-        #     for i in range(len(useful_target_Y_list)):
-        #         pre_label = useful_predict_Y_list[i]
-        #         gold_label = useful_target_Y_list[i]
-        #         with open('output/paragraph_statistics/' + str(epoch) + '_gold_' + str(gold_label) + '_pre_' + str(pre_label) + '.txt', mode='a') as f:
-        #             f.write(useful_raw_sentence_list[i][1] + '\n')  # main_verb
-        #             f.write(useful_raw_sentence_list[i][0] + '\n\n')  # raw_sentence
-        #     write_time += 1
-        # if write_time == 2:
-        #     break
+        entity_type_list = ['STATE', 'EVENT', 'REPORT', 'GENERIC_SENTENCE', 'GENERALIZING_SENTENCE', 'QUESTION', 'IMPERATIVE']
+        if tmp_macro_f1 < 0.62 or tmp_macro_f1 > 0.76:
+            for i in range(len(useful_target_Y_list)):
+                pre_label = useful_predict_Y_list[i]
+                gold_label = useful_target_Y_list[i]
+                with open('output/paragraph_statistics/' + str(tmp_macro_f1) + '_gold_' + entity_type_list[gold_label] + '_pre_' + entity_type_list[pre_label] + '.txt', mode='a') as f:
+                    f.write(useful_raw_sentence_list[i][1] + '\n')  # main_verb
+                    f.write(useful_raw_sentence_list[i][0] + '\n\n')  # raw_sentence
+            write_time += 1
+        if write_time == 2:
+            break
 
     return best_epoch, best_model, best_macro_f1, best_acc

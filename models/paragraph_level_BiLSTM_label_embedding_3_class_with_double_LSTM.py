@@ -22,15 +22,15 @@ class MyModel(nn.Module):
             for param in self.BiLSTM_1.named_parameters():
                 param[1].requires_grad = False
 
-        self.BiLSTM_1_5 = nn.LSTM(300, 300 // 2, num_layers=1, batch_first=True, bidirectional=True, dropout=dropout)
+        self.BiLSTM_1_5 = nn.LSTM(input_dim, 300 // 2, num_layers=1, batch_first=True, bidirectional=True, dropout=dropout)
         self.BiLSTM_2 = nn.LSTM(300, 300 // 2, num_layers=1, batch_first=True, bidirectional=True, dropout=dropout)
 
         self.hidden2tag = nn.Linear(300, 7)
         self.softmax = nn.LogSoftmax()
 
         self.merge_mlp = nn.Sequential(
-            # nn.Dropout(p=dropout),
-            nn.Linear(643, 300),
+            nn.Dropout(p=dropout),
+            nn.Linear(300, 343),
             nn.ReLU()
         )
 
@@ -71,8 +71,9 @@ class MyModel(nn.Module):
         sentence_base_model = SentenceLevelModelBase(input_dim=343, dropout=0.5, random_seed=self.random_seed, if_use_ex_initial=0)
         return sentence_base_model.load()
 
-    def merge(self, sentence_embedding_1, word_embeddings_list):
-        sentence_embedding_1 = torch.stack([sentence_embedding_1 for _ in range(word_embeddings_list.shape[0])])  # sentence_len * 300
-        merge_embedding = torch.cat((sentence_embedding_1, word_embeddings_list), dim=1)  # sentence_len * 643
-        merge_embedding = self.merge_mlp(merge_embedding)  # sentence_len * 300
+    def merge(self, sentence_embedding_1, word_embeddings_list):  # 300， sentence_len * 343
+        # sentence_embedding_1 = torch.stack([sentence_embedding_1 for _ in range(word_embeddings_list.shape[0])])  # sentence_len * 300
+        sentence_embedding_1 = self.merge_mlp(sentence_embedding_1).unsqueeze(0)  # get 1 * 343
+        merge_embedding = torch.cat((sentence_embedding_1, word_embeddings_list), dim=0)  # (sentence_len+1) * 643
+        # merge_embedding = self.merge_mlp(merge_embedding)  # sentence_len * 300
         return merge_embedding

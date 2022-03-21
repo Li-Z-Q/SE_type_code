@@ -28,6 +28,12 @@ export PYTHONUNBUFFERED=1
 #    --IF_USE_EX_INITIAL 0 \
 #  > output/sentence_base_3_class.txt &
 
+# sentence_base_Linear_3_class
+CUDA_VISIBLE_DEVICES=3 nohup \
+  python run_sentence_level_Linear_3_class.py \
+    --IF_USE_EX_INITIAL 0 \
+  > output/sentence_base_Linear_3_class.txt &
+
 ## paragraph_base
 #CUDA_VISIBLE_DEVICES=2 nohup \
 #  python run_paragraph_level_BiLSTM.py \
@@ -122,11 +128,11 @@ export PYTHONUNBUFFERED=1
 
 
 
-# paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM
-CUDA_VISIBLE_DEVICES=7 nohup \
-  python run_paragraph_level_BiLSTM_label_embedding_3_class_with_double_LSTM.py \
-    --IF_USE_EX_INITIAL_1 1 \
-    --IF_USE_EX_INITIAL_2 0 \
-  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM_one_more_dropout.txt &
-#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM.txt &
-#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM_one_more_dropout.txt &
+## paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM
+#CUDA_VISIBLE_DEVICES=7 nohup \
+#  python run_paragraph_level_BiLSTM_label_embedding_3_class_with_double_LSTM.py \
+#    --IF_USE_EX_INITIAL_1 1 \
+#    --IF_USE_EX_INITIAL_2 0 \
+#  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM_cat_once.txt &
+##  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM.txt &
+##  > output/paragraph_1st_initial_non-loss_label_embedding_3_class_with_double_LSTM_cat_once.txt &
