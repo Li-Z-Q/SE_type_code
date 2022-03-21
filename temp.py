@@ -1,8 +1,5 @@
-import random
-
-a = [0, 1, 2, 1, 2, 0, 3, 5, 3, 2]
-c = [0, 1, 9, 1, 9, 0, 9, 5, 3, 2]
-
-random.seed(0)
-random.shuffle(a)
-print(a)
+mapping_dict = {0: 0, 1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 2}
+print(
+    mapping_dict[0],
+    mapping_dict[5]
+)

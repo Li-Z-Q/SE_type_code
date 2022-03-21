@@ -30,9 +30,15 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
                     gold_label = train_data[1][i]
                     if gold_label == 7:
                         continue
-                    batch_loss += -output_2[i][gold_label]
+                    if gold_label < 3:
+                        new_gold_label = 0
+                    elif gold_label < 5:
+                        new_gold_label = 1
+                    else:
+                        new_gold_label = 2
+                    batch_loss += -output_2[i][new_gold_label]
                     if ex_loss:
-                        batch_loss += -output_1_list[i][gold_label]
+                        batch_loss += -output_1_list[i][new_gold_label]
 
             batch_loss.backward()
             optimizer.step()
@@ -42,15 +48,15 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
         useful_target_Y_list = []
         useful_predict_Y_list = []
         useful_predict_Y_1_list = []
-        useful_raw_sentence_list = []
         with torch.no_grad():
             for valid_data in valid_data_list:
                 inputs = [torch.tensor(sentence)[:, :].cuda() for sentence in valid_data[3]]
                 pre_labels_list, _, _ = model.forward(inputs)  # sentence_num * 7
                 pre_labels_list_2 = pre_labels_list[0]
 
-                useful_target_Y_list += [int(gold_label) for gold_label in valid_data[1] if gold_label != 7]
-                useful_raw_sentence_list += [valid_data[0][i] for i in range(len(valid_data[1])) if valid_data[1][i] != 7]
+                gold_labels_list = [int(gold_label) for gold_label in valid_data[1] if gold_label != 7]
+                mapping_dict = {0: 0, 1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 2}
+                useful_target_Y_list += [mapping_dict[g] for g in gold_labels_list]
                 useful_predict_Y_list += [pre_labels_list_2[i] for i in range(len(valid_data[1])) if valid_data[1][i] != 7]
 
                 ex_pre_label_list = pre_labels_list[1]
@@ -67,17 +73,5 @@ def train_and_valid(model, optimizer, train_batch_list, valid_data_list, total_e
             best_epoch = epoch
             best_macro_f1 = tmp_macro_f1
             best_model = copy.deepcopy(model)
-
-        # entity_type_list = ['STATE', 'EVENT', 'REPORT', 'GENERIC_SENTENCE', 'GENERALIZING_SENTENCE', 'QUESTION', 'IMPERATIVE']
-        # if tmp_macro_f1 < 0.62 or tmp_macro_f1 > 0.76:
-        #     for i in range(len(useful_target_Y_list)):
-        #         pre_label = useful_predict_Y_list[i]
-        #         gold_label = useful_target_Y_list[i]
-        #         with open('output/paragraph_statistics/' + str(tmp_macro_f1) + '_gold_' + entity_type_list[gold_label] + '_pre_' + entity_type_list[pre_label] + '.txt', mode='a') as f:
-        #             f.write(useful_raw_sentence_list[i][1] + '\n')  # main_verb
-        #             f.write(useful_raw_sentence_list[i][0] + '\n\n')  # raw_sentence
-        #     write_time += 1
-        # if write_time == 2:
-        #     break
 
     return best_epoch, best_model, best_macro_f1, best_acc
