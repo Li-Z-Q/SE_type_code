@@ -3,9 +3,9 @@ import torch
 import random
 
 
-def load_data():
+def load_data(pt_path):
     print('Loading Data...')
-    with open(os.path.join(os.getcwd(), 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb.pt'), 'rb') as outfile:
+    with open(os.path.join(os.getcwd(), pt_path), 'rb') as outfile:
         data = torch.load(outfile)
         outfile.close()
 
@@ -84,9 +84,15 @@ def helper(train_X, train_Y, train_X_eos_list, train_X_raw_sentence):
     return data_list
 
 
-def re_load(random_seed):
-    print('use 343 from author')
-    train_X, train_X_label_length_list, train_X_eos_list, train_Y, test_X, test_X_label_length_list, test_X_eos_list, test_Y, train_X_raw_sentence, test_X_raw_sentence = load_data()
+def re_load(random_seed, input_dim=343):
+    print('use {} from author'.format(str(input_dim)))
+    if input_dim == 343:
+        pt_path = 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb.pt'
+    elif input_dim == 393:
+        pt_path = 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb_with_main_verb_embedding.pt'
+    else:
+        pt_path = 0
+    train_X, train_X_label_length_list, train_X_eos_list, train_Y, test_X, test_X_label_length_list, test_X_eos_list, test_Y, train_X_raw_sentence, test_X_raw_sentence = load_data(pt_path)
 
     print("len(test_X): ", len(test_X))
     print("len(train_X): ", len(train_X))

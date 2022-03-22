@@ -3,6 +3,7 @@ import sys
 sys.path.append(os.getcwd() + '/data')
 sys.path.append(os.getcwd() + '/tools')
 sys.path.append(os.getcwd() + '/models')
+sys.path.append(os.getcwd() + '/resource')
 sys.path.append(os.getcwd() + '/pre_train')
 print(sys.path)
 
@@ -12,11 +13,9 @@ warnings.filterwarnings('ignore')
 import numpy as np
 from torch import optim
 from tools.load_data_from_author import re_load
-from models.paragraph_level_BiLSTM import MyModel
-from models.paragraph_level_BiLSTM import AuthorModel
-from tools.load_data_from_json import get_paragraph_data
 from tools.devide_train_batch import get_train_batch_list
-from train_valid_test.train_valid_paragraph_level_model import train_and_valid
+from models.paragraph_level_BiLSTM_main_verb_embedding import MyModel
+from train_valid_test.train_valid_paragraph_with_main_verb import train_and_valid_fn
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -43,22 +42,13 @@ if __name__ == '__main__':
         print("\n\ntime=", t)
 
         train_data_list, test_data_list = re_load(random_seed=t, input_dim=dim)  # from author
-        # train_data_list, test_data_list = get_paragraph_data(dim=dim, random_seed=t)
         train_batch_list = get_train_batch_list(train_data_list, args.BATCH_SIZE, each_data_len=0)  #
 
-        if args.METHOD == 0:
-            model = MyModel(input_dim=dim, dropout=args.DROPOUT, if_use_ex_initial_1=args.IF_USE_EX_INITIAL_1, if_use_ex_initial_2=args.IF_USE_EX_INITIAL_2, random_seed=t, freeze=args.FREEZE).cuda()
-        else:
-            model = AuthorModel(input_dim=dim, dropout=args.DROPOUT, if_use_ex_initial_1=args.IF_USE_EX_INITIAL_1, if_use_ex_initial_2=args.IF_USE_EX_INITIAL_2, random_seed=t).cuda()
-
+        model = MyModel(input_dim=dim, dropout=args.DROPOUT, if_use_ex_initial_1=args.IF_USE_EX_INITIAL_1, if_use_ex_initial_2=args.IF_USE_EX_INITIAL_2, random_seed=t, freeze=args.FREEZE).cuda()
         optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=args.LEARN_RATE, weight_decay=1e-4)
 
-        best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid(model, optimizer, train_batch_list, test_data_list, args.EPOCHs, args.EX_LOSS)
+        best_epoch, best_model, best_macro_Fscore, best_acc = train_and_valid_fn(model, optimizer, train_batch_list, test_data_list, args.EPOCHs)
         print("\nbest_epoch: ", best_epoch, best_macro_Fscore, best_acc)
-
-        # if args.METHOD == 0 and args.IF_USE_EX_INITIAL_1 == 0 and args.IF_USE_EX_INITIAL_2 == 0:
-        #     best_model.save()
-        #     print('best model save done')
 
         valid_best_f1_list.append(best_macro_Fscore)
         valid_best_acc_list.append(best_acc)
