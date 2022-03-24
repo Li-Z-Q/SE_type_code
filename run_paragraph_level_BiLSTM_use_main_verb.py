@@ -14,8 +14,8 @@ import numpy as np
 from torch import optim
 from tools.load_data_from_author import re_load
 from tools.devide_train_batch import get_train_batch_list
-from models.paragraph_level_BiLSTM_main_verb_embedding import MyModel
-from train_valid_test.train_valid_paragraph_with_main_verb import train_and_valid_fn
+from models.paragraph_level_BiLSTM_use_main_verb import MyModel
+from train_valid_test.train_valid_paragraph_use_main_verb import train_and_valid_fn
 
 import argparse
 parser = argparse.ArgumentParser()

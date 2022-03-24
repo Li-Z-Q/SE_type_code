@@ -34,7 +34,7 @@ def statistic():
 
         statistic_dict = sorted(statistic_dict.items(), key=lambda x: x[1][7], reverse=True)
 
-        f = open('output/statistic_main_verb_' + flag + '.txt', 'w')
+        f = open('output/statistic_main_verb_' + flag + '_replace.txt', 'w')
         f.write("all_labels_list:      " + str(all_labels_list) + '\n')
         f.write("all_labels_prob_list: " + str(all_labels_prob_list) + '\n\n')
         for i in range(len(statistic_dict)):
@@ -70,7 +70,7 @@ def statistic():
         # question_sort = do_simple(question_sort)
         # imperative_sort = do_simple(imperative_sort)
 
-        torch.save(statistic_dict_plus, 'resource/statistic_dict_plus_' + flag + '.pt')
+        torch.save(statistic_dict_plus, 'resource/statistic_dict_plus_' + flag + '_replace.pt')
 
     helper(train_data_list, 'train')
     helper(test_data_list, 'test')

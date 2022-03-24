@@ -100,14 +100,17 @@ PEN_TREEBANK_POS_LIST = ['CC', 'CD', 'DT', 'EX', 'FW', 'IN', 'JJ', 'JJR', 'JJS',
                          'PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 'VBG',
                          'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB']
 
-
+will_be_replaced_list = ['None', 'is', 'was', 'be', 'were', "'s", 'has', 'had', 'made', 'found', 'including', 'known', 'include', "'ll"]
 def tansfer_word2vec(input_list, main_verb, posner_flag=True, k=300):
     if posner_flag:
         pos_list, ner_list = input_list[0], input_list[1]
-        embedding = torch.zeros(len(pos_list), k + len(PEN_TREEBANK_POS_LIST) + len(NER_LIST) + 50)
+        embedding = torch.zeros(len(pos_list), k + len(PEN_TREEBANK_POS_LIST) + len(NER_LIST))
 
         for i in range(len(pos_list)):
             word, pos, ner = pos_list[i][0], pos_list[i][1], ner_list[i][1]
+
+            if word in will_be_replaced_list:
+                word = 'lzq'
 
             if word in model:
                 embedding[i, :k] = torch.from_numpy(model[word])
@@ -119,28 +122,31 @@ def tansfer_word2vec(input_list, main_verb, posner_flag=True, k=300):
             if ner in NER_LIST:
                 embedding[i, k + len(PEN_TREEBANK_POS_LIST) + NER_LIST.index(ner)] = 1
 
-            if main_verb in model:
-                embedding[i, 343:] = torch.from_numpy(model[main_verb])[:50]
-            else:
-                embedding[i, 343:] = unknown_words(main_verb)[:50]
+        if main_verb in model:
+            main_verb_embedding = torch.from_numpy(model[main_verb])
+        else:
+            main_verb_embedding = unknown_words(main_verb)
 
-        return embedding
+        return embedding, main_verb_embedding
     else:
-        word_list = input_list
-        embedding = torch.zeros(len(word_list), k)
-        for i in range(len(word_list)):
-            word = word_list[i]
-
-            if word in model:
-                embedding[i, :] = torch.from_numpy(model[word])
-            else:
-                embedding[i, :] = unknown_words(word)
-        return embedding
+        a = 0
+        # word_list = input_list
+        # embedding = torch.zeros(len(word_list), k)
+        # for i in range(len(word_list)):
+        #     word = word_list[i]
+        #
+        #     if word in model:
+        #         embedding[i, :] = torch.from_numpy(model[word])
+        #     else:
+        #         embedding[i, :] = unknown_words(word)
+        # return embedding
 
 
 def process_sentence(sentence, main_verb, posner_flag=True, sentencemarker=False):
+
     if posner_flag:
         word_list = nltk.word_tokenize(sentence)
+
         if sentence not in sentence_pos_ner_dict:
             n = 0
             # pos_list = pos_tager.tag(word_list)
@@ -150,10 +156,6 @@ def process_sentence(sentence, main_verb, posner_flag=True, sentencemarker=False
             pos_list = copy.deepcopy(sentence_pos_ner_dict[sentence][0])
             ner_list = copy.deepcopy(sentence_pos_ner_dict[sentence][1])
             assert len(pos_list) == len(word_list)
-            # print "len(pos_list): ", len(pos_list), pos_list
-            # print "len(ner_list): ", len(ner_list), ner_list
-            # print "len(word_list): ", len(word_list), word_list
-
 
         if sentencemarker:
             pos_list.insert(0, ('<SOS>', ''))
@@ -162,16 +164,24 @@ def process_sentence(sentence, main_verb, posner_flag=True, sentencemarker=False
             pos_list.append(('<EOS>', ''))
             ner_list.append(('<EOS>', ''))
 
-        return tansfer_word2vec((pos_list, ner_list), main_verb, posner_flag=True)
+        if main_verb in word_list:
+            main_verb_position = word_list.index(main_verb)
+        else:
+            main_verb_position = -1
+
+        embedding, main_verb_embedding = tansfer_word2vec((pos_list, ner_list), main_verb, posner_flag=True)
+
+        return embedding, main_verb_embedding, main_verb_position
     else:
-        word_list = nltk.word_tokenize(sentence)
-        # word_list = st.tokenize(sentence)
-
-        if sentencemarker:
-            word_list.insert(0, '<SOS>')
-            word_list.append('<EOS>')
-
-        return tansfer_word2vec(word_list, main_verb, posner_flag=False)
+        a = 0
+        # word_list = nltk.word_tokenize(sentence)
+        # # word_list = st.tokenize(sentence)
+        #
+        # if sentencemarker:
+        #     word_list.insert(0, '<SOS>')
+        #     word_list.append('<EOS>')
+        #
+        # return tansfer_word2vec(word_list, posner_flag=False)
 
 
 entity_type_list = ['STATE', 'EVENT', 'REPORT', 'GENERIC_SENTENCE', 'GENERALIZING_SENTENCE', 'QUESTION', 'IMPERATIVE']  # 'CANNOT_DECIDE'
@@ -213,11 +223,11 @@ def transfer_docvec_labels(doc_clause_list, posner_flag=True, sentencemarker=Fal
 
         # print "clause_text: ", clause_text
 
-        clause_embedding = process_sentence(clause_text, main_verb, posner_flag=posner_flag, sentencemarker=sentencemarker)
+        clause_embedding, main_verb_embedding, main_verb_position = process_sentence(clause_text, main_verb, posner_flag=posner_flag, sentencemarker=sentencemarker)
         clause_embedding_list.append(clause_embedding)
         doc_length = doc_length + clause_embedding.size(0)
         eos_position_list.append(doc_length)
-        raw_sentences_list.append([clause_text, main_verb])
+        raw_sentences_list.append([clause_text, main_verb, main_verb_embedding, main_verb_position])
 
         # print "eos_position_list: ", eos_position_list
 
@@ -239,9 +249,8 @@ def process_doc(doc_path):
             main_verb = unicode('None')
         else:
             main_verb = unicode(clause.find('mainverb').string)
-        # print "clause_text: ", clause_text
-        # print "main_verb: ", main_verb
-        # input('aa')
+        if main_verb in will_be_replaced_list:
+            main_verb = 'lzq'
 
         label = 'CANNOT_DECIDE'
         annotation = clause.find('annotation', attrs={"annotator": "gold"})
@@ -380,5 +389,5 @@ print 'connective count: ' + str(connective_count)
 print 'connective percentage: ' + str(connective_count * 1.0 / clause_count)
 store_sentence_pos_ner_dict()
 
-with open('data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb_with_main_verb_embedding.pt', 'w+') as outfile:
+with open('data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb_info_replace.pt', 'w+') as outfile:
     torch.save(masc_data, outfile)

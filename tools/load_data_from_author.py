@@ -87,7 +87,7 @@ def helper(train_X, train_Y, train_X_eos_list, train_X_raw_sentence):
 def re_load(random_seed, input_dim=343):
     print('use {} from author'.format(str(input_dim)))
     if input_dim == 343:
-        pt_path = 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb.pt'
+        pt_path = 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb_info.pt'
     elif input_dim == 393:
         pt_path = 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb_with_main_verb_embedding.pt'
     else:

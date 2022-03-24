@@ -113,13 +113,12 @@ export PYTHONUNBUFFERED=1
 
 
 
-## paragraph_double_initial_loss
-#CUDA_VISIBLE_DEVICES=7 nohup \
-#  python run_paragraph_level_BiLSTM.py \
-#    --IF_USE_EX_INITIAL_1 0 \
-#    --IF_USE_EX_INITIAL_2 1 \
-#    --EX_LOSS 1 \
-#  > output/paragraph_double_initial_loss.txt &
+# paragraph_double_initial_non-loss
+CUDA_VISIBLE_DEVICES=7 nohup \
+  python run_paragraph_level_BiLSTM.py \
+    --IF_USE_EX_INITIAL_1 0 \
+    --IF_USE_EX_INITIAL_2 1 \
+  > output/paragraph_double_initial_non-loss.txt &
 
 
 
@@ -140,7 +139,16 @@ export PYTHONUNBUFFERED=1
 #  > output/paragraph_author_393.txt &
 
 
-# paragraph_base_main_verb_distribution_label_embedding
-CUDA_VISIBLE_DEVICES=3 nohup \
-  python run_paragraph_level_BiLSTM_main_verb_embedding.py \
-  > output/paragraph_main_verb_distribution_label_embedding_on_base.txt &
+## paragraph_base_main_verb_distribution_label_embedding
+#CUDA_VISIBLE_DEVICES=3 nohup \
+#  python run_paragraph_level_BiLSTM_use_main_verb.py \
+#  > output/paragraph_base_use_main_verb.txt &
+
+
+
+## paragraph_1st_initial_non-loss_label_embedding
+#CUDA_VISIBLE_DEVICES=2 nohup \
+#  python run_paragraph_level_BiLSTM_label_embedding.py \
+#    --IF_USE_EX_INITIAL_1 1 \
+#    --IF_USE_EX_INITIAL_2 0 \
+#  > output/paragraph_1st_initial_non-loss_contextual_label_embedding.txt &

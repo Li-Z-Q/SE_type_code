@@ -32,7 +32,13 @@ class MyModel(nn.Module):
         self.softmax = nn.LogSoftmax()
 
         self.merge_mlp = nn.Sequential(
-            nn.Linear(600, 300),
+            nn.Linear(600, 500),
+            nn.ReLU(),
+            nn.Dropout(p=dropout),
+            nn.Linear(500, 400),
+            nn.ReLU(),
+            nn.Dropout(p=dropout),
+            nn.Linear(400, 300),
             nn.ReLU()
         )
 
@@ -44,16 +50,22 @@ class MyModel(nn.Module):
             return pre_labels_list, output, sentence_embeddings_output
         else:  # self.if_use_ex_initial_1
             sentence_embeddings_list = []
-            for sentence in sentences_list:
-                sentence = self.dropout(sentence)
+
+            for sentence_ in sentences_list:
+                sentence = self.dropout(sentence_)
+                word_embeddings_list = sentence  # sentence_len * 336
+                ex_pre_label, _, _ = self.BiLSTM_1(word_embeddings_list)
+                ex_pre_label_list.append(ex_pre_label)
+            for i in range(len(sentences_list)):
+                sentence = self.dropout(sentences_list[i])
                 word_embeddings_list = sentence  # sentence_len * 336
                 ex_pre_label, output_1, sentence_embedding = self.BiLSTM_1(word_embeddings_list)
 
                 merge_embedding = self.merge(sentence_embedding, self.label_embedding[ex_pre_label, :])
+                # merge_embedding = self.merge_contextual(sentence_embedding, ex_pre_label_list, i)
 
-                sentence_embeddings_list.append(merge_embedding)  # sentence_embedding size is 300
+                sentence_embeddings_list.append(merge_embedding)  # merge_embedding size is 300
                 output_1_list.append(output_1)
-                ex_pre_label_list.append(ex_pre_label)
 
             sentence_embeddings_list = torch.stack(sentence_embeddings_list).unsqueeze(0)  # 1 * sentence_num * 300
             sentence_embeddings_list = self.dropout(sentence_embeddings_list)
@@ -80,6 +92,25 @@ class MyModel(nn.Module):
             return 0
 
     def merge(self, sentence_embedding, label_embedding):
+        merge_embedding = torch.cat((sentence_embedding, label_embedding), dim=0)
+        merge_embedding = self.merge_mlp(merge_embedding)  # from 600 -> 300
+        return merge_embedding
+
+    def merge_contextual(self, sentence_embedding, ex_pre_labels_list, position):
+        label_embedding_window = torch.randn(5, 300).cuda()
+        if position - 2 >= 0:
+            label_embedding_window[0, :] = self.label_embedding[ex_pre_labels_list[position-1], :]
+        if position - 1 >= 0:
+            label_embedding_window[1, :] = self.label_embedding[ex_pre_labels_list[position-1], :]
+        if True:
+            label_embedding_window[2, :] = self.label_embedding[ex_pre_labels_list[position], :]
+        if position + 1 < len(ex_pre_labels_list):
+            label_embedding_window[3, :] = self.label_embedding[ex_pre_labels_list[position+1], :]
+        if position + 2 < len(ex_pre_labels_list):
+            label_embedding_window[4, :] = self.label_embedding[ex_pre_labels_list[position + 1], :]
+
+        label_embedding = torch.mean(label_embedding_window, dim=0)  # get size 300
+
         merge_embedding = torch.cat((sentence_embedding, label_embedding), dim=0)
         merge_embedding = self.merge_mlp(merge_embedding)  # from 600 -> 300
         return merge_embedding
