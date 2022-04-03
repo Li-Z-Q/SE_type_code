@@ -13,10 +13,10 @@ warnings.filterwarnings('ignore')
 
 import numpy as np
 from torch import optim
-from tools.load_data_from_author import re_load
+from tools.load_data_from_pt import re_load
 from models.sentence_level_BiLSTM_author import MyModel
-from tools.devide_train_batch import get_train_batch_list
-from train_valid_test.train_valid_paragraph_level_model import train_and_valid
+from tools.set_train_batch import get_train_batch_list
+from train_test.train_valid_paragraph_level_model import train_and_valid
 
 import argparse
 parser = argparse.ArgumentParser()

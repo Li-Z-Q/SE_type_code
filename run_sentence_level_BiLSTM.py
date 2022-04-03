@@ -13,11 +13,11 @@ warnings.filterwarnings('ignore')
 
 import numpy as np
 from torch import optim
-from tools.load_data_from_author import re_load
+from tools.load_data_from_pt import re_load
 from models.sentence_level_BiLSTM import MyModel
-from tools.devide_train_batch import get_train_batch_list
-from tools.load_data_from_json import from_paragraph_to_sentence
-from train_valid_test.train_valid_sentence_level_model import train_and_valid_fn
+from tools.set_train_batch import get_train_batch_list
+from tools.from_paragraph_to_sentence import from_paragraph_to_sentence_fn
+from train_test.train_valid_sentence_level_model import train_and_valid_fn
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -40,8 +40,8 @@ if __name__ == '__main__':
         print("\n\ntime=", t)
 
         train_data_list, test_data_list = re_load(random_seed=t)
-        test_data_list = from_paragraph_to_sentence(test_data_list, random_seed=t)
-        train_data_list = from_paragraph_to_sentence(train_data_list, random_seed=t)
+        test_data_list = from_paragraph_to_sentence_fn(test_data_list, random_seed=t)
+        train_data_list = from_paragraph_to_sentence_fn(train_data_list, random_seed=t)
         train_batch_list = get_train_batch_list(train_data_list, args.BATCH_SIZE, each_data_len=1)
 
         model = MyModel(input_dim=dim,

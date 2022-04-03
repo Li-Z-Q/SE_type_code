@@ -5,7 +5,7 @@ import random
 
 def load_data():
     print('Loading Data...')
-    with open(os.path.join(os.getcwd(), 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb.pt'), 'rb') as outfile:
+    with open(os.path.join(os.getcwd(), 'data/masc_paragraph_addposnerembedding_dictformat_with_raw_sentence_with_main_verb_info.pt'), 'rb') as outfile:
         data = torch.load(outfile)
         outfile.close()
 
